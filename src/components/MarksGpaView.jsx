@@ -16,7 +16,7 @@ export default function MarksGpaView() {
   } = useAcademic();
 
   const semesterMetrics = getSemesterMetrics();
-  const [simulatorTarget, setSimulatorTarget] = useState(3.8);
+  const [simulatorTarget, setSimulatorTarget] = useState(4.0);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
@@ -26,24 +26,25 @@ export default function MarksGpaView() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Academic Performance
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                <span>🎯</span> Focus: Perfect 4.00 GPA
               </span>
-              <span className="text-xs text-slate-400">Seneca Official 4.0 GPA Scale</span>
+              <span className="text-xs text-slate-400">President's Honour List with Distinction</span>
             </div>
             <h2 className="text-xl font-bold text-white tracking-tight mt-1">
-              Marks & Semester GPA Command Center
+              Marks & 4.0 GPA Command Center
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Live weighted grade computations, passing threshold audits, and target GPA simulation.
+              Live weighted grade computations, 80%+ threshold monitors for 4.0 quality points, and Seneca GPA analytics.
             </p>
           </div>
 
           <div className="flex items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-800">
             <div>
               <div className="text-[10px] uppercase font-bold text-slate-400">Projected GPA</div>
-              <div className="text-2xl font-extrabold text-emerald-400 font-mono">
-                {semesterMetrics.currentGpa}
+              <div className="text-2xl font-extrabold text-emerald-400 font-mono flex items-baseline gap-1">
+                <span>{semesterMetrics.currentGpa}</span>
+                <span className="text-xs font-normal text-slate-400">/ 4.00</span>
               </div>
             </div>
             <div className="w-px h-8 bg-slate-800" />
@@ -54,6 +55,79 @@ export default function MarksGpaView() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* 4.0 GPA Golden Rule & Roadmap Card */}
+      <div className="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-base border border-amber-500/30">
+              4.0
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <span>The Seneca 4.0 GPA Formula</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
+                  ≥ 80.0% = 4.0 Quality Points
+                </span>
+              </h3>
+              <p className="text-xs text-slate-400">
+                At Seneca, both <strong>A (80–89%)</strong> and <strong>A+ (90–100%)</strong> yield the maximum <strong>4.0 GPA points</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 4.0 Targets per course */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+          {courses.filter(c => c.credits > 0).map(c => {
+            const metrics = getCourseMetrics(c);
+            const remainingWeight = Math.max(0, 100 - metrics.completedWeight);
+            const neededFor80 = Math.max(0, 80 - metrics.earnedWeight);
+            const requiredAvgFor80 = remainingWeight > 0 ? (neededFor80 / remainingWeight) * 100 : null;
+            const isOnTrack = metrics.currentAverage === null || metrics.currentAverage >= 80;
+
+            return (
+              <div 
+                key={c.id} 
+                onClick={() => {
+                  setSelectedCourseId(c.id);
+                  setCurrentView('course-detail');
+                }}
+                className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/90 hover:border-amber-500/50 transition cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span 
+                    className="font-mono text-xs font-bold px-1.5 py-0.5 rounded border"
+                    style={{
+                      color: c.color,
+                      backgroundColor: `${c.color}20`,
+                      borderColor: `${c.color}50`
+                    }}
+                  >
+                    {c.code}
+                  </span>
+                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${
+                    isOnTrack ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                  }`}>
+                    {isOnTrack ? '✓ On Track for 4.0' : '⚠️ Need Push'}
+                  </span>
+                </div>
+
+                <div className="text-xs font-semibold text-white group-hover:text-amber-400 transition truncate">
+                  {c.name}
+                </div>
+
+                <div className="mt-2.5 pt-2 border-t border-slate-900 text-[11px] flex items-center justify-between">
+                  <span className="text-slate-400">Remaining Need for 4.0:</span>
+                  <span className="font-mono font-bold text-emerald-400">
+                    {requiredAvgFor80 !== null ? (requiredAvgFor80 <= 0 ? '4.0 Locked! 🎉' : `${requiredAvgFor80.toFixed(1)}% avg`) : 'Complete'}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -70,7 +144,7 @@ export default function MarksGpaView() {
 
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-slate-300">Target GPA:</span>
-            <span className="font-mono text-lg font-bold text-red-400 px-3 py-1 rounded-lg bg-red-500/10 border border-red-500/20">
+            <span className="font-mono text-lg font-bold text-amber-400 px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30">
               {simulatorTarget.toFixed(2)}
             </span>
           </div>
@@ -84,14 +158,14 @@ export default function MarksGpaView() {
             step="0.05"
             value={simulatorTarget}
             onChange={(e) => setSimulatorTarget(parseFloat(e.target.value))}
-            className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-red-500"
+            className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-amber-500"
           />
           <div className="flex justify-between text-[11px] font-mono text-slate-500">
             <span>2.00 (Pass)</span>
             <span>3.00 (Good)</span>
             <span>3.50 (Very Good)</span>
-            <span className="text-emerald-400 font-bold">3.80+ (President's Honour List)</span>
-            <span className="text-red-400 font-bold">4.00 (Distinction)</span>
+            <span>3.80+ (Honour List)</span>
+            <span className="text-amber-400 font-bold">4.00 (Distinction Target)</span>
           </div>
         </div>
 

@@ -149,13 +149,18 @@ export default function DashboardView() {
       {/* KPI Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-sm relative overflow-hidden group hover:border-slate-700 transition">
-          <div className="text-xs font-medium text-slate-400">Projected GPA</div>
+          <div className="text-xs font-medium text-slate-400 flex items-center justify-between">
+            <span>Projected GPA</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-bold border border-amber-500/20">
+              🎯 4.0 Focus
+            </span>
+          </div>
           <div className="text-2xl font-bold text-white mt-1 flex items-baseline gap-2">
             <span>{metrics.currentGpa}</span>
-            <span className="text-xs font-normal text-emerald-400">/ 4.0 Scale</span>
+            <span className="text-xs font-normal text-emerald-400">/ 4.00 Max</span>
           </div>
           <div className="text-[11px] text-slate-400 mt-1">
-            Target: <span className="text-slate-300 font-semibold">3.80+ (Honours)</span>
+            Target: <span className="text-amber-300 font-bold">4.00 (Distinction)</span>
           </div>
         </div>
 

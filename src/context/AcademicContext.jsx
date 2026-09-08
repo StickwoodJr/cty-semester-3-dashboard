@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
 
 const AcademicContext = createContext();
 
-const STORAGE_KEY = 'seneca_cty_sem3_courses_v4';
+const STORAGE_KEY = 'seneca_cty_sem3_courses_v5';
 const NOTES_STORAGE_KEY = 'seneca_cty_sem3_scratchpad_v1';
 
 export function AcademicProvider({ children }) {
@@ -30,14 +30,14 @@ export function AcademicProvider({ children }) {
   // Scratchpad notes
   const [scratchpad, setScratchpad] = useState(() => {
     try {
-      return localStorage.getItem(NOTES_STORAGE_KEY) || "### Semester 3 Quick Scratchpad\n- Get fresh external SSD for Ubuntu in OPS345\n- Parul Kantaria (DAT330) requires 50% weighted on 3 categories separately\n- WTP100 completion deadline: October 23, 2026\n- Review Azure Learner budget weekly";
+      return localStorage.getItem(NOTES_STORAGE_KEY) || "### Semester 3 Quick Scratchpad\n- Target: 4.00 GPA (President's Honour List with Distinction)\n- Need >= 80% (A / A+) in all graded courses\n- Parul Kantaria (DAT330) requires 50% weighted on 3 categories separately\n- WTP100 completion deadline: October 23, 2026\n- Review Azure & AWS Learner budget weekly";
     } catch {
       return "";
     }
   });
 
-  // Target GPA simulator
-  const [targetGpa, setTargetGpa] = useState(3.8);
+  // Target GPA simulator (Focused on 4.0 GPA)
+  const [targetGpa, setTargetGpa] = useState(4.0);
 
   // Save changes to LocalStorage
   useEffect(() => {
