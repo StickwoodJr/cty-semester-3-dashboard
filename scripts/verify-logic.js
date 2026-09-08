@@ -14,6 +14,7 @@ import { getLetterGrade, getGpaValue } from '../src/data/senecaDates.js';
 import { calculateSemesterWorkload, calculateWorkloadMetrics, getCrunchSeverity } from '../src/utils/workloadHelper.js';
 import { INITIAL_COURSES } from '../src/data/coursesData.js';
 import { LAB_PREFLIGHT_PRESETS, GENERAL_PREFLIGHT_CRITERIA } from '../src/data/labPreflightData.js';
+import { CTY_PROGRAM_CONFIG, CTY_SEMESTERS, SENECA_COOP_GATES, INDUSTRY_CERTIFICATIONS } from '../src/data/pathwayData.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -334,6 +335,53 @@ test('GENERAL_PREFLIGHT_CRITERIA: Covers all 5 Seneca academic standard pillars'
   assert(ids.includes('gen-cloud'));
   assert(ids.includes('gen-format'));
   assert(ids.includes('gen-academic'));
+});
+
+// -------------------------------------------------------------
+// 6. Degree Pathway, Prerequisite Chains & Co-op Clearance
+// -------------------------------------------------------------
+console.log('\n🎓 6. Degree Pathway, Prerequisite Chains & Co-op Clearance:');
+
+test('CTY_PROGRAM_CONFIG: Establishes official Seneca program credentials and thresholds', () => {
+  assert.strictEqual(CTY_PROGRAM_CONFIG.programCode, 'CTY');
+  assert.strictEqual(CTY_PROGRAM_CONFIG.totalCredits, 36.0);
+  assert.strictEqual(CTY_PROGRAM_CONFIG.coopGpaThreshold, 3.00);
+  assert.strictEqual(CTY_PROGRAM_CONFIG.distinctionGpaThreshold, 4.00);
+});
+
+test('Prerequisite Graph: Semester 3 courses correctly unlock Semester 4 and Co-op placements', () => {
+  const sem3 = CTY_SEMESTERS.find(s => s.semester === 3);
+  assert(sem3, 'Semester 3 must exist in curriculum map');
+  assert.strictEqual(sem3.courses.length, 7, 'Semester 3 must have 7 courses');
+
+  const prereqMap = {};
+  sem3.courses.forEach(c => {
+    if (c.prereqFor) prereqMap[c.code] = c.prereqFor;
+  });
+
+  assert.strictEqual(prereqMap['OPS345'], 'OPS445', 'OPS345 must unlock OPS445');
+  assert.strictEqual(prereqMap['DAT330'], 'DAT440', 'DAT330 must unlock DAT440');
+  assert.strictEqual(prereqMap['SEC320'], 'SEC420', 'SEC320 must unlock SEC420');
+  assert.strictEqual(prereqMap['WTP100'], 'CTY331', 'WTP100 must unlock CTY331');
+  assert.strictEqual(prereqMap['MST300'], 'CSN405', 'MST300 must unlock CSN405');
+  assert.strictEqual(prereqMap['CSN305'], 'CSN405', 'CSN305 must unlock CSN405');
+});
+
+test('SENECA_COOP_GATES & INDUSTRY_CERTIFICATIONS: Audits all 4 gates and 6 vendor certifications', () => {
+  assert.strictEqual(SENECA_COOP_GATES.length, 4, 'Must have 4 official Seneca co-op gates');
+  assert.strictEqual(INDUSTRY_CERTIFICATIONS.length, 6, 'Must have 6 aligned certifications');
+
+  const certVendors = new Set(INDUSTRY_CERTIFICATIONS.map(c => c.vendor));
+  assert(certVendors.has('Microsoft'), 'Must include Microsoft certs (AZ-900/104, DP-900)');
+  assert(certVendors.has('Red Hat'), 'Must include Red Hat RHCSA');
+  assert(certVendors.has('CompTIA'), 'Must include CompTIA Security+');
+  assert(certVendors.has('Cisco'), 'Must include Cisco CCNA');
+
+  INDUSTRY_CERTIFICATIONS.forEach(cert => {
+    assert(cert.examCode, `Cert ${cert.id} must have exam code`);
+    assert(cert.voucherTip, `Cert ${cert.id} must declare student voucher tip`);
+    assert(cert.url.startsWith('https://'), `Cert ${cert.id} must have secure URL`);
+  });
 });
 
 console.log(`\n🎉 Verification Completed: ${passedTests}/${totalTests} tests passed cleanly with 0 failures.\n`);

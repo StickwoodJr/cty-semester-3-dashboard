@@ -165,7 +165,35 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
   - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` verifying preset validity against active courses, proof token presence in bash/SQL commands, and general Seneca criteria completeness (**16/16 tests passing**).
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `ShieldCheck` icon and "Audit" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Built cleanly (`npm run build`, 0 errors), 16/16 logic verification tests passing (`npm test`).
-- **Commit**: Completed in Cycle 9.
+- **Commit**: Completed in Cycle 9 (`fda64d5`).
+
+### Cycle 10 — CTY Degree Pathway, Prerequisite Tree & Co-op Clearance Architecture (`src/components/DegreePathwayView.jsx`, `src/data/pathwayData.js`)
+- **Category**: New High-Impact Feature (Curriculum Progression, SenecaWorks Co-op Sentinel & Career Certification Alignment)
+- **Motivation**: Seneca's Computer Systems Technology (CTY) is a 3-year (6 semester, 36 credit) Ontario College Advanced Diploma program where Semester 3 serves as the critical "Hingepin Semester". Passing Semester 3 unlocks Semester 4 advanced courses (OPS445, DAT440, SEC420, CSN405) and determines student eligibility for CTY331 (Summer 2027 Co-op Work Term 1). Students need clear visibility into prerequisite chains, official SenecaWorks co-op gates, graduation honours thresholds, and industry certification mapping (AZ-900, AZ-104, RHCSA, DP-900, Security+, CCNA).
+- **Implementation**:
+  - Created `src/data/pathwayData.js` featuring:
+    - Full 6-semester curriculum map for Seneca FASET CTY program.
+    - Prerequisite linkages for all Semester 3 courses:
+      - `OPS345` ➔ `OPS445` (Advanced Linux & Python Automation)
+      - `DAT330` ➔ `DAT440` (Advanced Database Architecture & DW)
+      - `SEC320` ➔ `SEC420` (Applied Network Defense & Pen Testing)
+      - `CSN305` + `MST300` ➔ `CSN405` (Enterprise Virtualization & Cloud Infra)
+      - `WTP100` ➔ `CTY331` (Co-op Work Term 1 Placement)
+    - 4 official SenecaWorks Co-op Clearance Gates:
+      1. Cumulative GPA $\ge 3.00$
+      2. WTP100 14 modules completed before Oct 23, 2026
+      3. Zero unresolved F / DNC in core technical courses
+      4. Full-time enrollment status maintained (minimum 66% course load)
+    - 6 Industry Certification alignments with exam codes, syllabus alignment percentages, and Seneca student voucher tips (Microsoft Learn 50%, CompTIA Academic 40%, Cisco NetAcad 60%).
+  - Developed `src/components/DegreePathwayView.jsx` featuring:
+    - **Interactive Prerequisite Tree**: Semester-by-semester selector with course cards, prerequisite badges, descriptions, and projected grades synced from `AcademicContext`.
+    - **Co-op Clearance Gate Sentinel**: Live evaluation of all 4 co-op gates, real-time WTP module completion tracking, and Summer 2027 recruitment timeline.
+    - **Industry Certification Hub**: Detailed cards with vendor badges, syllabus alignment notes, and links to official exam specs.
+    - **Seneca Honours Standing Projector**: Visual criteria for President's Honour List with Distinction (4.00 Term GPA), President's Honour List ($\ge 3.60$), and Diploma Honours ($\ge 3.00$).
+  - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` validating program config thresholds, prerequisite map integrity, and co-op/certification data completeness (**19/19 tests passing**).
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `GraduationCap` icon and "Diploma" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 19/19 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 10.
 
 ---
 

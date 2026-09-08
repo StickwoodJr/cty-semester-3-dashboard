@@ -416,6 +416,7 @@ export default function LabPreflightView() {
                 onClick={resetActiveChecklist}
                 className="text-xs text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 transition"
                 title="Reset checklist"
+                aria-label="Reset checklist for this lab"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
@@ -429,6 +430,9 @@ export default function LabPreflightView() {
                 return (
                   <button
                     key={item.id}
+                    role="checkbox"
+                    aria-checked={isChecked}
+                    aria-label={`Rubric check: ${item.label}, ${isChecked ? 'verified' : 'pending'}`}
                     onClick={() => toggleItem(item.id)}
                     className={`w-full p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 group ${
                       isChecked

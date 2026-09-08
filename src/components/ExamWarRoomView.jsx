@@ -332,6 +332,7 @@ export default function ExamWarRoomView() {
                       setSelectedCourseId(task.courseId);
                       setCurrentView('timer');
                     }}
+                    aria-label={`Start study sprint for ${task.courseCode} ${task.name}`}
                     className="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold transition flex items-center justify-center gap-1.5"
                     title="Start focus timer for this course"
                   >
@@ -344,6 +345,7 @@ export default function ExamWarRoomView() {
                       setActiveModal('edit-task');
                       setModalPayload({ courseId: task.courseId, assessment: task });
                     }}
+                    aria-label={`Enter score for ${task.courseCode} ${task.name}`}
                     className="px-3 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 text-xs transition"
                     title="Enter exam score"
                   >
@@ -383,8 +385,18 @@ export default function ExamWarRoomView() {
               return (
                 <div 
                   key={item.id}
+                  role="checkbox"
+                  aria-checked={isChecked}
+                  tabIndex={0}
+                  aria-label={`${item.course}: ${item.title}, ${isChecked ? 'completed' : 'pending'}`}
                   onClick={() => toggleCheck(item.id)}
-                  className="py-3.5 flex items-start gap-3.5 cursor-pointer hover:bg-slate-950/40 p-2 rounded-xl transition group"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleCheck(item.id);
+                    }
+                  }}
+                  className="py-3.5 flex items-start gap-3.5 cursor-pointer hover:bg-slate-950/40 p-2 rounded-xl transition group focus:outline-none focus:ring-2 focus:ring-red-500/80"
                 >
                   <div className={`w-5 h-5 rounded-md flex items-center justify-center border mt-0.5 transition ${
                     isChecked 

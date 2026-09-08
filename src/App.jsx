@@ -25,6 +25,7 @@ import ResourceVaultView from './components/ResourceVaultView';
 import HabitsTrackerView from './components/HabitsTrackerView';
 import WorkloadRadarView from './components/WorkloadRadarView';
 import LabPreflightView from './components/LabPreflightView';
+import DegreePathwayView from './components/DegreePathwayView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -110,6 +111,7 @@ function AppContent() {
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}
           {currentView === 'preflight' && <LabPreflightView />}
+          {(currentView === 'pathway' || currentView === 'degree') && <DegreePathwayView />}
           {currentView === 'resources' && <ResourceVaultView />}
           {currentView === 'print' && <PrintReportView />}
         </main>
