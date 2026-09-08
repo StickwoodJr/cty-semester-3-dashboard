@@ -16,7 +16,21 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
   - Linked assessments directly to one-click Focus Study Timer sessions and course details.
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Award` icon and "Midterms" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Zero build errors (`npm run build`). Clean responsive layout across desktop and mobile.
-- **Commit**: Completed in Cycle 1.
+- **Commit**: Completed in Cycle 1 (`98e7420`).
+
+### Cycle 2 — Smart Study Block & Gap-Time Optimizer (`src/components/StudyPlannerView.jsx`)
+- **Category**: New High-Impact Feature (4.0 GPA Strategy, Campus Gap Utilization & Calendar Sync)
+- **Motivation**: Seneca CTY Semester 3 students spend long days on Newnham Campus with substantial multi-hour gaps between classes (e.g. 4.5 hours free on Tuesday afternoon, 1h 55m on Wednesday afternoon, 1h 55m on Thursday morning). Without structured scheduling, these gap hours are easily lost. Achieving a 4.0 GPA across 7 rigorous courses (OPS345 Linux, MST300 Azure, DAT330 SQL, CSN305 SDN, SEC320 Forensics) requires ~20–25 weekly hours of dedicated hands-on lab practice.
+- **Implementation**:
+  - Created `src/components/StudyPlannerView.jsx` featuring an automated gap-opportunity detector identifying high-yield study windows across Monday–Friday.
+  - Provided a pre-balanced 4.0 GPA study block plan mapped to each course's technical workload and weight, persisted to `localStorage` (`seneca_cty_study_blocks_v2`).
+  - Implemented customizable weekly study targets per course (`seneca_cty_study_targets_v1`) and aggregated past 7-day focus timer logs (`seneca_cty_study_sessions_v1`) to display a live "4.0 Study Readiness Index".
+  - Interactive block manager: mark complete, delete, add custom blocks with campus location and specific lab objectives, or reset to recommended 4.0 plan.
+  - Seamless Focus Timer integration: 1-click "Focus" button switches directly to the Focus Timer with course pre-selected.
+  - Full RFC-5545 iCalendar generation (`generateStudyBlocksIcs`) with 15-minute advance phone notifications, wired into `SyncExportModal.jsx` and the Study Planner header.
+  - Linked from `TimetableView.jsx` with quick "Gap Planner" action button, `Sidebar.jsx` (with `Compass` icon and "4.0 Gaps" badge), and `CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 warnings/errors).
+- **Commit**: Completed in Cycle 2.
 
 ---
 

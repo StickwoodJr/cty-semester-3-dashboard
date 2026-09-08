@@ -337,6 +337,8 @@ export default function FocusTimerView() {
             <div className="flex flex-wrap items-center justify-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 text-xs font-semibold z-10">
               <button
                 onClick={() => handleModeChange('pomodoro')}
+                aria-label="Pomodoro 25 minute sprint"
+                aria-pressed={timerMode === 'pomodoro'}
                 className={`px-3.5 py-1.5 rounded-xl transition ${
                   timerMode === 'pomodoro' 
                     ? 'bg-red-600 text-white shadow' 
@@ -347,6 +349,8 @@ export default function FocusTimerView() {
               </button>
               <button
                 onClick={() => handleModeChange('deep')}
+                aria-label="Deep work 50 minute sprint"
+                aria-pressed={timerMode === 'deep'}
                 className={`px-3.5 py-1.5 rounded-xl transition ${
                   timerMode === 'deep' 
                     ? 'bg-red-600 text-white shadow' 
@@ -357,6 +361,8 @@ export default function FocusTimerView() {
               </button>
               <button
                 onClick={() => handleModeChange('custom')}
+                aria-label={`Custom duration: ${customMinutes} minutes`}
+                aria-pressed={timerMode === 'custom'}
                 className={`px-3.5 py-1.5 rounded-xl transition ${
                   timerMode === 'custom' 
                     ? 'bg-red-600 text-white shadow' 
@@ -367,6 +373,8 @@ export default function FocusTimerView() {
               </button>
               <button
                 onClick={() => handleModeChange('stopwatch')}
+                aria-label="Open stopwatch mode"
+                aria-pressed={timerMode === 'stopwatch'}
                 className={`px-3.5 py-1.5 rounded-xl transition ${
                   timerMode === 'stopwatch' 
                     ? 'bg-red-600 text-white shadow' 
@@ -435,7 +443,8 @@ export default function FocusTimerView() {
             <div className="flex items-center gap-4 z-10 mb-4">
               <button
                 onClick={handleToggleRunning}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-xl transition-all hover:scale-105 active:scale-95 ${
+                aria-label={isRunning ? 'Pause Timer' : 'Start Focus Session'}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-xl transition-all hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 ${
                   isRunning 
                     ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-900/30' 
                     : 'bg-red-600 hover:bg-red-500 shadow-red-900/40'
@@ -447,7 +456,8 @@ export default function FocusTimerView() {
 
               <button
                 onClick={() => resetTimer()}
-                className="w-12 h-12 rounded-2xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 flex items-center justify-center transition hover:scale-105"
+                aria-label="Reset Timer"
+                className="w-12 h-12 rounded-2xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 flex items-center justify-center transition hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                 title="Reset Timer"
               >
                 <RotateCcw className="w-5 h-5" />
@@ -456,7 +466,8 @@ export default function FocusTimerView() {
               {timerMode === 'stopwatch' && isRunning && (
                 <button
                   onClick={handleLogStopwatch}
-                  className="px-4 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition hover:scale-105 flex items-center gap-1.5"
+                  aria-label="Log stopwatch study session"
+                  className="px-4 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition hover:scale-105 flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Log Session</span>

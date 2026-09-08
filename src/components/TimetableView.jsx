@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   Clock, MapPin, Calendar, ExternalLink, Globe, Wifi, 
-  Coffee, Sparkles, BookOpen, Grid, List, Layers, Info, Download
+  Coffee, Sparkles, BookOpen, Grid, List, Layers, Info, Download, Compass
 } from 'lucide-react';
 
 export default function TimetableView() {
@@ -306,6 +306,17 @@ export default function TimetableView() {
                 <span>Compact Cards</span>
               </button>
             </div>
+
+            {/* Study Planner Gap Optimizer Button */}
+            <button
+              onClick={() => setCurrentView('planner')}
+              aria-label="Open Study & Gap Planner"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600/15 hover:bg-red-600/25 border border-red-500/30 text-red-400 hover:text-red-300 text-xs font-semibold transition"
+              title="Optimize campus gap hours in Study Planner"
+            >
+              <Compass className="w-3.5 h-3.5 text-red-400" />
+              <span>Gap Planner</span>
+            </button>
 
             {/* Sync iCal button */}
             <button

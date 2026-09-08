@@ -100,14 +100,25 @@ export default function Navbar() {
             <span className="hidden sm:inline">Add Task</span>
           </button>
 
+          {/* Mobile Search Button */}
+          <button
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+            aria-label="Open search and command palette"
+            title="Search (Ctrl+K)"
+            className="md:hidden p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
           {/* Export CSV Button */}
           <button 
             onClick={() => {
               exportTasksToCSV(courses);
               showToast("Exported semester task tracker to CSV", "success");
             }}
+            aria-label="Export semester task tracker to CSV"
             title="Export CSV (compatible with spreadsheet tracker)"
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800"
+            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
           >
             <Download className="w-4 h-4" />
           </button>
@@ -115,8 +126,9 @@ export default function Navbar() {
           {/* Settings / Sync */}
           <button 
             onClick={() => setActiveModal('settings')}
+            aria-label="Open Settings and Data Sync"
             title="Settings & Data Sync"
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800"
+            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 rounded-lg transition-colors border border-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
           >
             <Settings className="w-4 h-4" />
           </button>

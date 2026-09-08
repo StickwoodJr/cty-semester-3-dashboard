@@ -55,7 +55,9 @@ const DAY_FIRST_DATES = {
   Tuesday: '2026-09-08', // First Day of term
   Wednesday: '2026-09-09',
   Thursday: '2026-09-10',
-  Friday: '2026-09-11'
+  Friday: '2026-09-11',
+  Saturday: '2026-09-12',
+  Sunday: '2026-09-13'
 };
 
 const DAY_BYDAY_CODES = {
@@ -63,7 +65,9 @@ const DAY_BYDAY_CODES = {
   Tuesday: 'TU',
   Wednesday: 'WE',
   Thursday: 'TH',
-  Friday: 'FR'
+  Friday: 'FR',
+  Saturday: 'SA',
+  Sunday: 'SU'
 };
 
 /**
@@ -213,3 +217,57 @@ export function generateAllInOneIcs(courses, semesterConfig) {
     'END:VCALENDAR'
   ].join('\r\n');
 }
+
+/**
+ * Generate iCalendar for recurring weekly study blocks
+ */
+export function generateStudyBlocksIcs(studyBlocks) {
+  let events = [];
+
+  (studyBlocks || []).forEach((block, idx) => {
+    const firstDate = DAY_FIRST_DATES[block.day];
+    const byDay = DAY_BYDAY_CODES[block.day];
+    if (!firstDate || !byDay) return;
+
+    const dtStart = formatIcsDateTime(firstDate, block.startTime);
+    const dtEnd = formatIcsDateTime(firstDate, block.endTime);
+    if (!dtStart || !dtEnd) return;
+
+    const uid = `studyblock-seneca-2026-${block.id || idx}@senecapolytechnic.ca`;
+    const summary = `📚 [Study Block] ${block.courseCode || 'Study'}: ${block.title || 'Focused Study'}`;
+    const description = `Seneca CTY Semester 3 Study Block\\nCourse: ${block.courseCode || 'General'}\\nObjective: ${block.objective || block.notes || 'Independent Lab Practice & Review'}\\nTarget: 4.0 GPA Preparation`;
+    const location = block.location || 'Seneca Newnham Campus';
+
+    events.push([
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTAMP:20260908T000000Z`,
+      `DTSTART:${dtStart}`,
+      `DTEND:${dtEnd}`,
+      `RRULE:FREQ=WEEKLY;UNTIL=20261218T235959Z;BYDAY=${byDay}`,
+      `SUMMARY:${escapeIcsText(summary)}`,
+      `DESCRIPTION:${escapeIcsText(description)}`,
+      `LOCATION:${escapeIcsText(location)}`,
+      'STATUS:CONFIRMED',
+      'BEGIN:VALARM',
+      'TRIGGER:-PT15M',
+      'ACTION:DISPLAY',
+      `DESCRIPTION:${escapeIcsText(`Study Block Starting: ${block.title || block.courseCode}`)}`,
+      'END:VALARM',
+      'END:VEVENT'
+    ].join('\r\n'));
+  });
+
+  return [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Seneca CTY Semester 3//Smart Study Planner//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:Seneca CTY Study Schedule (4.0 Target)',
+    'X-WR-TIMEZONE:America/Toronto',
+    ...events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+}
+

@@ -19,6 +19,7 @@ import LabToolbeltView from './components/LabToolbeltView';
 import CommandPaletteModal from './components/CommandPaletteModal';
 import PrintReportView from './components/PrintReportView';
 import ExamWarRoomView from './components/ExamWarRoomView';
+import StudyPlannerView from './components/StudyPlannerView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -78,6 +79,7 @@ function AppContent() {
           {currentView === 'tasks' && <TasksView />}
           {currentView === 'course-detail' && <CourseDetailView />}
           {currentView === 'schedule' && <TimetableView />}
+          {currentView === 'planner' && <StudyPlannerView />}
           {currentView === 'marks' && <MarksGpaView />}
           {currentView === 'exams' && <ExamWarRoomView />}
           {currentView === 'wtp' && <WtpCareerHub />}

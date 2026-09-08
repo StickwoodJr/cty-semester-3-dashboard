@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, BookOpen, Plus, Cloud, ChevronRight, 
-  AlertTriangle, Timer, Terminal, Download, Printer, Award
+  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -23,6 +23,7 @@ export default function Sidebar() {
     { id: 'calendar', label: 'Calendar', icon: Calendar },
     { id: 'tasks', label: 'Upcoming & Tasks', icon: CheckSquare },
     { id: 'schedule', label: 'Weekly Timetable', icon: Clock },
+    { id: 'planner', label: 'Study & Gap Planner', icon: Compass, badge: '4.0 Gaps' },
     { id: 'timer', label: 'Focus & Study Timer', icon: Timer, badge: '4.0 Target' },
     { id: 'toolbelt', label: 'CTY Lab Toolbelt', icon: Terminal, badge: 'Snippets' },
     { id: 'marks', label: 'Marks & GPA', icon: BarChart3 },
@@ -80,8 +81,9 @@ export default function Sidebar() {
               setActiveModal('edit-course');
               setModalPayload({ isNew: true });
             }}
+            aria-label="Add New Course"
             title="Add Course"
-            className="text-slate-400 hover:text-red-400 transition"
+            className="text-slate-400 hover:text-red-400 transition p-1 rounded hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
           >
             <Plus className="w-3.5 h-3.5" />
           </button>

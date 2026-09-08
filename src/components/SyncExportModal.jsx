@@ -8,6 +8,7 @@ import {
   generateTimetableIcs, 
   generateAssessmentsIcs, 
   generateAllInOneIcs, 
+  generateStudyBlocksIcs,
   triggerFileDownload 
 } from '../utils/icsExport';
 
@@ -52,6 +53,16 @@ export default function SyncExportModal() {
         triggerFileDownload('Seneca-CTY-Sem3-Assessments.ics', content);
         setDownloadedType('tasks');
         showToast('Downloaded Assessments & Deadlines (.ics)', 'success');
+      } else if (type === 'study-blocks') {
+        let blocks = [];
+        try {
+          const saved = localStorage.getItem('seneca_cty_study_blocks_v2');
+          if (saved) blocks = JSON.parse(saved);
+        } catch {}
+        const content = generateStudyBlocksIcs(blocks);
+        triggerFileDownload('Seneca-CTY-Sem3-Study-Blocks-4.0.ics', content);
+        setDownloadedType('study-blocks');
+        showToast('Downloaded Study Schedule (.ics) with 15-min alerts', 'success');
       }
     } catch (e) {
       console.error('Export failed:', e);
@@ -211,6 +222,33 @@ export default function SyncExportModal() {
 
                   <button
                     onClick={() => handleDownload('tasks')}
+                    className="shrink-0 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition flex items-center gap-2"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Option 4: Study Blocks & Gap-Time Schedule */}
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 transition">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-white">
+                        📚 4.0 Study Blocks & Gap-Time Schedule (.ics)
+                      </span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                        4.0 Strategy
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      All your planned recurring study sessions positioned in Seneca campus gap hours, complete with course objectives, campus study locations, and 15-minute advance phone reminders.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => handleDownload('study-blocks')}
                     className="shrink-0 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition flex items-center gap-2"
                   >
                     <Download className="w-3.5 h-3.5" />

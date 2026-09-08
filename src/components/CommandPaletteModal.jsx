@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText, Award
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass
 } from 'lucide-react';
 
 export default function CommandPaletteModal() {
@@ -51,6 +51,7 @@ export default function CommandPaletteModal() {
   const navItems = [
     { id: 'dashboard', title: 'Dashboard & Command Center', category: 'Navigation', icon: LayoutDashboard, action: () => setCurrentView('dashboard') },
     { id: 'schedule', title: 'Weekly Timetable (Scaled Grid & Breaks)', category: 'Navigation', icon: Clock, action: () => setCurrentView('schedule') },
+    { id: 'planner', title: 'Study & Gap Planner (4.0 Target & Campus Gaps)', category: 'Navigation', icon: Compass, action: () => setCurrentView('planner') },
     { id: 'timer', title: 'Focus & Study Session Timer', category: 'Navigation', icon: Timer, action: () => setCurrentView('timer') },
     { id: 'toolbelt', title: 'CTY Lab Technical Toolbelt & Cheatsheet', category: 'Navigation', icon: Terminal, action: () => setCurrentView('toolbelt') },
     { id: 'calendar', title: 'Academic Calendar (Month Grid & Agenda)', category: 'Navigation', icon: Calendar, action: () => setCurrentView('calendar') },
