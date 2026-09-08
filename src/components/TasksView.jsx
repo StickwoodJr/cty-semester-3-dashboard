@@ -6,6 +6,7 @@ import {
   ChevronRight, Kanban, Table as TableIcon, Sparkles
 } from 'lucide-react';
 import { exportTasksToCSV } from '../utils/csvHelper';
+import { getDueUrgency } from '../utils/dateHelper';
 
 export default function TasksView() {
   const { 
@@ -53,7 +54,12 @@ export default function TasksView() {
   filteredTasks.sort((a, b) => {
     let comp = 0;
     if (sortBy === 'dueDate') {
-      comp = (a.dueDate || '').localeCompare(b.dueDate || '');
+      const hasA = Boolean(a.dueDate && a.dueDate.trim());
+      const hasB = Boolean(b.dueDate && b.dueDate.trim());
+      if (!hasA && !hasB) return 0;
+      if (!hasA) return 1;
+      if (!hasB) return -1;
+      comp = a.dueDate.localeCompare(b.dueDate);
     } else if (sortBy === 'weight') {
       comp = (parseFloat(a.weight) || 0) - (parseFloat(b.weight) || 0);
     } else if (sortBy === 'course') {
@@ -331,7 +337,14 @@ export default function TasksView() {
                         {/* Due Date & Week */}
                         <td className="py-3 px-4 font-mono">
                           <div className="text-slate-200">{task.dueDate || 'TBA'}</div>
-                          {task.week && <div className="text-[10px] text-slate-400">Week {task.week}</div>}
+                          <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                            {task.week && <span className="text-[10px] text-slate-400">Wk {task.week}</span>}
+                            {task.dueDate && !isDone && (
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${getDueUrgency(task.dueDate).badgeClass}`}>
+                                {getDueUrgency(task.dueDate).label}
+                              </span>
+                            )}
+                          </div>
                         </td>
 
                         {/* Weight */}
@@ -476,10 +489,17 @@ export default function TasksView() {
                         </div>
 
                         <div className="flex items-center justify-between text-[10px] text-slate-400 mt-3 pt-2 border-t border-slate-900">
-                          <span className="flex items-center gap-1 font-mono">
-                            <Clock className="w-3 h-3 text-slate-500" />
-                            {task.dueDate}
-                          </span>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="flex items-center gap-1 font-mono">
+                              <Clock className="w-3 h-3 text-slate-500" />
+                              {task.dueDate || 'TBA'}
+                            </span>
+                            {task.dueDate && colStatus !== 'Graded' && (
+                              <span className={`inline-block text-[9px] px-1 py-0.2 rounded font-semibold ${getDueUrgency(task.dueDate).badgeClass}`}>
+                                {getDueUrgency(task.dueDate).label}
+                              </span>
+                            )}
+                          </div>
 
                           <button
                             onClick={(e) => {

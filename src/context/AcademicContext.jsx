@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_COURSES } from '../data/coursesData';
 import { SEMESTER_CONFIG, SENECA_GRADE_SCALE, getLetterGrade, getGpaValue } from '../data/senecaDates';
+import { sortTasksByDueDate } from '../utils/dateHelper';
 import confetti from 'canvas-confetti';
 
 const AcademicContext = createContext();
@@ -193,24 +194,73 @@ export function AcademicProvider({ children }) {
     const letterGrade = getLetterGrade(currentAverage);
     const gpa = getGpaValue(currentAverage);
 
+    // Helper to calculate weighted average for a specific subset of tasks
+    const getCategoryAvg = (taskList) => {
+      const graded = taskList.filter(t => t.status === 'Graded' && t.score !== null && t.score !== undefined && !isNaN(t.score));
+      if (graded.length === 0) return null;
+      let earned = 0;
+      let weight = 0;
+      graded.forEach(t => {
+        const w = parseFloat(t.weight) || 0;
+        weight += w;
+        earned += (parseFloat(t.score) / (parseFloat(t.maxScore) || 100)) * w;
+      });
+      return weight > 0 ? (earned / weight) * 100 : null;
+    };
+
     // Check specific syllabus requirements
     const passingChecks = [];
     if (course.id === 'sec320') {
-      // 50% on tests, 50% on labs
-      const testTasks = assessments.filter(a => a.category === 'Test');
-      const labTasks = assessments.filter(a => a.category === 'Lab');
+      const testAvg = getCategoryAvg(assessments.filter(a => a.category === 'Test' || a.category === 'Exam'));
+      const labAvg = getCategoryAvg(assessments.filter(a => a.category === 'Lab'));
+
       passingChecks.push({ name: "Overall >= 50%", passed: (currentAverage === null || currentAverage >= 50) });
-      passingChecks.push({ name: "Tests Weighted Avg >= 50%", condition: "50% Test Threshold" });
-      passingChecks.push({ name: "Labs Weighted Avg >= 50%", condition: "50% Lab Threshold" });
+      passingChecks.push({ 
+        name: `Tests Weighted Avg >= 50% ${testAvg !== null ? `(${testAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: testAvg === null || testAvg >= 50,
+        condition: "50% Test Threshold" 
+      });
+      passingChecks.push({ 
+        name: `Labs Weighted Avg >= 50% ${labAvg !== null ? `(${labAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: labAvg === null || labAvg >= 50,
+        condition: "50% Lab Threshold" 
+      });
     } else if (course.id === 'dat330') {
+      const labAvg = getCategoryAvg(assessments.filter(a => a.category === 'Lab'));
+      const testAvg = getCategoryAvg(assessments.filter(a => a.category === 'Test' || a.category === 'Exam'));
+      const projAvg = getCategoryAvg(assessments.filter(a => a.category === 'Assignment' || a.category === 'Project'));
+
       passingChecks.push({ name: "Overall >= 50%", passed: (currentAverage === null || currentAverage >= 50) });
-      passingChecks.push({ name: "Labs Weighted Avg >= 50%", condition: "50% Lab Threshold" });
-      passingChecks.push({ name: "Tests Weighted Avg >= 50%", condition: "50% Test Threshold" });
-      passingChecks.push({ name: "Assignments & Project >= 50%", condition: "50% Project Threshold" });
+      passingChecks.push({ 
+        name: `Labs Weighted Avg >= 50% ${labAvg !== null ? `(${labAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: labAvg === null || labAvg >= 50,
+        condition: "50% Lab Threshold" 
+      });
+      passingChecks.push({ 
+        name: `Tests Weighted Avg >= 50% ${testAvg !== null ? `(${testAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: testAvg === null || testAvg >= 50,
+        condition: "50% Test Threshold" 
+      });
+      passingChecks.push({ 
+        name: `Assignments & Project >= 50% ${projAvg !== null ? `(${projAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: projAvg === null || projAvg >= 50,
+        condition: "50% Project Threshold" 
+      });
     } else if (course.id === 'mst300') {
+      const labAvg = getCategoryAvg(assessments.filter(a => a.category === 'Lab'));
+      const projAvg = getCategoryAvg(assessments.filter(a => a.category === 'Project'));
+
       passingChecks.push({ name: "Overall >= 50%", passed: (currentAverage === null || currentAverage >= 50) });
-      passingChecks.push({ name: "Labs Avg >= 50%", condition: "50% Lab Threshold" });
-      passingChecks.push({ name: "Projects Avg >= 50%", condition: "50% Project Threshold" });
+      passingChecks.push({ 
+        name: `Labs Avg >= 50% ${labAvg !== null ? `(${labAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: labAvg === null || labAvg >= 50,
+        condition: "50% Lab Threshold" 
+      });
+      passingChecks.push({ 
+        name: `Projects Avg >= 50% ${projAvg !== null ? `(${projAvg.toFixed(1)}%)` : '(Pending)'}`, 
+        passed: projAvg === null || projAvg >= 50,
+        condition: "50% Project Threshold" 
+      });
     } else if (course.id === 'wtp100') {
       const completedCount = (course.modulesList || []).filter(m => m.completed).length;
       passingChecks.push({
@@ -232,14 +282,13 @@ export function AcademicProvider({ children }) {
     };
   };
 
-  // Overall semester metrics
+  // Overall semester metrics (Credit-Weighted Seneca Polytechnic Formula)
   const getSemesterMetrics = () => {
     let gradedCredits = 0;
     let totalQualityPoints = 0;
     let totalTasks = 0;
     let completedTasks = 0;
     let totalWeightedScore = 0;
-    let evaluatedCoursesCount = 0;
 
     courses.forEach(course => {
       const metrics = getCourseMetrics(course);
@@ -252,13 +301,12 @@ export function AcademicProvider({ children }) {
       if (course.credits > 0 && metrics.currentAverage !== null) {
         gradedCredits += course.credits;
         totalQualityPoints += (metrics.gpa || 0) * course.credits;
-        totalWeightedScore += metrics.currentAverage;
-        evaluatedCoursesCount++;
+        totalWeightedScore += metrics.currentAverage * course.credits;
       }
     });
 
     const currentGpa = gradedCredits > 0 ? (totalQualityPoints / gradedCredits) : null;
-    const semesterAverage = evaluatedCoursesCount > 0 ? (totalWeightedScore / evaluatedCoursesCount) : null;
+    const semesterAverage = gradedCredits > 0 ? (totalWeightedScore / gradedCredits) : null;
     const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
     return {
@@ -270,7 +318,7 @@ export function AcademicProvider({ children }) {
     };
   };
 
-  // All assessments flattened with course info
+  // All assessments flattened with course info, sorted safely by due date
   const getAllAssessments = () => {
     const list = [];
     courses.forEach(course => {
@@ -286,9 +334,8 @@ export function AcademicProvider({ children }) {
         });
       });
     });
-    // Sort by due date ascending
-    list.sort((a, b) => (a.dueDate || '').localeCompare(b.dueDate || ''));
-    return list;
+    // Safely sort by due date ascending (empty dates sort to end)
+    return sortTasksByDueDate(list, true);
   };
 
   return (

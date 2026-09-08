@@ -6,6 +6,7 @@ import {
   Flame, HelpCircle, Layers, FileText, BarChart2,
   Maximize2, Minimize2, Copy, Check, Trash2
 } from 'lucide-react';
+import { getDueUrgency } from '../utils/dateHelper';
 
 export default function DashboardView() {
   const { 
@@ -306,10 +307,17 @@ export default function DashboardView() {
                           <div className="text-xs font-semibold text-slate-200">
                             {task.weight}% <span className="text-[10px] text-slate-400">wt</span>
                           </div>
-                          <div className="text-[10px] text-slate-400 flex items-center justify-end gap-1">
+                          <div className="text-[10px] text-slate-400 flex items-center justify-end gap-1 mt-0.5">
                             <Calendar className="w-3 h-3 text-slate-400" />
-                            <span>{task.dueDate}</span>
+                            <span className="font-mono">{task.dueDate || 'TBA'}</span>
                           </div>
+                          {task.dueDate && (
+                            <div className="mt-0.5">
+                              <span className={`inline-block text-[9px] px-1.5 py-0.5 rounded font-semibold ${getDueUrgency(task.dueDate).badgeClass}`}>
+                                {getDueUrgency(task.dueDate).label}
+                              </span>
+                            </div>
+                          )}
                         </div>
 
                         <button
