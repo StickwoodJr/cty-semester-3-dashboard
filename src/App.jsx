@@ -23,6 +23,7 @@ import StudyPlannerView from './components/StudyPlannerView';
 import FlashcardsView from './components/FlashcardsView';
 import ResourceVaultView from './components/ResourceVaultView';
 import HabitsTrackerView from './components/HabitsTrackerView';
+import WorkloadRadarView from './components/WorkloadRadarView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -100,6 +101,7 @@ function AppContent() {
           {currentView === 'schedule' && <TimetableView />}
           {currentView === 'planner' && <StudyPlannerView />}
           {currentView === 'habits' && <HabitsTrackerView />}
+          {currentView === 'workload' && <WorkloadRadarView />}
           {currentView === 'marks' && <MarksGpaView />}
           {currentView === 'exams' && <ExamWarRoomView />}
           {currentView === 'flashcards' && <FlashcardsView />}

@@ -11,6 +11,8 @@ import {
   getLocalDateStr 
 } from '../src/utils/dateHelper.js';
 import { getLetterGrade, getGpaValue } from '../src/data/senecaDates.js';
+import { calculateSemesterWorkload, calculateWorkloadMetrics, getCrunchSeverity } from '../src/utils/workloadHelper.js';
+import { INITIAL_COURSES } from '../src/data/coursesData.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -228,6 +230,62 @@ test('Credit-Weighted Average Formula: Multiplies by course credits and excludes
   assert.strictEqual(totalCredits, 2);
   assert.strictEqual(termGpa, 3.5);
   assert.strictEqual(termAvg, 80.0);
+});
+
+// -------------------------------------------------------------
+// 4. Workload Crunch Radar & 4.0 Early-Bird Buffer Tests
+// -------------------------------------------------------------
+console.log('\n📊 4. Workload Crunch Radar & 4.0 Early-Bird Buffer:');
+
+test('getCrunchSeverity: Classifies weekly workloads accurately', () => {
+  const calm = getCrunchSeverity(10, 2, false);
+  assert.strictEqual(calm.level, 'calm');
+
+  const moderate = getCrunchSeverity(18, 4, false);
+  assert.strictEqual(moderate.level, 'moderate');
+
+  const high = getCrunchSeverity(30, 5, false);
+  assert.strictEqual(high.level, 'high');
+
+  const extreme = getCrunchSeverity(100, 10, true);
+  assert.strictEqual(extreme.level, 'extreme');
+  assert.strictEqual(extreme.pulse, true);
+});
+
+test('calculateSemesterWorkload: Accurately groups 14 weeks and identifies Week 7 & 14 crunches', () => {
+  const weeks = calculateSemesterWorkload(INITIAL_COURSES, {}, false);
+  assert.strictEqual(weeks.length, 14);
+
+  const week7 = weeks.find(w => w.week === 7);
+  assert(week7, 'Week 7 must exist');
+  assert.strictEqual(week7.tasks.length, 10, 'Week 7 must have 10 tasks');
+  assert(week7.totalWeight > 100, 'Week 7 total weight must be > 100%');
+  assert.strictEqual(week7.severity.level, 'extreme');
+
+  const metrics = calculateWorkloadMetrics(weeks);
+  assert.strictEqual(metrics.totalTasks, 83, `Expected 83 total semester evaluations, got ${metrics.totalTasks}`);
+  assert(metrics.volatility > 0, 'Volatility must be positive');
+});
+
+test('calculateSemesterWorkload: Early-bird staging shifts weight and reduces crunch', () => {
+  // Stage OPS345 labs early from Week 7 to Weeks 3, 4, 5, 6
+  const mockBuffers = {
+    'ops345-lab1': 3,
+    'ops345-lab2': 4,
+    'ops345-lab3': 5,
+    'ops345-lab4': 6
+  };
+
+  const rawWeeks = calculateSemesterWorkload(INITIAL_COURSES, mockBuffers, false);
+  const smoothedWeeks = calculateSemesterWorkload(INITIAL_COURSES, mockBuffers, true);
+
+  const rawWeek7 = rawWeeks.find(w => w.week === 7);
+  const smoothedWeek7 = smoothedWeeks.find(w => w.week === 7);
+
+  // 4 labs * 2% = 8% weight shifted
+  assert.strictEqual(smoothedWeek7.tasks.length, rawWeek7.tasks.length - 4);
+  assert(smoothedWeek7.totalWeight < rawWeek7.totalWeight);
+  assert.strictEqual(Math.round((rawWeek7.totalWeight - smoothedWeek7.totalWeight) * 10) / 10, 8.0);
 });
 
 console.log(`\n🎉 Verification Completed: ${passedTests}/${totalTests} tests passed cleanly with 0 failures.\n`);

@@ -395,105 +395,133 @@ export default function CourseDetailView() {
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 text-[10px] uppercase tracking-wider">
               <tr>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Evaluation Name</th>
-                <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Due Date</th>
-                <th className="py-3 px-4 text-right">Weight</th>
-                <th className="py-3 px-4 text-center">Score</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th scope="col" className="py-3 px-4">Status</th>
+                <th scope="col" className="py-3 px-4">Evaluation Name</th>
+                <th scope="col" className="py-3 px-4">Category</th>
+                <th scope="col" className="py-3 px-4">Due Date</th>
+                <th scope="col" className="py-3 px-4 text-right">Weight</th>
+                <th scope="col" className="py-3 px-4 text-center">Score</th>
+                <th scope="col" className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {(course.assessments || []).map(task => {
-                const isDone = task.status === 'Graded';
-                return (
-                  <tr key={task.id} className="hover:bg-slate-800/40 transition group">
-                    <td className="py-3 px-4">
+              {(!course.assessments || course.assessments.length === 0) ? (
+                <tr>
+                  <td colSpan={7} className="py-12 px-4 text-center">
+                    <div className="max-w-xs mx-auto space-y-3">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-slate-800/60 border border-slate-700/60 flex items-center justify-center text-slate-400">
+                        <BookOpen className="w-6 h-6" />
+                      </div>
+                      <p className="text-sm font-semibold text-slate-300">No assessments added yet</p>
+                      <p className="text-xs text-slate-500">Track labs, quizzes, and exams for {course.code} to forecast your GPA.</p>
                       <button
                         onClick={() => {
-                          const order = ['Not Started', 'In Progress', 'Submitted', 'Graded'];
-                          const nextIdx = (order.indexOf(task.status) + 1) % order.length;
-                          updateAssessment(course.id, task.id, {
-                            status: order[nextIdx],
-                            score: order[nextIdx] === 'Graded' && task.score === null ? 100 : task.score
-                          });
+                          setActiveModal('add-task');
+                          setModalPayload({ courseId: course.id });
                         }}
-                        className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
-                          task.status === 'Graded' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' :
-                          task.status === 'Submitted' ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' :
-                          task.status === 'In Progress' ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' :
-                          'bg-slate-800 text-slate-400 border-slate-700'
-                        }`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition shadow-sm"
                       >
-                        {task.status}
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add First Assessment</span>
                       </button>
-                    </td>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                course.assessments.map(task => {
+                  const isDone = task.status === 'Graded';
+                  return (
+                    <tr key={task.id} className="hover:bg-slate-800/40 transition group">
+                      <td className="py-3 px-4">
+                        <button
+                          onClick={() => {
+                            const order = ['Not Started', 'In Progress', 'Submitted', 'Graded'];
+                            const nextIdx = (order.indexOf(task.status) + 1) % order.length;
+                            updateAssessment(course.id, task.id, {
+                              status: order[nextIdx],
+                              score: order[nextIdx] === 'Graded' && task.score === null ? 100 : task.score
+                            });
+                          }}
+                          className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${
+                            task.status === 'Graded' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' :
+                            task.status === 'Submitted' ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' :
+                            task.status === 'In Progress' ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' :
+                            'bg-slate-800 text-slate-400 border-slate-700'
+                          }`}
+                          title="Click to cycle status"
+                        >
+                          {task.status}
+                        </button>
+                      </td>
 
-                    <td className="py-3 px-4">
-                      <div className={`font-semibold ${isDone ? 'text-slate-400 line-through' : 'text-white'}`}>
-                        {task.name}
-                      </div>
-                      <div className="text-[11px] text-slate-400 truncate max-w-sm">
-                        {task.topic}
-                      </div>
-                    </td>
+                      <td className="py-3 px-4">
+                        <div className={`font-semibold ${isDone ? 'text-slate-400 line-through' : 'text-white'}`}>
+                          {task.name}
+                        </div>
+                        <div className="text-[11px] text-slate-400 truncate max-w-sm">
+                          {task.topic}
+                        </div>
+                      </td>
 
-                    <td className="py-3 px-4">
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                        {task.category}
-                      </span>
-                    </td>
+                      <td className="py-3 px-4">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                          {task.category}
+                        </span>
+                      </td>
 
-                    <td className="py-3 px-4 font-mono text-slate-300">
-                      <div>{task.dueDate}</div>
-                      {task.week && <div className="text-[10px] text-slate-400">Week {task.week}</div>}
-                    </td>
+                      <td className="py-3 px-4 font-mono text-slate-300">
+                        <div>{task.dueDate}</div>
+                        {task.week && <div className="text-[10px] text-slate-400">Week {task.week}</div>}
+                      </td>
 
-                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-200">
-                      {task.weight}%
-                    </td>
+                      <td className="py-3 px-4 text-right font-mono font-bold text-slate-200">
+                        {task.weight}%
+                      </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <button
-                        onClick={() => {
-                          setActiveModal('edit-task');
-                          setModalPayload({ courseId: course.id, assessment: task });
-                        }}
-                        className={`font-mono text-xs px-2.5 py-0.5 rounded ${
-                          task.score !== null 
-                            ? 'bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30'
-                            : 'text-slate-500 border border-dashed border-slate-700 hover:text-slate-300'
-                        }`}
-                      >
-                        {task.score !== null ? `${task.score}%` : 'Enter'}
-                      </button>
-                    </td>
-
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition">
+                      <td className="py-3 px-4 text-center">
                         <button
                           onClick={() => {
                             setActiveModal('edit-task');
                             setModalPayload({ courseId: course.id, assessment: task });
                           }}
-                          className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800"
-                          title="Edit"
+                          aria-label={`Edit score for ${task.name}, currently ${task.score !== null ? `${task.score}%` : 'not entered'}`}
+                          className={`font-mono text-xs px-2 py-0.5 rounded hover:bg-slate-800 transition ${
+                            task.score !== null 
+                              ? 'text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20' 
+                              : 'text-slate-500 border border-dashed border-slate-700'
+                          }`}
                         >
-                          <Edit className="w-3.5 h-3.5" />
+                          {task.score !== null ? `${task.score}%` : '--'}
                         </button>
-                        <button
-                          onClick={() => deleteAssessment(course.id, task.id)}
-                          className="p-1 text-slate-500 hover:text-red-400 rounded hover:bg-slate-800"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                      </td>
+
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1 opacity-60 group-hover:opacity-100 transition">
+                          <button
+                            onClick={() => {
+                              setActiveModal('edit-task');
+                              setModalPayload({ courseId: course.id, assessment: task });
+                            }}
+                            className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800"
+                            title="Edit"
+                            aria-label={`Edit assessment: ${task.name}`}
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteAssessment(course.id, task.id)}
+                            className="p-1 text-slate-500 hover:text-red-400 rounded hover:bg-slate-800"
+                            title="Delete"
+                            aria-label={`Delete assessment: ${task.name}`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

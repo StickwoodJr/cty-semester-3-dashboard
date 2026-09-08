@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library, Flame
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library, Flame, Activity
 } from 'lucide-react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 
@@ -55,6 +55,7 @@ export default function CommandPaletteModal() {
     { id: 'schedule', title: 'Weekly Timetable (Scaled Grid & Breaks)', category: 'Navigation', icon: Clock, action: () => setCurrentView('schedule') },
     { id: 'planner', title: 'Study & Gap Planner (4.0 Target & Campus Gaps)', category: 'Navigation', icon: Compass, action: () => setCurrentView('planner') },
     { id: 'habits', title: '4.0 Daily Habits & Execution Streak Engine', category: 'Navigation', icon: Flame, action: () => setCurrentView('habits') },
+    { id: 'workload', title: 'Semester Workload Crunch Radar & 4.0 Early-Bird Buffer', category: 'Navigation', icon: Activity, action: () => setCurrentView('workload') },
     { id: 'timer', title: 'Focus & Study Session Timer', category: 'Navigation', icon: Timer, action: () => setCurrentView('timer') },
     { id: 'toolbelt', title: 'CTY Lab Technical Toolbelt & Cheatsheet', category: 'Navigation', icon: Terminal, action: () => setCurrentView('toolbelt') },
     { id: 'resources', title: 'Resource & Faculty Vault (Portals, Directory & Policies)', category: 'Navigation', icon: Library, action: () => setCurrentView('resources') },

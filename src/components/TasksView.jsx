@@ -36,6 +36,14 @@ export default function TasksView() {
   const [editingScoreId, setEditingScoreId] = useState(null);
   const [tempScore, setTempScore] = useState('');
 
+  const resetAllFilters = () => {
+    setSmartPreset('ALL');
+    setSearchTerm('');
+    setCourseFilter('ALL');
+    setStatusFilter('ALL');
+    setCategoryFilter('ALL');
+  };
+
   // Preset summary counts across all tasks
   const presetCounts = useMemo(() => ({
     ALL: allTasks.length,
@@ -361,8 +369,33 @@ export default function TasksView() {
               <tbody className="divide-y divide-slate-800/60">
                 {filteredTasks.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-500 text-xs">
-                      No assessments matching the chosen filters.
+                    <td colSpan={8} className="py-12 px-4 text-center">
+                      <div className="max-w-xs mx-auto space-y-3">
+                        <div className="w-12 h-12 mx-auto rounded-full bg-slate-800/60 border border-slate-700/60 flex items-center justify-center text-slate-400">
+                          <Search className="w-5 h-5" />
+                        </div>
+                        <p className="text-sm font-semibold text-slate-300">No assessments match your filters</p>
+                        <p className="text-xs text-slate-500">
+                          Try clearing search queries, presets, or course filters to view your evaluations.
+                        </p>
+                        <div className="flex items-center justify-center gap-2 pt-1">
+                          <button
+                            onClick={resetAllFilters}
+                            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                          >
+                            Reset All Filters
+                          </button>
+                          <button
+                            onClick={() => {
+                              setActiveModal('add-task');
+                              setModalPayload({ courseId: courses[0]?.id });
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition"
+                          >
+                            Add Assessment
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ) : (
@@ -552,8 +585,9 @@ export default function TasksView() {
                 {/* Cards Container */}
                 <div className="space-y-2.5 overflow-y-auto flex-1 pr-1">
                   {colTasks.length === 0 ? (
-                    <div className="py-12 text-center text-slate-600 text-xs">
-                      Empty column
+                    <div className="py-12 flex flex-col items-center justify-center text-slate-500 text-xs gap-1.5 border border-dashed border-slate-800/80 rounded-xl my-2">
+                      <CheckSquare className="w-5 h-5 text-slate-600" />
+                      <span className="text-slate-500">No {colStatus.toLowerCase()} tasks</span>
                     </div>
                   ) : (
                     colTasks.map(task => (

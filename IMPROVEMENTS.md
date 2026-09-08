@@ -97,7 +97,52 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
     - **Custom Habit Creator**: Add custom user habits with target rationale, persisted in `localStorage` (`seneca_cty_daily_habits_v1` & `seneca_cty_habit_logs_v1`).
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Flame` icon and "Daily" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Built cleanly (`npm run build`, 0 errors), 10/10 logic verification tests passing (`npm test`).
-- **Commit**: Completed in Cycle 6.
+- **Commit**: Completed in Cycle 6 (`136ed05`).
+
+### Cycle 7 — Comprehensive Accessibility (WCAG 2.1 AA Focus Trap), Resilient Empty States & Actionable Affordances
+- **Category**: Accessibility, Robustness & UX Polish (WCAG 2.1 AA, Focus Management, ARIA Semantics)
+- **Motivation**: When keyboard and screen reader users open modal dialogs or filter lists down to zero matches, interface ambiguity or focus escaping into the background document causes major accessibility failures. Furthermore, empty assessment tables without action buttons leave users confused on how to start tracking their coursework.
+- **Implementation**:
+  - **WAI-ARIA APG Modal Focus Trap Hook (`src/hooks/useFocusTrap.js`)**:
+    - Built cyclic keyboard focus trap for <kbd>Tab</kbd> and <kbd>Shift+Tab</kbd>.
+    - Automatically finds visible interactive elements inside the modal and focuses the first element upon opening.
+    - Saves `document.activeElement` before dialog opens and restores focus cleanly upon dismiss.
+    - Wired across all 6 application modals: `AssessmentModal.jsx`, `CourseEditModal.jsx`, `WhatIfCalculatorModal.jsx`, `SettingsModal.jsx`, `SyncExportModal.jsx`, and `CommandPaletteModal.jsx`.
+  - **Mobile Drawer Accessibility & Escape Listener (`src/App.jsx`)**:
+    - Added `role="dialog"`, `aria-modal="true"`, and `aria-label="Mobile navigation menu"`.
+    - Added `aria-label="Open navigation menu"` and `aria-expanded={mobileMenuOpen}` on hamburger toggle.
+    - Added `aria-label="Close navigation menu"` on dismiss button.
+    - Added global <kbd>Escape</kbd> keyboard listener to dismiss mobile drawer without mouse interaction.
+  - **Course Detail Empty State & Table Scope (`src/components/CourseDetailView.jsx`)**:
+    - Added `scope="col"` across all table header cells (`<th>`).
+    - Engineered friendly empty state for courses with 0 assessments, rendering an informative icon, supportive guidance text, and a 1-click "Add First Assessment" button.
+    - Added explicit `aria-label` attributes on edit and delete assessment buttons.
+  - **Tasks View Empty States (Table & Kanban Pipeline) (`src/components/TasksView.jsx`)**:
+    - Enhanced zero-result filter state with search icon, helpful explanation, "Reset All Filters" button, and "Add Assessment" button.
+    - Enhanced Kanban empty column placeholder with clean border-dashed styling, `CheckSquare` icon, and status label.
+  - **Technical Toolbelt Accessible Copy Buttons (`src/components/LabToolbeltView.jsx`)**:
+    - Added descriptive `aria-label={`Copy snippet for ${cmd.name}`}` on all clipboard buttons.
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 10/10 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 7.
+
+### Cycle 8 — Semester Workload Crunch Radar & 4.0 Early-Bird Buffer Recommender (`src/components/WorkloadRadarView.jsx`, `src/utils/workloadHelper.js`)
+- **Category**: New High-Impact Feature (Academic Workload Engineering, Predictive Analytics & Stress Mitigation)
+- **Motivation**: In CTY Semester 3, courses do not space out evaluations evenly. In particular, Week 7 creates an "Extreme Avalanche" bottleneck with 10 deliverables and >100% combined syllabus weight (OPS345 groups Labs 1–4 due in Week 7 right alongside its 25% Midterm and the WTP100 mandatory Oct 23 deadline). Similarly, Weeks 13–14 cluster 13 deliverables including three 15% final projects (DAT330, MST300, SEC320) and major final practical tests. Without proactive workload smoothing, even top students burn out or suffer mark drops during midterm and finals week.
+- **Implementation**:
+  - Engineered `src/utils/workloadHelper.js` featuring:
+    - `calculateSemesterWorkload`: Maps all 83 semester assessments across 14 academic weeks, accounting for Fall Reading Week (Oct 26–30).
+    - `getCrunchSeverity`: Classifies weekly cognitive loads into Calm (≤15%), Moderate (16–30%), High (31–45%), and Extreme Avalanche (≥50% or ≥9 deliverables) with pulsing status badges.
+    - `RECOMMENDED_EARLY_BUFFERS`: Curated 4.0 GPA buffer schedule shifting high-risk deliverables (OPS345 Labs 1–4, WTP100 modules, DAT330 Assignment 2, enterprise cloud projects) into lighter earlier weeks (Weeks 3–6 and 11–12).
+    - `calculateWorkloadMetrics`: Evaluates peak crunch week, average weekly weight, task volatility index, and hours saved.
+  - Engineered `src/components/WorkloadRadarView.jsx` featuring:
+    - **Interactive 14-Week Cognitive Load Histogram**: Visual bar graph with dynamic color gradients reflecting weekly stress intensity.
+    - **Raw vs. Early-Bird Smoothed Curve Toggle**: Real-time comparison demonstrating how early submission levels off the Week 7 and Week 13 peaks.
+    - **4.0 Early-Bird Staging System**: One-click buffer activation with hours-saved counter (up to 40+ hours of peak crunch pressure eliminated).
+    - **Active Week Breakdown Drawer**: Deep-dive into any selected week's assessments with status cycling, course navigation, and weight percentages.
+  - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` verifying severity classification, 14-week timeline aggregation, and early-bird weight reduction.
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Activity` icon and "Crunch" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 13/13 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 8.
 
 ---
 

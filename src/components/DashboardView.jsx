@@ -4,7 +4,7 @@ import {
   CheckCircle2, Clock, AlertCircle, Calendar, BookOpen, 
   ArrowUpRight, Sparkles, ChevronRight, CheckSquare, 
   Flame, HelpCircle, Layers, FileText, BarChart2,
-  Maximize2, Minimize2, Copy, Check, Trash2
+  Maximize2, Minimize2, Copy, Check, Trash2, Activity
 } from 'lucide-react';
 import { getDueUrgency } from '../utils/dateHelper';
 
@@ -117,6 +117,16 @@ export default function DashboardView() {
 
             {/* Countdown milestones */}
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
+              <button 
+                onClick={() => setCurrentView('workload')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-950/70 hover:bg-indigo-900/80 border border-indigo-500/40 text-indigo-300 transition hover:scale-105"
+                title="View 14-Week Workload Crunch Radar"
+                aria-label="View 14-Week Workload Crunch Radar, Week 7 Avalanche warning"
+              >
+                <Activity className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
+                <span>Workload Radar:</span>
+                <span className="font-bold text-indigo-300">W7 Avalanche (158%)</span>
+              </button>
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700/60 text-slate-300">
                 <Clock className="w-3.5 h-3.5 text-amber-400" />
                 <span>WTP100 Deadline:</span>

@@ -396,6 +396,7 @@ export default function LabToolbeltView() {
                                 : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/60'
                             }`}
                             title="Copy command to clipboard"
+                            aria-label={`Copy snippet for ${cmd.name}`}
                           >
                             {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                             <span>{isCopied ? 'Copied!' : 'Copy'}</span>

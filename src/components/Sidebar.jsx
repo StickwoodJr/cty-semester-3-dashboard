@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, BookOpen, Plus, Cloud, ChevronRight, 
-  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass, Brain, Library, Flame
+  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass, Brain, Library, Flame, Activity
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -25,6 +25,7 @@ export default function Sidebar() {
     { id: 'schedule', label: 'Weekly Timetable', icon: Clock },
     { id: 'planner', label: 'Study & Gap Planner', icon: Compass, badge: '4.0 Gaps' },
     { id: 'habits', label: '4.0 Daily Habits', icon: Flame, badge: 'Daily' },
+    { id: 'workload', label: 'Workload Radar', icon: Activity, badge: 'Crunch' },
     { id: 'timer', label: 'Focus & Study Timer', icon: Timer, badge: '4.0 Target' },
     { id: 'toolbelt', label: 'CTY Lab Toolbelt', icon: Terminal, badge: 'Snippets' },
     { id: 'resources', label: 'Resource & Faculty Vault', icon: Library, badge: 'Portals' },
