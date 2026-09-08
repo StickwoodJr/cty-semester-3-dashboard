@@ -71,37 +71,41 @@ export default function FocusTimerView() {
     }
   };
 
-  // Timer Tick
+  // Timestamp refs for drift-free timing across background tabs and system sleep
+  const targetEndTimeRef = useRef(null);
+  const stopwatchStartRef = useRef(null);
+  const stateRef = useRef({
+    timerMode,
+    customMinutes,
+    isBreak,
+    selectedCourseId,
+    sessionNotes,
+    courses,
+    soundEnabled
+  });
+
+  // Keep stateRef up to date on every render
   useEffect(() => {
-    let interval = null;
-    if (isRunning) {
-      interval = setInterval(() => {
-        if (timerMode === 'stopwatch') {
-          setStopwatchSeconds(prev => prev + 1);
-        } else {
-          setSecondsLeft(prev => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              setIsRunning(false);
-              handleTimerComplete();
-              return 0;
-            }
-            return prev - 1;
-          });
-        }
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, timerMode, isBreak]);
+    stateRef.current = {
+      timerMode,
+      customMinutes,
+      isBreak,
+      selectedCourseId,
+      sessionNotes,
+      courses,
+      soundEnabled
+    };
+  });
 
   // Handle completion
   const handleTimerComplete = () => {
     playChime();
     confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
 
-    if (!isBreak) {
-      const durationMinutes = timerMode === 'pomodoro' ? 25 : timerMode === 'deep' ? 50 : customMinutes;
-      const course = courses.find(c => c.id === selectedCourseId) || courses[0];
+    const current = stateRef.current;
+    if (!current.isBreak) {
+      const durationMinutes = current.timerMode === 'pomodoro' ? 25 : current.timerMode === 'deep' ? 50 : current.customMinutes;
+      const course = current.courses.find(c => c.id === current.selectedCourseId) || current.courses[0];
 
       const newSession = {
         id: Date.now(),
@@ -109,7 +113,7 @@ export default function FocusTimerView() {
         courseCode: course.code,
         minutes: durationMinutes,
         timestamp: new Date().toISOString(),
-        notes: sessionNotes || `Completed ${durationMinutes}m focus session for ${course.code}`
+        notes: current.sessionNotes || `Completed ${durationMinutes}m focus session for ${course.code}`
       };
 
       setSessions(prev => [newSession, ...prev]);
@@ -117,12 +121,88 @@ export default function FocusTimerView() {
 
       // Switch to break
       setIsBreak(true);
-      const breakMins = timerMode === 'pomodoro' ? 5 : 10;
-      setSecondsLeft(breakMins * 60);
+      const breakMins = current.timerMode === 'pomodoro' ? 5 : 10;
+      const breakSecs = breakMins * 60;
+      setSecondsLeft(breakSecs);
+      targetEndTimeRef.current = Date.now() + breakSecs * 1000;
+      setIsRunning(true);
     } else {
       showToast('☕ Break time over! Ready for your next focus sprint.', 'info');
       setIsBreak(false);
+      targetEndTimeRef.current = null;
+      setIsRunning(false);
       resetTimer();
+    }
+  };
+
+  // Drift-free Timer Tick with Background Tab & Sleep Recovery
+  useEffect(() => {
+    if (!isRunning) return;
+
+    const syncTick = () => {
+      if (timerMode === 'stopwatch') {
+        if (!stopwatchStartRef.current) {
+          stopwatchStartRef.current = Date.now() - stopwatchSeconds * 1000;
+        }
+        const elapsed = Math.floor((Date.now() - stopwatchStartRef.current) / 1000);
+        setStopwatchSeconds(elapsed);
+      } else {
+        if (!targetEndTimeRef.current) {
+          targetEndTimeRef.current = Date.now() + secondsLeft * 1000;
+        }
+        const remaining = Math.max(0, Math.ceil((targetEndTimeRef.current - Date.now()) / 1000));
+        setSecondsLeft(remaining);
+
+        // Update document tab title with remaining sprint time
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        const timeFormatted = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        document.title = `${timeFormatted} ${isBreak ? '☕ Break' : '🎯 Sprint'} | CTY Dashboard`;
+
+        if (remaining <= 0) {
+          setIsRunning(false);
+          targetEndTimeRef.current = null;
+          handleTimerComplete();
+        }
+      }
+    };
+
+    // Run tick immediately on visibility change or window focus
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncTick();
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    window.addEventListener('focus', onVisibilityChange);
+
+    const interval = setInterval(syncTick, 250);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.removeEventListener('focus', onVisibilityChange);
+      document.title = 'Seneca CTY Semester 3 | Academic Command Center';
+    };
+  }, [isRunning, timerMode, isBreak]);
+
+  // Toggle Start / Pause
+  const handleToggleRunning = () => {
+    if (isRunning) {
+      // Pause
+      setIsRunning(false);
+      targetEndTimeRef.current = null;
+      stopwatchStartRef.current = null;
+      document.title = 'Seneca CTY Semester 3 | Academic Command Center';
+    } else {
+      // Start / Resume
+      if (timerMode === 'stopwatch') {
+        stopwatchStartRef.current = Date.now() - stopwatchSeconds * 1000;
+      } else {
+        targetEndTimeRef.current = Date.now() + secondsLeft * 1000;
+      }
+      setIsRunning(true);
     }
   };
 
@@ -130,6 +210,9 @@ export default function FocusTimerView() {
   const resetTimer = (mode = timerMode, custom = customMinutes) => {
     setIsRunning(false);
     setIsBreak(false);
+    targetEndTimeRef.current = null;
+    stopwatchStartRef.current = null;
+    document.title = 'Seneca CTY Semester 3 | Academic Command Center';
     if (mode === 'pomodoro') {
       setSecondsLeft(25 * 60);
     } else if (mode === 'deep') {
@@ -351,7 +434,7 @@ export default function FocusTimerView() {
             {/* Play, Pause, Reset Controls */}
             <div className="flex items-center gap-4 z-10 mb-4">
               <button
-                onClick={() => setIsRunning(!isRunning)}
+                onClick={handleToggleRunning}
                 className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white shadow-xl transition-all hover:scale-105 active:scale-95 ${
                   isRunning 
                     ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-900/30' 
