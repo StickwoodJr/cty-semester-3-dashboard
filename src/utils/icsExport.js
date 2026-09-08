@@ -5,8 +5,8 @@
 
 // Format Date object or YYYY-MM-DD string to iCalendar YYYYMMDD
 export function formatIcsDate(dateStr) {
-  if (!dateStr) return '';
-  return dateStr.replace(/-/g, '');
+  if (!dateStr || typeof dateStr !== 'string') return '';
+  return dateStr.trim().replace(/[-/]/g, '');
 }
 
 // Convert "9:50 AM" and date "2026-09-14" to local ISO string "20260914T095000"
@@ -81,7 +81,9 @@ export function generateTimetableIcs(courses) {
       const firstDate = DAY_FIRST_DATES[day];
       const byDay = DAY_BYDAY_CODES[day] || 'MO';
       
-      const [startTime, endTime] = slot.time.split('-').map(t => t.trim());
+      const timeParts = (slot.time || '').split(/[-–—]/).map(t => t.trim());
+      const startTime = timeParts[0] || '9:00 AM';
+      const endTime = timeParts[1] || '10:00 AM';
       const dtStart = formatIcsDateTime(firstDate, startTime);
       const dtEnd = formatIcsDateTime(firstDate, endTime);
 
@@ -95,7 +97,7 @@ export function generateTimetableIcs(courses) {
         `DTSTAMP:20260908T000000Z`,
         `DTSTART;TZID=America/Toronto:${dtStart}`,
         `DTEND;TZID=America/Toronto:${dtEnd}`,
-        `RRULE:FREQ=WEEKLY;BYDAY=${byDay};UNTIL=20261218T235959Z`,
+        `RRULE:FREQ=WEEKLY;BYDAY=${byDay};UNTIL=20261219T045959Z`,
         `SUMMARY:${escapeIcsText(`${course.code} - ${course.name}`)}`,
         `LOCATION:${escapeIcsText(location)}`,
         `DESCRIPTION:${escapeIcsText(`Professor: ${course.professor}\\nEmail: ${course.email}\\nRoom: ${slot.room}\\nSection: ${course.section}\\nSeneca CTY Semester 3 (Fall 2026)`)}`,

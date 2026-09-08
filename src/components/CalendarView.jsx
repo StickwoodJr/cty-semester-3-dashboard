@@ -4,6 +4,7 @@ import {
   ChevronLeft, ChevronRight, Calendar as CalendarIcon, 
   Filter, CheckCircle2, Plus, Clock, Info, Layers
 } from 'lucide-react';
+import { getLocalDateStr } from '../utils/dateHelper';
 
 export default function CalendarView() {
   const { 
@@ -102,6 +103,7 @@ export default function CalendarView() {
   // Group tasks by date string (YYYY-MM-DD)
   const tasksByDate = {};
   filteredTasks.forEach(task => {
+    if (!task.dueDate) return;
     if (!tasksByDate[task.dueDate]) {
       tasksByDate[task.dueDate] = [];
     }
@@ -132,6 +134,7 @@ export default function CalendarView() {
               <button 
                 onClick={handlePrevMonth}
                 className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition"
+                aria-label="Previous month"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -141,6 +144,7 @@ export default function CalendarView() {
               <button 
                 onClick={handleNextMonth}
                 className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-100 transition"
+                aria-label="Next month"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -268,13 +272,20 @@ export default function CalendarView() {
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
           {/* Day of week headers */}
           <div className="grid grid-cols-7 border-b border-slate-800 bg-slate-950/80 text-center py-2.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
-            <span>Sunday</span>
-            <span>Monday</span>
-            <span>Tuesday</span>
-            <span>Wednesday</span>
-            <span>Thursday</span>
-            <span>Friday</span>
-            <span>Saturday</span>
+            {[
+              { short: 'Sun', full: 'Sunday' },
+              { short: 'Mon', full: 'Monday' },
+              { short: 'Tue', full: 'Tuesday' },
+              { short: 'Wed', full: 'Wednesday' },
+              { short: 'Thu', full: 'Thursday' },
+              { short: 'Fri', full: 'Friday' },
+              { short: 'Sat', full: 'Saturday' }
+            ].map(d => (
+              <span key={d.short} title={d.full}>
+                <span className="sm:hidden">{d.short}</span>
+                <span className="hidden sm:inline">{d.full}</span>
+              </span>
+            ))}
           </div>
 
           {/* Calendar Day Cells */}
@@ -282,7 +293,8 @@ export default function CalendarView() {
             {calendarDays.map((day, idx) => {
               const dayTasks = tasksByDate[day.dateStr] || [];
               const dayMilestones = importantDatesMap[day.dateStr] || [];
-              const isToday = day.dateStr === '2026-09-08'; // Default Fall 2026 Day 1
+              const todayStr = getLocalDateStr();
+              const isToday = day.dateStr === todayStr || (todayStr < '2026-09-08' && day.dateStr === '2026-09-08');
 
               return (
                 <div 
