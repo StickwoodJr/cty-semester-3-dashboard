@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library, Flame, Activity
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library, Flame, Activity, ShieldCheck
 } from 'lucide-react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 
@@ -58,6 +58,7 @@ export default function CommandPaletteModal() {
     { id: 'workload', title: 'Semester Workload Crunch Radar & 4.0 Early-Bird Buffer', category: 'Navigation', icon: Activity, action: () => setCurrentView('workload') },
     { id: 'timer', title: 'Focus & Study Session Timer', category: 'Navigation', icon: Timer, action: () => setCurrentView('timer') },
     { id: 'toolbelt', title: 'CTY Lab Technical Toolbelt & Cheatsheet', category: 'Navigation', icon: Terminal, action: () => setCurrentView('toolbelt') },
+    { id: 'preflight', title: 'Lab Pre-Flight Hub (Verification Commands & Rubrics)', category: 'Navigation', icon: ShieldCheck, action: () => setCurrentView('preflight') },
     { id: 'resources', title: 'Resource & Faculty Vault (Portals, Directory & Policies)', category: 'Navigation', icon: Library, action: () => setCurrentView('resources') },
     { id: 'calendar', title: 'Academic Calendar (Month Grid & Agenda)', category: 'Navigation', icon: Calendar, action: () => setCurrentView('calendar') },
     { id: 'tasks', title: 'Assessments & Tasks (Kanban & Table)', category: 'Navigation', icon: CheckSquare, action: () => setCurrentView('tasks') },

@@ -450,6 +450,7 @@ export default function MarksGpaView() {
                             step="1"
                             value={effectiveScore}
                             onChange={(e) => handleScoreChange(task.id, e.target.value)}
+                            aria-label={`Simulate score percentage for ${task.name}`}
                             className="w-full h-1.5 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-red-500"
                           />
                         </div>
@@ -469,6 +470,7 @@ export default function MarksGpaView() {
                             max="100"
                             value={effectiveScore}
                             onChange={(e) => handleScoreChange(task.id, e.target.value)}
+                            aria-label={`Simulate score number for ${task.name}`}
                             className="w-14 px-1.5 py-0.5 rounded bg-slate-950 border border-slate-700 text-right font-mono font-bold text-white text-xs focus:border-red-500 focus:outline-none"
                           />
                           <span className="text-slate-500 font-mono text-xs">%</span>
@@ -510,6 +512,7 @@ export default function MarksGpaView() {
             step="0.05"
             value={simulatorTarget}
             onChange={(e) => setSimulatorTarget(parseFloat(e.target.value))}
+            aria-label="Target GPA Simulator slider"
             className="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-amber-500"
           />
           <div className="flex justify-between text-[11px] font-mono text-slate-500">

@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, BookOpen, Plus, Cloud, ChevronRight, 
-  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass, Brain, Library, Flame, Activity
+  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass, Brain, Library, Flame, Activity, ShieldCheck
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -28,6 +28,7 @@ export default function Sidebar() {
     { id: 'workload', label: 'Workload Radar', icon: Activity, badge: 'Crunch' },
     { id: 'timer', label: 'Focus & Study Timer', icon: Timer, badge: '4.0 Target' },
     { id: 'toolbelt', label: 'CTY Lab Toolbelt', icon: Terminal, badge: 'Snippets' },
+    { id: 'preflight', label: 'Lab Pre-Flight Hub', icon: ShieldCheck, badge: 'Audit' },
     { id: 'resources', label: 'Resource & Faculty Vault', icon: Library, badge: 'Portals' },
     { id: 'marks', label: 'Marks & GPA', icon: BarChart3 },
     { id: 'exams', label: 'Exam & Midterm Hub', icon: Award, badge: 'Midterms' },

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   Terminal, Copy, Check, Search, Server, Shield, Database, 
-  Cloud, Network, Key, ExternalLink, Sparkles, BookOpen, AlertTriangle
+  Cloud, Network, Key, ExternalLink, Sparkles, BookOpen, AlertTriangle, ShieldCheck
 } from 'lucide-react';
 
 export default function LabToolbeltView() {
-  const { showToast } = useAcademic();
+  const { showToast, setCurrentView } = useAcademic();
 
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -280,17 +280,29 @@ export default function LabToolbeltView() {
             </p>
           </div>
 
-          {/* Matrix Username Input */}
-          <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs">
-            <Key className="w-4 h-4 text-amber-400 shrink-0" />
-            <span className="text-slate-400 text-[11px] whitespace-nowrap">Seneca User:</span>
-            <input
-              type="text"
-              value={senecaUsername}
-              onChange={(e) => setSenecaUsername(e.target.value)}
-              placeholder="Username"
-              className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono w-28 focus:outline-none focus:border-red-500"
-            />
+          <div className="flex items-center gap-3">
+            {/* Link to Lab Pre-Flight Hub */}
+            <button
+              onClick={() => setCurrentView('preflight')}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition shadow-sm"
+              title="Open Lab Pre-Flight & Screenshot Auditor"
+            >
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Pre-Flight Auditor</span>
+            </button>
+
+            {/* Matrix Username Input */}
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs">
+              <Key className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="text-slate-400 text-[11px] whitespace-nowrap">Seneca User:</span>
+              <input
+                type="text"
+                value={senecaUsername}
+                onChange={(e) => setSenecaUsername(e.target.value)}
+                placeholder="Username"
+                className="bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white font-mono w-28 focus:outline-none focus:border-red-500"
+              />
+            </div>
           </div>
         </div>
 

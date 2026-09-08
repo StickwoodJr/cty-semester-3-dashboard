@@ -24,6 +24,7 @@ import FlashcardsView from './components/FlashcardsView';
 import ResourceVaultView from './components/ResourceVaultView';
 import HabitsTrackerView from './components/HabitsTrackerView';
 import WorkloadRadarView from './components/WorkloadRadarView';
+import LabPreflightView from './components/LabPreflightView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -108,6 +109,7 @@ function AppContent() {
           {currentView === 'wtp' && <WtpCareerHub />}
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}
+          {currentView === 'preflight' && <LabPreflightView />}
           {currentView === 'resources' && <ResourceVaultView />}
           {currentView === 'print' && <PrintReportView />}
         </main>

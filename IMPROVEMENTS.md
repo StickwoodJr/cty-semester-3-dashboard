@@ -142,7 +142,30 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
   - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` verifying severity classification, 14-week timeline aggregation, and early-bird weight reduction.
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Activity` icon and "Crunch" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Built cleanly (`npm run build`, 0 errors), 13/13 logic verification tests passing (`npm test`).
-- **Commit**: Completed in Cycle 8.
+- **Commit**: Completed in Cycle 8 (`fc69619`).
+
+### Cycle 9 — Lab Pre-Flight Verification & Screenshot Rubric Auditor (`src/components/LabPreflightView.jsx`, `src/data/labPreflightData.js`)
+- **Category**: New High-Impact Feature (Lab Protocol Quality Assurance, Cloud Budget Protection & 4.0 Grade Defense)
+- **Motivation**: In Seneca CTY Semester 3, students submit over 35 technical hands-on labs across 5 core systems courses (OPS345 Linux, DAT330 Azure SQL, MST300 Azure Cloud, SEC320 Forensics, CSN305 SDN). Syllabi strictly penalize submissions that fail format protocols—such as missing student identification banners (`whoami`), missing system timestamps (`date`), or failing to deallocate Azure VMs (burning the $100 student credit, which constitutes 10% of the entire course grade in DAT330 & MST300).
+- **Implementation**:
+  - Built `src/data/labPreflightData.js` featuring:
+    - Pre-configured audit presets covering all major semester labs across OPS345, DAT330, MST300, SEC320, CSN305, and WTP100.
+    - Single-line terminal verification commands combining student username (`whoami`), system hostname (`hostname`), local timestamp (`date`), IP address verification, and service daemon status checks.
+    - Explicit rubric penalty warnings detailing exact mark deductions for missing evidence.
+    - Seneca 5-point standard submission criteria (identification, timestamp, cloud safeguards, professional PDF formatting, and academic integrity).
+  - Built `src/components/LabPreflightView.jsx` featuring:
+    - Interactive course filter and lab carousel with audit status badges.
+    - One-click copyable terminal command generator with instant visual feedback.
+    - Interactive rubric checklist persisted in `localStorage` under `seneca_cty_lab_preflight_v1`.
+    - Live **Submission Readiness Score** (0–100%) with circular SVG progress meter.
+    - Celebratory confetti upon reaching 100% pre-flight clearance.
+    - One-click "Mark as Submitted & Graded (100%)" button synchronizing directly into `AcademicContext`.
+    - Direct launch links to Learn@Seneca Dropbox, Azure Cloud Shell, and Focus Timer.
+    - Cross-linked from `LabToolbeltView.jsx` with a dedicated header button.
+  - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` verifying preset validity against active courses, proof token presence in bash/SQL commands, and general Seneca criteria completeness (**16/16 tests passing**).
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `ShieldCheck` icon and "Audit" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 16/16 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 9.
 
 ---
 

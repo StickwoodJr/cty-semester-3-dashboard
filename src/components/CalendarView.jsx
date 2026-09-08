@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   ChevronLeft, ChevronRight, Calendar as CalendarIcon, 
@@ -11,7 +11,7 @@ export default function CalendarView() {
     courses, 
     getAllAssessments, 
     setActiveModal, 
-    setModalPayload,
+    setModalPayload, 
     semesterConfig,
     updateAssessment
   } = useAcademic();
@@ -88,36 +88,44 @@ export default function CalendarView() {
     return days;
   };
 
-  const calendarDays = getCalendarDays();
+  const calendarDays = useMemo(() => {
+    return getCalendarDays();
+  }, [currentYear, currentMonth]);
 
   // Filter tasks based on criteria
-  const filterTask = (task) => {
-    if (selectedCourseFilter !== 'ALL' && task.courseId !== selectedCourseFilter) return false;
-    if (hideDone && task.status === 'Graded') return false;
-    if (selectedCategory !== 'ALL' && task.category !== selectedCategory) return false;
-    return true;
-  };
-
-  const filteredTasks = allTasks.filter(filterTask);
+  const filteredTasks = useMemo(() => {
+    return allTasks.filter(task => {
+      if (selectedCourseFilter !== 'ALL' && task.courseId !== selectedCourseFilter) return false;
+      if (hideDone && task.status === 'Graded') return false;
+      if (selectedCategory !== 'ALL' && task.category !== selectedCategory) return false;
+      return true;
+    });
+  }, [allTasks, selectedCourseFilter, hideDone, selectedCategory]);
 
   // Group tasks by date string (YYYY-MM-DD)
-  const tasksByDate = {};
-  filteredTasks.forEach(task => {
-    if (!task.dueDate) return;
-    if (!tasksByDate[task.dueDate]) {
-      tasksByDate[task.dueDate] = [];
-    }
-    tasksByDate[task.dueDate].push(task);
-  });
+  const tasksByDate = useMemo(() => {
+    const map = {};
+    filteredTasks.forEach(task => {
+      if (!task.dueDate) return;
+      if (!map[task.dueDate]) {
+        map[task.dueDate] = [];
+      }
+      map[task.dueDate].push(task);
+    });
+    return map;
+  }, [filteredTasks]);
 
   // Seneca Important Academic Dates mapping
-  const importantDatesMap = {};
-  semesterConfig.importantDates.forEach(d => {
-    if (!importantDatesMap[d.date]) {
-      importantDatesMap[d.date] = [];
-    }
-    importantDatesMap[d.date].push(d);
-  });
+  const importantDatesMap = useMemo(() => {
+    const map = {};
+    (semesterConfig.importantDates || []).forEach(d => {
+      if (!map[d.date]) {
+        map[d.date] = [];
+      }
+      map[d.date].push(d);
+    });
+    return map;
+  }, [semesterConfig.importantDates]);
 
   const categories = ['ALL', 'Lab', 'Quiz', 'Assignment', 'Test', 'Project', 'Exam', 'In-class', 'Milestone'];
 
@@ -269,9 +277,9 @@ export default function CalendarView() {
 
       {/* View 1: Month Grid View */}
       {viewMode === 'grid' && (
-        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-sm" role="region" aria-label="Monthly Calendar View">
           {/* Day of week headers */}
-          <div className="grid grid-cols-7 border-b border-slate-800 bg-slate-950/80 text-center py-2.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
+          <div className="grid grid-cols-7 border-b border-slate-800 bg-slate-950/80 text-center py-2.5 text-xs font-bold text-slate-400 uppercase tracking-wider" role="row">
             {[
               { short: 'Sun', full: 'Sunday' },
               { short: 'Mon', full: 'Monday' },
@@ -281,7 +289,7 @@ export default function CalendarView() {
               { short: 'Fri', full: 'Friday' },
               { short: 'Sat', full: 'Saturday' }
             ].map(d => (
-              <span key={d.short} title={d.full}>
+              <span key={d.short} title={d.full} role="columnheader">
                 <span className="sm:hidden">{d.short}</span>
                 <span className="hidden sm:inline">{d.full}</span>
               </span>
@@ -289,7 +297,7 @@ export default function CalendarView() {
           </div>
 
           {/* Calendar Day Cells */}
-          <div className="grid grid-cols-7 auto-rows-fr bg-slate-950/40">
+          <div className="grid grid-cols-7 auto-rows-fr bg-slate-950/40" role="grid" aria-label={`${monthNames[currentMonth]} ${currentYear}`}>
             {calendarDays.map((day, idx) => {
               const dayTasks = tasksByDate[day.dateStr] || [];
               const dayMilestones = importantDatesMap[day.dateStr] || [];
@@ -299,13 +307,25 @@ export default function CalendarView() {
               return (
                 <div 
                   key={idx}
+                  role="gridcell"
+                  tabIndex={0}
+                  aria-label={`${day.dateStr}${dayTasks.length > 0 ? `, ${dayTasks.length} assessment${dayTasks.length > 1 ? 's' : ''}` : ''}`}
                   onClick={() => {
                     if (dayTasks.length === 0) {
                       setActiveModal('add-task');
                       setModalPayload({ defaultDate: day.dateStr, courseId: courses[0]?.id });
                     }
                   }}
-                  className={`min-h-[110px] p-2 border-b border-r border-slate-800/80 flex flex-col justify-between transition-colors ${
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      if (dayTasks.length === 0) {
+                        e.preventDefault();
+                        setActiveModal('add-task');
+                        setModalPayload({ defaultDate: day.dateStr, courseId: courses[0]?.id });
+                      }
+                    }
+                  }}
+                  className={`min-h-[110px] p-2 border-b border-r border-slate-800/80 flex flex-col justify-between transition-colors focus:outline-none focus:ring-2 focus:ring-red-500/80 ${
                     day.isCurrentMonth ? 'bg-slate-900/60' : 'bg-slate-950/70 opacity-40'
                   } ${isToday ? 'ring-1 ring-inset ring-red-500/60 bg-red-950/10' : ''} hover:bg-slate-800/30 cursor-pointer`}
                 >
@@ -352,12 +372,23 @@ export default function CalendarView() {
                       return (
                         <div
                           key={task.id}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`${task.courseCode}: ${task.name} (${task.weight}%), status ${task.status}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             setActiveModal('edit-task');
                             setModalPayload({ courseId: task.courseId, assessment: task });
                           }}
-                          className={`text-[10px] p-1 rounded-md border flex items-center justify-between gap-1 group transition-all ${
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              setActiveModal('edit-task');
+                              setModalPayload({ courseId: task.courseId, assessment: task });
+                            }
+                          }}
+                          className={`text-[10px] p-1 rounded-md border flex items-center justify-between gap-1 group transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-red-400 ${
                             isDone 
                               ? 'bg-slate-950/80 border-slate-800 text-slate-400 line-through' 
                               : 'hover:brightness-110'
@@ -453,6 +484,7 @@ export default function CalendarView() {
                           setModalPayload({ courseId: task.courseId, assessment: task });
                         }}
                         className="px-2.5 py-1 text-xs rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+                        aria-label={`Edit assessment: ${task.name}`}
                       >
                         Edit
                       </button>

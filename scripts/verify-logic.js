@@ -13,6 +13,7 @@ import {
 import { getLetterGrade, getGpaValue } from '../src/data/senecaDates.js';
 import { calculateSemesterWorkload, calculateWorkloadMetrics, getCrunchSeverity } from '../src/utils/workloadHelper.js';
 import { INITIAL_COURSES } from '../src/data/coursesData.js';
+import { LAB_PREFLIGHT_PRESETS, GENERAL_PREFLIGHT_CRITERIA } from '../src/data/labPreflightData.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -286,6 +287,53 @@ test('calculateSemesterWorkload: Early-bird staging shifts weight and reduces cr
   assert.strictEqual(smoothedWeek7.tasks.length, rawWeek7.tasks.length - 4);
   assert(smoothedWeek7.totalWeight < rawWeek7.totalWeight);
   assert.strictEqual(Math.round((rawWeek7.totalWeight - smoothedWeek7.totalWeight) * 10) / 10, 8.0);
+});
+
+// -------------------------------------------------------------
+// 5. Lab Pre-Flight & Rubric Verification Tests
+// -------------------------------------------------------------
+console.log('\n🛡️ 5. Lab Pre-Flight & Screenshot Rubric Auditing:');
+
+test('LAB_PREFLIGHT_PRESETS: Every preset corresponds to a valid course and contains audit commands', () => {
+  const courseIds = new Set(INITIAL_COURSES.map(c => c.id));
+  assert(LAB_PREFLIGHT_PRESETS.length >= 8, 'Should have at least 8 lab presets');
+
+  LAB_PREFLIGHT_PRESETS.forEach(preset => {
+    assert(courseIds.has(preset.courseId), `Preset courseId ${preset.courseId} must exist in INITIAL_COURSES`);
+    assert(preset.labName && preset.labName.length > 0, 'Lab name must not be empty');
+    assert(preset.verificationCmd && preset.verificationCmd.length > 0, 'Verification command must not be empty');
+    assert(Array.isArray(preset.requiredItems) && preset.requiredItems.length >= 3, 'Must have at least 3 required rubric items');
+    
+    // Check that items have penalty warnings
+    preset.requiredItems.forEach(item => {
+      assert(item.id, 'Item must have an id');
+      assert(item.label, 'Item must have a label');
+      assert(item.penalty, 'Item must declare a rubric penalty warning');
+    });
+  });
+});
+
+test('LAB_PREFLIGHT_PRESETS: Terminal commands contain essential proof tokens (whoami, date, or SQL audit)', () => {
+  LAB_PREFLIGHT_PRESETS.forEach(preset => {
+    if (preset.terminalType === 'bash') {
+      const hasIdentity = preset.verificationCmd.includes('whoami');
+      const hasTime = preset.verificationCmd.includes('date');
+      assert(hasIdentity || hasTime, `Bash preset ${preset.id} must include identity or timestamp tokens`);
+    } else if (preset.terminalType === 'sql') {
+      const hasSqlAudit = preset.verificationCmd.includes('SUSER_SNAME') || preset.verificationCmd.includes('GETDATE');
+      assert(hasSqlAudit, `SQL preset ${preset.id} must include SUSER_SNAME or GETDATE tokens`);
+    }
+  });
+});
+
+test('GENERAL_PREFLIGHT_CRITERIA: Covers all 5 Seneca academic standard pillars', () => {
+  assert.strictEqual(GENERAL_PREFLIGHT_CRITERIA.length, 5);
+  const ids = GENERAL_PREFLIGHT_CRITERIA.map(c => c.id);
+  assert(ids.includes('gen-id'));
+  assert(ids.includes('gen-time'));
+  assert(ids.includes('gen-cloud'));
+  assert(ids.includes('gen-format'));
+  assert(ids.includes('gen-academic'));
 });
 
 console.log(`\n🎉 Verification Completed: ${passedTests}/${totalTests} tests passed cleanly with 0 failures.\n`);

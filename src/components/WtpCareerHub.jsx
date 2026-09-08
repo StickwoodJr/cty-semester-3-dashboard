@@ -13,6 +13,15 @@ export default function WtpCareerHub() {
   const completedCount = modules.filter(m => m.completed).length;
   const progressPercent = Math.round((completedCount / (modules.length || 1)) * 100);
 
+  const handleToggle = (moduleId) => {
+    const targetModule = modules.find(m => m.id === moduleId);
+    const willBeCompleted = targetModule && !targetModule.completed;
+    toggleWtpModule(moduleId);
+    if (willBeCompleted && completedCount + 1 === modules.length) {
+      triggerCelebration();
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
       
@@ -109,8 +118,18 @@ export default function WtpCareerHub() {
           {modules.map(m => (
             <div
               key={m.id}
-              onClick={() => toggleWtpModule(m.id)}
-              className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition ${
+              role="checkbox"
+              aria-checked={m.completed}
+              tabIndex={0}
+              aria-label={`Module ${m.id}: ${m.title}, ${m.completed ? 'Passed' : 'Pending'}`}
+              onClick={() => handleToggle(m.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleToggle(m.id);
+                }
+              }}
+              className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 cursor-pointer transition focus:outline-none focus:ring-2 focus:ring-amber-500/80 ${
                 m.completed 
                   ? 'bg-emerald-500/10 border-emerald-500/30 text-white' 
                   : 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-slate-700'
