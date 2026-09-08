@@ -65,6 +65,16 @@ export default function SettingsModal() {
       return;
     }
 
+    const availableCodes = new Set(courses.map(c => c.code.toLowerCase()));
+    let addedCount = 0;
+    const unmatchedCourses = new Set();
+
+    parsedTasks.forEach(t => {
+      if (!availableCodes.has(t.courseCode.toLowerCase())) {
+        unmatchedCourses.add(t.courseCode);
+      }
+    });
+
     // Merge or append to existing courses
     setCourses(prevCourses => {
       return prevCourses.map(course => {
@@ -82,12 +92,14 @@ export default function SettingsModal() {
             name: t.name,
             category: t.category || 'Assignment',
             dueDate: t.dueDate || '2026-10-15',
-            weight: 5.0,
+            weight: typeof t.weight === 'number' && !isNaN(t.weight) ? t.weight : 5.0,
             status: t.status || 'Not Started',
-            score: null,
+            score: t.score !== undefined ? t.score : null,
             maxScore: 100,
-            topic: `Imported from CSV`
+            topic: t.topic || `Imported from CSV`
           }));
+
+        addedCount += newTasks.length;
 
         return {
           ...course,
@@ -96,7 +108,18 @@ export default function SettingsModal() {
       });
     });
 
-    showToast(`Successfully imported ${parsedTasks.length} tasks from CSV!`, "success");
+    if (addedCount > 0) {
+      if (unmatchedCourses.size > 0) {
+        showToast(`Imported ${addedCount} tasks! (${unmatchedCourses.size} other courses skipped: ${[...unmatchedCourses].slice(0, 3).join(', ')})`, "info");
+      } else {
+        showToast(`Successfully imported ${addedCount} tasks from CSV!`, "success");
+      }
+    } else if (unmatchedCourses.size > 0) {
+      showToast(`No tasks matched Semester 3 courses (${[...unmatchedCourses].join(', ')})`, "warning");
+    } else {
+      showToast("All imported tasks already exist in course trackers", "info");
+    }
+
     setCsvInput('');
     setShowCsvImport(false);
   };
