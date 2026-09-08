@@ -17,6 +17,7 @@ import SyncExportModal from './components/SyncExportModal';
 import FocusTimerView from './components/FocusTimerView';
 import LabToolbeltView from './components/LabToolbeltView';
 import CommandPaletteModal from './components/CommandPaletteModal';
+import PrintReportView from './components/PrintReportView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -80,6 +81,7 @@ function AppContent() {
           {currentView === 'wtp' && <WtpCareerHub />}
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}
+          {currentView === 'print' && <PrintReportView />}
         </main>
       </div>
 

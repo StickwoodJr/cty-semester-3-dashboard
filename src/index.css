@@ -37,3 +37,26 @@
   border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(-2px);
 }
+
+/* Print / PDF Styles */
+@media print {
+  header, aside, nav, .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  main {
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+  .print-page {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+  }
+  .print-page * {
+    color: inherit;
+  }
+}
