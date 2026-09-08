@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AcademicProvider, useAcademic } from './context/AcademicContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -22,11 +22,22 @@ import ExamWarRoomView from './components/ExamWarRoomView';
 import StudyPlannerView from './components/StudyPlannerView';
 import FlashcardsView from './components/FlashcardsView';
 import ResourceVaultView from './components/ResourceVaultView';
+import HabitsTrackerView from './components/HabitsTrackerView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
   const { currentView, toastMessage } = useAcademic();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile drawer on Escape
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
@@ -47,10 +58,14 @@ function AppContent() {
               className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <div className="relative w-72 bg-slate-900 h-full border-r border-slate-800 z-10 flex flex-col">
+            <div className="relative w-72 bg-slate-900 h-full border-r border-slate-800 z-10 flex flex-col" role="dialog" aria-modal="true" aria-label="Mobile navigation menu">
               <div className="p-4 border-b border-slate-800 flex items-center justify-between">
                 <span className="font-bold text-white text-sm">Seneca CTY Menu</span>
-                <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 p-1">
+                <button 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="text-slate-400 hover:text-white p-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  aria-label="Close navigation menu"
+                >
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -67,7 +82,9 @@ function AppContent() {
           <div className="md:hidden mb-4 flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="flex items-center gap-2 text-xs font-semibold text-slate-300"
+              className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition rounded-lg p-1 focus:outline-none focus:ring-2 focus:ring-red-500"
+              aria-label="Open navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               <Menu className="w-4 h-4 text-red-400" />
               <span>Menu & Navigation</span>
@@ -82,6 +99,7 @@ function AppContent() {
           {currentView === 'course-detail' && <CourseDetailView />}
           {currentView === 'schedule' && <TimetableView />}
           {currentView === 'planner' && <StudyPlannerView />}
+          {currentView === 'habits' && <HabitsTrackerView />}
           {currentView === 'marks' && <MarksGpaView />}
           {currentView === 'exams' && <ExamWarRoomView />}
           {currentView === 'flashcards' && <FlashcardsView />}

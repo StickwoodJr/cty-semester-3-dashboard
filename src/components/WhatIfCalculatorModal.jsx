@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { X, Calculator, Target, Sparkles, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function WhatIfCalculatorModal() {
   const { activeModal, setActiveModal, modalPayload, getCourseMetrics } = useAcademic();
+  const isModalOpen = activeModal === 'what-if';
+  const modalRef = useFocusTrap(isModalOpen);
 
   // Close on Escape key
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function WhatIfCalculatorModal() {
       aria-modal="true"
       aria-labelledby="what-if-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">

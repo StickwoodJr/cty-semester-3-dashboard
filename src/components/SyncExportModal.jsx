@@ -11,6 +11,7 @@ import {
   generateStudyBlocksIcs,
   triggerFileDownload 
 } from '../utils/icsExport';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function SyncExportModal() {
   const { 
@@ -20,6 +21,9 @@ export default function SyncExportModal() {
     semesterConfig,
     showToast 
   } = useAcademic();
+
+  const isModalOpen = activeModal === 'sync-export';
+  const modalRef = useFocusTrap(isModalOpen);
 
   // Close on Escape key
   useEffect(() => {
@@ -78,7 +82,7 @@ export default function SyncExportModal() {
       aria-modal="true"
       aria-labelledby="sync-export-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90">

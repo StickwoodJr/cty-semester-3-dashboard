@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { X, BookOpen, Plus, Trash2, MapPin } from 'lucide-react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function CourseEditModal() {
   const { activeModal, setActiveModal, modalPayload, updateCourse, addCourse } = useAcademic();
+  const isModalOpen = activeModal === 'edit-course';
+  const modalRef = useFocusTrap(isModalOpen);
 
   const isNew = modalPayload?.isNew || false;
   const course = modalPayload?.course || {};
@@ -102,7 +105,7 @@ export default function CourseEditModal() {
       aria-modal="true"
       aria-labelledby="course-edit-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">

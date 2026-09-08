@@ -3,8 +3,9 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library, Flame
 } from 'lucide-react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function CommandPaletteModal() {
   const { 
@@ -17,6 +18,7 @@ export default function CommandPaletteModal() {
   } = useAcademic();
 
   const [isOpen, setIsOpen] = useState(false);
+  const modalRef = useFocusTrap(isOpen);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
@@ -52,6 +54,7 @@ export default function CommandPaletteModal() {
     { id: 'dashboard', title: 'Dashboard & Command Center', category: 'Navigation', icon: LayoutDashboard, action: () => setCurrentView('dashboard') },
     { id: 'schedule', title: 'Weekly Timetable (Scaled Grid & Breaks)', category: 'Navigation', icon: Clock, action: () => setCurrentView('schedule') },
     { id: 'planner', title: 'Study & Gap Planner (4.0 Target & Campus Gaps)', category: 'Navigation', icon: Compass, action: () => setCurrentView('planner') },
+    { id: 'habits', title: '4.0 Daily Habits & Execution Streak Engine', category: 'Navigation', icon: Flame, action: () => setCurrentView('habits') },
     { id: 'timer', title: 'Focus & Study Session Timer', category: 'Navigation', icon: Timer, action: () => setCurrentView('timer') },
     { id: 'toolbelt', title: 'CTY Lab Technical Toolbelt & Cheatsheet', category: 'Navigation', icon: Terminal, action: () => setCurrentView('toolbelt') },
     { id: 'resources', title: 'Resource & Faculty Vault (Portals, Directory & Policies)', category: 'Navigation', icon: Library, action: () => setCurrentView('resources') },
@@ -133,7 +136,7 @@ export default function CommandPaletteModal() {
       aria-modal="true"
       aria-label="Command palette navigation and search"
     >
-      <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
         
         {/* Search Bar Input */}
         <div className="flex items-center px-4 py-3.5 border-b border-slate-800 gap-3 bg-slate-900/90">

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { exportTasksToCSV, parseCSV } from '../utils/csvHelper';
 import { getLocalDateStr } from '../utils/dateHelper';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function SettingsModal() {
   const { 
@@ -16,6 +17,9 @@ export default function SettingsModal() {
     resetToDefaults, 
     showToast 
   } = useAcademic();
+
+  const isModalOpen = activeModal === 'settings';
+  const modalRef = useFocusTrap(isModalOpen);
 
   // Close on Escape key
   useEffect(() => {
@@ -143,7 +147,7 @@ export default function SettingsModal() {
       aria-modal="true"
       aria-labelledby="settings-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">
