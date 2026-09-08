@@ -4,6 +4,22 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 
 ---
 
+## Autonomous Feature Agent Log
+
+### Cycle 1 — Exam & Midterm War Room (`src/components/ExamWarRoomView.jsx`)
+- **Category**: New High-Impact Feature (Academic Strategy & 4.0 GPA Target)
+- **Motivation**: Midterms, tests, and finals account for over 60% of the entire semester's grade across the 7 courses. Additionally, Seneca syllabi mandate strict independent sub-minimum rules (e.g. SEC320 and DAT330 requiring $\ge 50\%$ test weighted averages to pass) and specific cheat sheet allowances (e.g. OPS345 1-sided handwritten 8.5"x11" sheet for midterm, 2-sided for final).
+- **Implementation**:
+  - Built `src/components/ExamWarRoomView.jsx` with live countdown clocks to Midterm Week (Oct 19, 2026) and Final Exam Week (Dec 7, 2026).
+  - Integrated course-by-course syllabus threshold alert cards detailing exact allowable exam aids and passing hurdles.
+  - Built an interactive Seneca CTY Exam Readiness Checklist persisted in `localStorage` under `seneca_cty_exam_readiness_v1` with progress bar and completion feedback.
+  - Linked assessments directly to one-click Focus Study Timer sessions and course details.
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Award` icon and "Midterms" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Zero build errors (`npm run build`). Clean responsive layout across desktop and mobile.
+- **Commit**: Completed in Cycle 1.
+
+---
+
 ## Session: September 8, 2026 (Initial Comprehensive Audit)
 
 ### Baseline Verification

@@ -18,6 +18,7 @@ import FocusTimerView from './components/FocusTimerView';
 import LabToolbeltView from './components/LabToolbeltView';
 import CommandPaletteModal from './components/CommandPaletteModal';
 import PrintReportView from './components/PrintReportView';
+import ExamWarRoomView from './components/ExamWarRoomView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -78,6 +79,7 @@ function AppContent() {
           {currentView === 'course-detail' && <CourseDetailView />}
           {currentView === 'schedule' && <TimetableView />}
           {currentView === 'marks' && <MarksGpaView />}
+          {currentView === 'exams' && <ExamWarRoomView />}
           {currentView === 'wtp' && <WtpCareerHub />}
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}

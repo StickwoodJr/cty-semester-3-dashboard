@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   CheckSquare, Search, Filter, Plus, Download, Upload, 
   CheckCircle2, Clock, AlertCircle, Edit3, Trash2, ArrowUpDown, 
-  ChevronRight, Kanban, Table as TableIcon, Sparkles
+  ChevronRight, Kanban, Table as TableIcon, Sparkles, XCircle
 } from 'lucide-react';
 import { exportTasksToCSV } from '../utils/csvHelper';
 import { getDueUrgency } from '../utils/dateHelper';
@@ -23,6 +23,7 @@ export default function TasksView() {
   const allTasks = getAllAssessments();
 
   // Filters & State
+  const [smartPreset, setSmartPreset] = useState('ALL'); // 'ALL' | 'DUE_SOON' | 'OVERDUE' | 'HIGH_WEIGHT' | 'INCOMPLETE' | 'COMPLETED'
   const [searchTerm, setSearchTerm] = useState('');
   const [courseFilter, setCourseFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
@@ -35,6 +36,24 @@ export default function TasksView() {
   const [editingScoreId, setEditingScoreId] = useState(null);
   const [tempScore, setTempScore] = useState('');
 
+  // Preset summary counts across all tasks
+  const presetCounts = useMemo(() => ({
+    ALL: allTasks.length,
+    DUE_SOON: allTasks.filter(t => {
+      if (t.status === 'Graded') return false;
+      const d = getDueUrgency(t.dueDate).days;
+      return d !== null && d >= 0 && d <= 7;
+    }).length,
+    OVERDUE: allTasks.filter(t => {
+      if (t.status === 'Graded') return false;
+      const d = getDueUrgency(t.dueDate).days;
+      return d !== null && d < 0;
+    }).length,
+    HIGH_WEIGHT: allTasks.filter(t => (parseFloat(t.weight) || 0) >= 15).length,
+    INCOMPLETE: allTasks.filter(t => t.status !== 'Graded').length,
+    COMPLETED: allTasks.filter(t => t.status === 'Graded').length,
+  }), [allTasks]);
+
   // Filtering logic
   const filteredTasks = allTasks.filter(task => {
     if (courseFilter !== 'ALL' && task.courseId !== courseFilter) return false;
@@ -46,6 +65,21 @@ export default function TasksView() {
       const matchCourse = task.courseCode.toLowerCase().includes(q);
       const matchTopic = (task.topic || '').toLowerCase().includes(q);
       if (!matchName && !matchCourse && !matchTopic) return false;
+    }
+    if (smartPreset === 'DUE_SOON') {
+      if (task.status === 'Graded') return false;
+      const d = getDueUrgency(task.dueDate).days;
+      if (d === null || d < 0 || d > 7) return false;
+    } else if (smartPreset === 'OVERDUE') {
+      if (task.status === 'Graded') return false;
+      const d = getDueUrgency(task.dueDate).days;
+      if (d === null || d >= 0) return false;
+    } else if (smartPreset === 'HIGH_WEIGHT') {
+      if ((parseFloat(task.weight) || 0) < 15) return false;
+    } else if (smartPreset === 'INCOMPLETE') {
+      if (task.status === 'Graded') return false;
+    } else if (smartPreset === 'COMPLETED') {
+      if (task.status !== 'Graded') return false;
     }
     return true;
   });
@@ -212,6 +246,62 @@ export default function TasksView() {
             ))}
           </select>
         </div>
+
+        {/* Smart Presets Quick-Filter Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-800/60">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[11px] font-semibold text-slate-400 mr-1 flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Smart Presets:</span>
+            </span>
+            {[
+              { id: 'ALL', label: 'All' },
+              { id: 'DUE_SOON', label: 'Due This Week (≤7d)' },
+              { id: 'OVERDUE', label: 'Overdue' },
+              { id: 'HIGH_WEIGHT', label: 'High Weight (≥15%)' },
+              { id: 'INCOMPLETE', label: 'Incomplete' },
+              { id: 'COMPLETED', label: 'Completed' },
+            ].map(p => {
+              const active = smartPreset === p.id;
+              const count = presetCounts[p.id] || 0;
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setSmartPreset(p.id)}
+                  aria-pressed={active}
+                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition flex items-center gap-1.5 ${
+                    active
+                      ? 'bg-red-600 text-white shadow-sm ring-1 ring-red-400'
+                      : 'bg-slate-950 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800'
+                  }`}
+                >
+                  <span>{p.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-semibold ${
+                    active ? 'bg-red-700/80 text-white' : 'bg-slate-800 text-slate-400'
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {(smartPreset !== 'ALL' || courseFilter !== 'ALL' || statusFilter !== 'ALL' || categoryFilter !== 'ALL' || searchTerm.trim() !== '') && (
+            <button
+              onClick={() => {
+                setSmartPreset('ALL');
+                setCourseFilter('ALL');
+                setStatusFilter('ALL');
+                setCategoryFilter('ALL');
+                setSearchTerm('');
+              }}
+              className="text-xs text-slate-400 hover:text-red-400 flex items-center gap-1 transition px-2 py-1 rounded-md hover:bg-slate-800/60"
+            >
+              <XCircle className="w-3.5 h-3.5" />
+              <span>Clear filters</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* View 1: Table Layout */}
@@ -221,8 +311,9 @@ export default function TasksView() {
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Status</th>
+                  <th scope="col" className="py-3 px-4">Status</th>
                   <th 
+                    scope="col"
                     className="py-3 px-4 cursor-pointer hover:text-slate-200 transition"
                     onClick={() => handleSort('course')}
                   >
@@ -232,6 +323,7 @@ export default function TasksView() {
                     </div>
                   </th>
                   <th 
+                    scope="col"
                     className="py-3 px-4 cursor-pointer hover:text-slate-200 transition"
                     onClick={() => handleSort('name')}
                   >
@@ -240,8 +332,9 @@ export default function TasksView() {
                       <ArrowUpDown className="w-3 h-3 text-slate-500" />
                     </div>
                   </th>
-                  <th className="py-3 px-4">Category</th>
+                  <th scope="col" className="py-3 px-4">Category</th>
                   <th 
+                    scope="col"
                     className="py-3 px-4 cursor-pointer hover:text-slate-200 transition"
                     onClick={() => handleSort('dueDate')}
                   >
@@ -251,6 +344,7 @@ export default function TasksView() {
                     </div>
                   </th>
                   <th 
+                    scope="col"
                     className="py-3 px-4 cursor-pointer hover:text-slate-200 transition text-right"
                     onClick={() => handleSort('weight')}
                   >
@@ -259,8 +353,8 @@ export default function TasksView() {
                       <ArrowUpDown className="w-3 h-3 text-slate-500" />
                     </div>
                   </th>
-                  <th className="py-3 px-4 text-center">Score (%)</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th scope="col" className="py-3 px-4 text-center">Score (%)</th>
+                  <th scope="col" className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
 
@@ -291,6 +385,7 @@ export default function TasksView() {
                                 score: nextStatus === 'Graded' && task.score === null ? 100 : task.score
                               });
                             }}
+                            aria-label={`Current status: ${task.status}. Click to cycle.`}
                             className={`px-2 py-1 rounded-md text-[10px] font-semibold border transition ${
                               task.status === 'Graded' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' :
                               task.status === 'Submitted' ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' :
@@ -367,10 +462,12 @@ export default function TasksView() {
                                   if (e.key === 'Escape') setEditingScoreId(null);
                                 }}
                                 autoFocus
+                                aria-label={`Score percentage for ${task.name}`}
                                 className="w-14 px-1.5 py-0.5 text-center text-xs bg-slate-950 border border-red-500 rounded text-white font-mono focus:outline-none"
                               />
                               <button
                                 onClick={() => handleScoreSave(task.courseId, task.id)}
+                                aria-label="Confirm score"
                                 className="text-emerald-400 hover:text-emerald-300 font-bold text-xs"
                               >
                                 ✓
@@ -382,6 +479,7 @@ export default function TasksView() {
                                 setEditingScoreId(task.id);
                                 setTempScore(task.score !== null ? String(task.score) : '');
                               }}
+                              aria-label={`Edit score for ${task.name}, currently ${task.score !== null ? `${task.score}%` : 'not entered'}`}
                               className={`font-mono text-xs px-2 py-0.5 rounded hover:bg-slate-800 transition ${
                                 task.score !== null 
                                   ? 'text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20' 
@@ -402,6 +500,7 @@ export default function TasksView() {
                                 setActiveModal('edit-task');
                                 setModalPayload({ courseId: task.courseId, assessment: task });
                               }}
+                              aria-label={`Edit assessment: ${task.name}`}
                               className="p-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-800"
                               title="Edit assessment details"
                             >
@@ -409,6 +508,7 @@ export default function TasksView() {
                             </button>
                             <button
                               onClick={() => deleteAssessment(task.courseId, task.id)}
+                              aria-label={`Delete assessment: ${task.name}`}
                               className="p-1 rounded text-slate-500 hover:text-red-400 hover:bg-slate-800"
                               title="Delete assessment"
                             >

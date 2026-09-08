@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award
 } from 'lucide-react';
 
 export default function CommandPaletteModal() {
@@ -56,6 +56,7 @@ export default function CommandPaletteModal() {
     { id: 'calendar', title: 'Academic Calendar (Month Grid & Agenda)', category: 'Navigation', icon: Calendar, action: () => setCurrentView('calendar') },
     { id: 'tasks', title: 'Assessments & Tasks (Kanban & Table)', category: 'Navigation', icon: CheckSquare, action: () => setCurrentView('tasks') },
     { id: 'marks', title: 'Marks & Seneca 4.0 GPA Command Center', category: 'Navigation', icon: BarChart3, action: () => setCurrentView('marks') },
+    { id: 'exams', title: 'Exam & Midterm War Room (Countdowns & Cheat Sheets)', category: 'Navigation', icon: Award, action: () => setCurrentView('exams') },
     { id: 'wtp', title: 'WTP100 Career Hub (14 Modules)', category: 'Navigation', icon: Briefcase, action: () => setCurrentView('wtp') },
   ];
 
