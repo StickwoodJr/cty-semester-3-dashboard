@@ -40,7 +40,7 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 
 #### Tier 2 — Responsive & Cross-Browser
 - [x] **T2.1 (Calendar Day Name Truncation)**: On mobile (<640px), weekday names switch to compact `Sun`, `Mon` while desktop displays `Sunday`, `Monday`. *(Fixed in `39ac1fe`)*
-- [ ] **T2.2 (Timetable Mobile Scaling)**: Timetable scaled grid needs horizontal scroll affordance and compact agenda view fallback for narrow touchscreens (360px).
+- [x] **T2.2 (Timetable Mobile Scaling)**: Timetable grid dynamically collapses to 1 column when a day filter is selected on mobile/tablets, adds mobile swipe affordance for 5-day view, and provides responsive full-width compact view with keyboard accessibility in `src/components/TimetableView.jsx`.
 - [ ] **T2.3 (Modal Viewport Overflow)**: Modals on small mobile screens need explicit `max-h-[85vh]` with smooth scrolling bodies.
 
 #### Tier 3 — Accessibility (WCAG AA)

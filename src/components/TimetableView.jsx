@@ -281,6 +281,8 @@ export default function TimetableView() {
             <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
               <button
                 onClick={() => setViewMode('grid')}
+                aria-label="Switch to time grid view"
+                aria-pressed={viewMode === 'grid'}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
                   viewMode === 'grid' 
                     ? 'bg-red-600 text-white shadow' 
@@ -292,6 +294,8 @@ export default function TimetableView() {
               </button>
               <button
                 onClick={() => setViewMode('compact')}
+                aria-label="Switch to compact cards view"
+                aria-pressed={viewMode === 'compact'}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
                   viewMode === 'compact' 
                     ? 'bg-red-600 text-white shadow' 
@@ -306,6 +310,7 @@ export default function TimetableView() {
             {/* Sync iCal button */}
             <button
               onClick={() => setActiveModal('sync-export')}
+              aria-label="Sync Timetable to iPhone or Google Calendar"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs font-semibold transition"
               title="Sync Timetable to iPhone / Google Calendar"
             >
@@ -326,6 +331,8 @@ export default function TimetableView() {
             <span className="text-slate-400 text-[11px] mr-1">Filter Day:</span>
             <button
               onClick={() => setSelectedDayFilter('all')}
+              aria-label="View all 5 days"
+              aria-pressed={selectedDayFilter === 'all'}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
                 selectedDayFilter === 'all'
                   ? 'bg-slate-800 text-white border border-slate-700'
@@ -338,6 +345,8 @@ export default function TimetableView() {
               <button
                 key={d}
                 onClick={() => setSelectedDayFilter(d)}
+                aria-label={`View ${d} timetable`}
+                aria-pressed={selectedDayFilter === d}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
                   selectedDayFilter === d
                     ? 'bg-red-600 text-white shadow'
@@ -389,11 +398,18 @@ export default function TimetableView() {
       {viewMode === 'grid' ? (
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm overflow-x-auto">
           
+          {/* Mobile Swipe Hint when viewing all days */}
+          {selectedDayFilter === 'all' && (
+            <div className="sm:hidden text-[11px] text-slate-400 text-center pb-3 font-mono flex items-center justify-center gap-1.5 border-b border-slate-800/80 mb-3">
+              <span>⇄ Swipe horizontally or pick a day above for mobile view</span>
+            </div>
+          )}
+
           {/* Calendar Table Container */}
-          <div className="min-w-[760px] relative">
+          <div className={`${displayedDays.length === 1 ? 'w-full' : 'min-w-[760px]'} relative`}>
             
             {/* Days Column Header Row */}
-            <div className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))] sm:grid-cols-[76px_repeat(5,minmax(0,1fr))] gap-2 sm:gap-3 pb-3 border-b border-slate-800 mb-2">
+            <div className={`grid ${displayedDays.length === 1 ? 'grid-cols-[64px_1fr] sm:grid-cols-[76px_1fr]' : 'grid-cols-[64px_repeat(5,minmax(0,1fr))] sm:grid-cols-[76px_repeat(5,minmax(0,1fr))]'} gap-2 sm:gap-3 pb-3 border-b border-slate-800 mb-2`}>
               {/* Top-left corner cell */}
               <div className="text-center font-mono text-[10px] text-slate-400 pt-1">
                 TIME
@@ -422,7 +438,7 @@ export default function TimetableView() {
             </div>
 
             {/* Timetable Body (Time stamps on left + Day columns) */}
-            <div className="grid grid-cols-[64px_repeat(5,minmax(0,1fr))] sm:grid-cols-[76px_repeat(5,minmax(0,1fr))] gap-2 sm:gap-3 relative" style={{ height: `${GRID_HEIGHT}px` }}>
+            <div className={`grid ${displayedDays.length === 1 ? 'grid-cols-[64px_1fr] sm:grid-cols-[76px_1fr]' : 'grid-cols-[64px_repeat(5,minmax(0,1fr))] sm:grid-cols-[76px_repeat(5,minmax(0,1fr))]'} gap-2 sm:gap-3 relative`} style={{ height: `${GRID_HEIGHT}px` }}>
               
               {/* Left Column: Hourly Time Stamps */}
               <div className="relative border-r border-slate-800/80 select-none">
@@ -600,7 +616,7 @@ export default function TimetableView() {
         </div>
       ) : (
         /* View Mode 2: Compact Cards List */
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className={`grid grid-cols-1 ${displayedDays.length === 1 ? 'md:grid-cols-1 max-w-xl mx-auto' : 'md:grid-cols-5'} gap-4`}>
           {displayedDays.map(day => {
             const dayClasses = scheduleData[day] || [];
             return (
@@ -616,11 +632,20 @@ export default function TimetableView() {
                   {dayClasses.map((item, idx) => (
                     <div
                       key={idx}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`View details for ${item.courseCode} ${item.name} at ${item.time}`}
                       onClick={() => {
                         setSelectedCourseId(item.courseId);
                         setCurrentView('course-detail');
                       }}
-                      className="p-3.5 rounded-xl border transition cursor-pointer group shadow-sm flex flex-col justify-between hover:scale-[1.01]"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setSelectedCourseId(item.courseId);
+                          setCurrentView('course-detail');
+                        }
+                      }}
+                      className="p-3.5 rounded-xl border transition cursor-pointer group shadow-sm flex flex-col justify-between hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-red-500"
                       style={{
                         backgroundColor: `${item.color}15`,
                         borderColor: `${item.color}45`
