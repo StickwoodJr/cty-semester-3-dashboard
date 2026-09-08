@@ -10,10 +10,10 @@ export const INITIAL_COURSES = [
     officeHours: "By appointment / Post-class synchronous",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#3b82f6", // Blue
-    accentColor: "blue",
-    badgeBg: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-    gradient: "from-blue-600 to-indigo-700",
+    color: "#ef4444", // Crimson / Red
+    accentColor: "red",
+    badgeBg: "bg-red-500/10 text-red-400 border-red-500/30",
+    gradient: "from-red-600 to-rose-700",
     schedule: [
       { day: "Monday", time: "3:20 PM - 5:05 PM", room: "Newnham Bldg A - A1509" },
       { day: "Wednesday", time: "5:10 PM - 6:55 PM", room: "Newnham Bldg A - A3512" }
@@ -33,7 +33,7 @@ export const INITIAL_COURSES = [
     budgetTracker: {
       enabled: true,
       service: "Microsoft Azure SQL & Data Services",
-      creditLimit: 100, // percentage or dollar
+      creditLimit: 100,
       currentSpend: 0,
       notes: "Budget allotment management accounts for 10% of total course mark."
     },
@@ -72,10 +72,10 @@ export const INITIAL_COURSES = [
     officeHours: "Mondays & Tuesdays after class",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#0284c7", // Sky blue
-    accentColor: "sky",
-    badgeBg: "bg-sky-500/10 text-sky-400 border-sky-500/30",
-    gradient: "from-sky-600 to-blue-800",
+    color: "#a855f7", // Purple / Violet
+    accentColor: "purple",
+    badgeBg: "bg-purple-500/10 text-purple-400 border-purple-500/30",
+    gradient: "from-purple-600 to-indigo-800",
     schedule: [
       { day: "Monday", time: "9:50 AM - 11:35 AM", room: "Newnham Bldg C - C3036" },
       { day: "Tuesday", time: "9:50 AM - 11:35 AM", room: "Newnham Bldg A - A4515" }
@@ -129,13 +129,13 @@ export const INITIAL_COURSES = [
     officeHours: "Weekly lab sessions & GitHub Discussions",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#10b981", // Emerald
-    accentColor: "emerald",
-    badgeBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
-    gradient: "from-emerald-600 to-teal-800",
+    color: "#d97706", // Gold / Amber
+    accentColor: "amber",
+    badgeBg: "bg-amber-500/10 text-amber-400 border-amber-500/30",
+    gradient: "from-amber-600 to-yellow-800",
     schedule: [
-      { day: "Wednesday", time: "9:50 AM - 11:35 AM", room: "Newnham Lab - Ubuntu Drive Host" },
-      { day: "Friday", time: "9:50 AM - 11:35 AM", room: "Newnham Lab - Ubuntu Drive Host" }
+      { day: "Wednesday", time: "1:30 PM - 3:15 PM", room: "Newnham Lab - Ubuntu Drive Host" },
+      { day: "Thursday", time: "8:55 AM - 10:40 AM", room: "Newnham Lab - Ubuntu Drive Host" }
     ],
     links: [
       { label: "Course Site", url: "https://seneca-ictoer.github.io/OPS345v2/" },
@@ -152,7 +152,7 @@ export const INITIAL_COURSES = [
     budgetTracker: {
       enabled: true,
       service: "AWS Learner Lab Sandbox",
-      creditLimit: 50.00, // strict $50 limit
+      creditLimit: 50.00,
       currentSpend: 0.00,
       currency: "USD",
       notes: "DO NOT LEAVE INSTANCES RUNNING! Stop all EC2 & RDS instances when finished working."
@@ -185,10 +185,10 @@ export const INITIAL_COURSES = [
     officeHours: "Tuesdays 1:30 PM - 2:30 PM or appointment",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#ef4444", // Red
-    accentColor: "rose",
-    badgeBg: "bg-rose-500/10 text-rose-400 border-rose-500/30",
-    gradient: "from-rose-600 to-red-800",
+    color: "#0284c7", // Blue
+    accentColor: "sky",
+    badgeBg: "bg-sky-500/10 text-sky-400 border-sky-500/30",
+    gradient: "from-sky-600 to-blue-800",
     schedule: [
       { day: "Monday", time: "1:30 PM - 3:15 PM", room: "Newnham Bldg K - K1272" },
       { day: "Tuesday", time: "11:40 AM - 1:25 PM", room: "Newnham Bldg K - K1272" }
@@ -233,13 +233,13 @@ export const INITIAL_COURSES = [
     email: "glen.choi@senecapolytechnic.ca",
     officeHours: "Schedule one-on-one via Zoom / Email",
     credits: 1.0,
-    delivery: "Flexible Mode (In-Person or Online Synchronous)",
-    color: "#a855f7", // Purple
-    accentColor: "purple",
-    badgeBg: "bg-purple-500/10 text-purple-400 border-purple-500/30",
-    gradient: "from-purple-600 to-indigo-800",
+    delivery: "Online Flexible (Broadcasting simultaneously from K2241)",
+    color: "#ec4899", // Pink / Magenta
+    accentColor: "pink",
+    badgeBg: "bg-pink-500/10 text-pink-400 border-pink-500/30",
+    gradient: "from-pink-600 to-purple-800",
     schedule: [
-      { day: "Friday", time: "1:30 PM - 4:10 PM", room: "Newnham Bldg K - K2241 (or Online)" }
+      { day: "Friday", time: "1:30 PM - 4:10 PM", room: "ONLINE (Flexible: or Newnham Bldg K - K2241)" }
     ],
     links: [
       { label: "Learn@Seneca", url: "https://learn.senecapolytechnic.ca/ultra/institution-page" }
@@ -264,7 +264,7 @@ export const INITIAL_COURSES = [
       { id: "psy262-a12-sketch", name: "In-Class Assignment #12", category: "In-class", weight: 1.0, dueDate: "2026-11-27", week: 11, status: "Not Started", score: null, maxScore: 100, topic: "5-4-3-2-1 Grounding Campus Sketch" },
       { id: "psy262-final", name: "Final Exam", category: "Exam", weight: 25.0, dueDate: "2026-12-11", week: 13, status: "Not Started", score: null, maxScore: 100, topic: "Comprehensive Course Final Examination" }
     ],
-    notes: "Flexible delivery: attend in-person at K2241 or synchronously online. Quiz 1 & 2 are high value (20% each)!"
+    notes: "Flexible delivery: attend online or on-campus at K2241. Quiz 1 & 2 are high value (20% each)!"
   },
   {
     id: "wtp100",
@@ -275,14 +275,14 @@ export const INITIAL_COURSES = [
     professor: "Work-Integrated Learning (WIL) Co-ordinator",
     email: "wil@senecapolytechnic.ca",
     officeHours: "Seneca Works / WIL Hub",
-    credits: 0.0, // SAT/UN course
-    delivery: "Online Synchronous",
-    color: "#f59e0b", // Amber
-    accentColor: "amber",
-    badgeBg: "bg-amber-500/10 text-amber-400 border-amber-500/30",
-    gradient: "from-amber-600 to-yellow-700",
+    credits: 0.0,
+    delivery: "ONLINE Synchronous",
+    color: "#06b6d4", // Cyan / Teal
+    accentColor: "cyan",
+    badgeBg: "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
+    gradient: "from-cyan-600 to-teal-700",
     schedule: [
-      { day: "Online Synchronous", time: "Weekly asynchronous modules + Live Q&A", room: "Blackboard Ultra / MS Teams" }
+      { day: "Wednesday", time: "11:40 AM - 1:25 PM", room: "ONLINE (Blackboard / MS Teams)" }
     ],
     links: [
       { label: "Seneca Works Portal", url: "https://senecaworks.senecapolytechnic.ca" },
@@ -329,22 +329,22 @@ export const INITIAL_COURSES = [
     name: "Software Defined Networks",
     section: "NBB",
     classNbr: "CSN305",
-    professor: "Faculty Assigned (Pending)",
+    professor: "Faculty Assigned",
     email: "seneca@senecapolytechnic.ca",
-    officeHours: "To be announced by professor",
+    officeHours: "Thursday after class",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#6366f1", // Indigo
-    accentColor: "indigo",
-    badgeBg: "bg-indigo-500/10 text-indigo-400 border-indigo-500/30",
-    gradient: "from-indigo-600 to-violet-800",
+    color: "#22c55e", // Green
+    accentColor: "green",
+    badgeBg: "bg-green-500/10 text-green-400 border-green-500/30",
+    gradient: "from-green-600 to-emerald-800",
     schedule: [
-      { day: "TBA (Class details pending)", time: "Awaiting final schedule release", room: "Newnham Campus" }
+      { day: "Thursday", time: "12:35 PM - 2:20 PM", room: "Newnham Campus" }
     ],
     links: [
       { label: "Learn@Seneca", url: "https://learn.senecapolytechnic.ca/ultra/institution-page" }
     ],
-    description: "Core CTY 3rd semester networking course covering Software Defined Networking (SDN), OpenFlow protocols, network programmability, controller architecture (OpenDaylight/ONOS), and network virtualization. Syllabus details can be customized via the Edit Course button once published!",
+    description: "Core CTY 3rd semester networking course covering Software Defined Networking (SDN), OpenFlow protocols, network programmability, controller architecture (OpenDaylight/ONOS), and network virtualization.",
     passingRequirements: [
       "Achieve 50% or higher overall",
       "Prerequisite: CSN205 completed in Semester 2"
@@ -353,10 +353,10 @@ export const INITIAL_COURSES = [
     budgetTracker: { enabled: false },
     isCustomizable: true,
     assessments: [
-      { id: "csn305-placeholder-1", name: "Lab 1 (Customizable)", category: "Lab", weight: 5.0, dueDate: "2026-09-25", week: 3, status: "Not Started", score: null, maxScore: 100, topic: "SDN Testbed & Controller Setup" },
-      { id: "csn305-placeholder-2", name: "Midterm Assessment (Customizable)", category: "Test", weight: 25.0, dueDate: "2026-10-21", week: 7, status: "Not Started", score: null, maxScore: 100, topic: "SDN Concepts & Architecture Exam" },
-      { id: "csn305-placeholder-3", name: "Remaining Labs & Final Exam (Customizable)", category: "Exam", weight: 70.0, dueDate: "2026-12-16", week: 14, status: "Not Started", score: null, maxScore: 100, topic: "Click 'Edit Course' or 'Add Task' when syllabus is published" }
+      { id: "csn305-placeholder-1", name: "Lab 1", category: "Lab", weight: 5.0, dueDate: "2026-09-25", week: 3, status: "Not Started", score: null, maxScore: 100, topic: "SDN Testbed & Controller Setup" },
+      { id: "csn305-placeholder-2", name: "Midterm Assessment", category: "Test", weight: 25.0, dueDate: "2026-10-21", week: 7, status: "Not Started", score: null, maxScore: 100, topic: "SDN Concepts & Architecture Exam" },
+      { id: "csn305-placeholder-3", name: "Final Assessment & Project", category: "Exam", weight: 70.0, dueDate: "2026-12-16", week: 14, status: "Not Started", score: null, maxScore: 100, topic: "Final evaluation and lab deliverables" }
     ],
-    notes: "Placeholder configured with full editing capabilities so you can add labs, tests, and schedule as soon as your professor releases the syllabus."
+    notes: "Thursday lecture 12:35 PM. Prerequisite CSN205 completed."
   }
 ];
