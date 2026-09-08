@@ -120,7 +120,7 @@ export default function TimetableView() {
         courseCode: "CSN305",
         courseId: "csn305",
         name: "Software Defined Networks",
-        time: "12:35 PM - 2:20 PM",
+        time: "12:35 PM - 4:10 PM",
         startTime: "12:35 PM",
         room: "Newnham Campus",
         instructor: "Faculty Assigned",

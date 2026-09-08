@@ -339,7 +339,7 @@ export const INITIAL_COURSES = [
     badgeBg: "bg-green-500/10 text-green-400 border-green-500/30",
     gradient: "from-green-600 to-emerald-800",
     schedule: [
-      { day: "Thursday", time: "12:35 PM - 2:20 PM", room: "Newnham Campus" }
+      { day: "Thursday", time: "12:35 PM - 4:10 PM", room: "Newnham Campus" }
     ],
     links: [
       { label: "Learn@Seneca", url: "https://learn.senecapolytechnic.ca/ultra/institution-page" }

@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
 
 const AcademicContext = createContext();
 
-const STORAGE_KEY = 'seneca_cty_sem3_courses_v5';
+const STORAGE_KEY = 'seneca_cty_sem3_courses_v6';
 const NOTES_STORAGE_KEY = 'seneca_cty_sem3_scratchpad_v1';
 
 export function AcademicProvider({ children }) {
