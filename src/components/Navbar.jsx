@@ -133,6 +133,16 @@ export default function Navbar() {
             </span>
           </div>
 
+          {/* Calendar Sync iCal Button */}
+          <button 
+            onClick={() => setActiveModal('sync-export')}
+            title="Export Calendar to iPhone / Google (.ics)"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-200 text-xs font-semibold border border-slate-800 transition shadow-sm"
+          >
+            <Calendar className="w-3.5 h-3.5 text-red-400" />
+            <span className="hidden md:inline">Sync iCal</span>
+          </button>
+
           {/* Add Task Button */}
           <button 
             onClick={() => {

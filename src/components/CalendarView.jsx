@@ -194,6 +194,15 @@ export default function CalendarView() {
             </div>
 
             <button
+              onClick={() => setActiveModal('sync-export')}
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition"
+              title="Sync calendar with iPhone / Google Calendar"
+            >
+              <CalendarIcon className="w-3.5 h-3.5 text-red-400" />
+              <span>Sync .ics</span>
+            </button>
+
+            <button
               onClick={() => {
                 setActiveModal('add-task');
                 setModalPayload({ 

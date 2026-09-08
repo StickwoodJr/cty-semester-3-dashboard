@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   Clock, MapPin, Calendar, ExternalLink, Globe, Wifi, 
-  Coffee, Sparkles, BookOpen, Grid, List, Layers, Info
+  Coffee, Sparkles, BookOpen, Grid, List, Layers, Info, Download
 } from 'lucide-react';
 
 export default function TimetableView() {
-  const { setSelectedCourseId, setCurrentView } = useAcademic();
+  const { setSelectedCourseId, setCurrentView, setActiveModal } = useAcademic();
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid' (scaled) or 'compact'
   const [selectedDayFilter, setSelectedDayFilter] = useState('all'); // 'all' or day name
@@ -303,6 +303,16 @@ export default function TimetableView() {
               </button>
             </div>
 
+            {/* Sync iCal button */}
+            <button
+              onClick={() => setActiveModal('sync-export')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-200 text-xs font-semibold transition"
+              title="Sync Timetable to iPhone / Google Calendar"
+            >
+              <Download className="w-3.5 h-3.5 text-red-400" />
+              <span>Sync .ics</span>
+            </button>
+
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
               <MapPin className="w-3.5 h-3.5 text-red-400" />
               <span>1750 Finch Ave E, Toronto</span>
@@ -483,23 +493,25 @@ export default function TimetableView() {
                       return (
                         <div
                           key={gap.id}
-                          className="absolute left-1.5 right-1.5 rounded-xl border border-dashed border-amber-500/25 bg-amber-500/[0.04] p-2 flex flex-col items-center justify-center text-center transition-all hover:bg-amber-500/[0.08] hover:border-amber-500/40 group z-10"
+                          onClick={() => setCurrentView('timer')}
+                          className="absolute left-1.5 right-1.5 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/[0.04] p-2 flex flex-col items-center justify-center text-center transition-all hover:bg-amber-500/[0.12] hover:border-amber-500/50 cursor-pointer group z-10"
                           style={{
                             top: `${topPx + 3}px`,
                             height: `${heightPx - 6}px`
                           }}
-                          title={`Free Break: ${gap.fromTime} to ${gap.toTime} (${durationStr})`}
+                          title={`Free Break: ${gap.fromTime} to ${gap.toTime} (${durationStr}). Click to start study timer!`}
                         >
-                          <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-amber-400/90">
+                          <div className="flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-amber-400/90 group-hover:text-amber-300">
                             <Coffee className="w-3 h-3 text-amber-400 shrink-0" />
                             <span>{durationStr} Break</span>
                           </div>
                           <div className="text-[9px] font-mono text-slate-400 mt-0.5">
                             {gap.fromTime} – {gap.toTime}
                           </div>
-                          {heightPx > 70 && (
-                            <div className="text-[9px] text-slate-400 group-hover:text-slate-300 mt-1 hidden sm:block">
-                              Free study / Campus break
+                          {heightPx > 65 && (
+                            <div className="text-[9px] text-amber-400/90 font-medium group-hover:text-amber-300 mt-1 flex items-center gap-1">
+                              <Sparkles className="w-2.5 h-2.5" />
+                              <span>Start Study Timer →</span>
                             </div>
                           )}
                         </div>

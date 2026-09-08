@@ -13,6 +13,9 @@ import AssessmentModal from './components/AssessmentModal';
 import CourseEditModal from './components/CourseEditModal';
 import WhatIfCalculatorModal from './components/WhatIfCalculatorModal';
 import SettingsModal from './components/SettingsModal';
+import SyncExportModal from './components/SyncExportModal';
+import FocusTimerView from './components/FocusTimerView';
+import LabToolbeltView from './components/LabToolbeltView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -74,6 +77,8 @@ function AppContent() {
           {currentView === 'schedule' && <TimetableView />}
           {currentView === 'marks' && <MarksGpaView />}
           {currentView === 'wtp' && <WtpCareerHub />}
+          {currentView === 'timer' && <FocusTimerView />}
+          {currentView === 'toolbelt' && <LabToolbeltView />}
         </main>
       </div>
 
@@ -82,6 +87,7 @@ function AppContent() {
       <CourseEditModal />
       <WhatIfCalculatorModal />
       <SettingsModal />
+      <SyncExportModal />
 
       {/* Toast Notification Banner */}
       {toastMessage && (
