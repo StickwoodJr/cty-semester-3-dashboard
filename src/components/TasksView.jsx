@@ -611,6 +611,7 @@ export default function TasksView() {
                                 score: order[nextIdx] === 'Graded' && task.score === null ? 100 : task.score
                               });
                             }}
+                            aria-label={`Advance status for ${task.name}`}
                             className="text-red-400 hover:text-red-300 font-semibold transition"
                             title="Advance status"
                           >

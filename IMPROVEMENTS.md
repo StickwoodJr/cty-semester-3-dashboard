@@ -60,9 +60,8 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 - [x] **T6.1 (Duplicated Date & Time Utilities)**: Extracted into `src/utils/dateHelper.js`. *(Fixed in `4356d16`)*
 - [ ] **T6.2 (Lack of Unit / Logic Verification Tests)**: Add a lightweight test runner or verify script to guarantee GPA formulas, CSV parsing, and date math do not regress.
 
-#### Tier 7 — Polish & UX Details
 - [x] **T7.1 ("Days Until Deadline" Urgency Indicator)**: Added `getDeadlineUrgency` in `src/utils/dateHelper.js` with color-coded badges in Dashboard & Tasks views. *(Fixed in `4356d16`)*
-- [ ] **T7.2 (Smart Filters on Tasks View)**: Quick-filter buttons for "Due this week", "Overdue", and "High-weight exams (>=15%)".
+- [x] **T7.2 (Smart Filters on Tasks View)**: Added smart filter presets bar ("All", "Due This Week ≤7d", "Overdue", "High Weight ≥15%", "Incomplete", "Completed") with dynamic count badges, single-click "Clear filters" action, and accessible ARIA attributes in `src/components/TasksView.jsx`.
 
 ---
 
