@@ -3,7 +3,8 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   CheckCircle2, Clock, AlertCircle, Calendar, BookOpen, 
   ArrowUpRight, Sparkles, ChevronRight, CheckSquare, 
-  Flame, HelpCircle, Layers, FileText, BarChart2
+  Flame, HelpCircle, Layers, FileText, BarChart2,
+  Maximize2, Minimize2, Copy, Check, Trash2
 } from 'lucide-react';
 
 export default function DashboardView() {
@@ -27,6 +28,15 @@ export default function DashboardView() {
 
   // Selected day for schedule preview (default Monday)
   const [scheduleDay, setScheduleDay] = useState('Monday');
+  const [isScratchpadExpanded, setIsScratchpadExpanded] = useState(false);
+  const [copiedNotes, setCopiedNotes] = useState(false);
+
+  const handleCopyNotes = () => {
+    if (!scratchpad) return;
+    navigator.clipboard.writeText(scratchpad);
+    setCopiedNotes(true);
+    setTimeout(() => setCopiedNotes(false), 2000);
+  };
 
   // Filter urgent tasks: due within 14 days or not graded yet
   const pendingTasks = allTasks.filter(t => t.status !== 'Graded');
@@ -488,15 +498,40 @@ export default function DashboardView() {
                 <FileText className="w-4 h-4 text-emerald-400" />
                 <h3 className="text-sm font-bold text-white">Quick Scratchpad</h3>
               </div>
-              <span className="text-[10px] text-slate-400">Auto-saved locally</span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={handleCopyNotes}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition text-xs"
+                  title="Copy to clipboard"
+                >
+                  {copiedNotes ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  onClick={() => setIsScratchpadExpanded(true)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition text-xs"
+                  title="Expand to Fullscreen"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
             <textarea
               value={scratchpad}
               onChange={(e) => setScratchpad(e.target.value)}
               placeholder="Paste room numbers, meeting links, lab notes, reminders..."
-              rows={4}
-              className="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30 font-mono transition"
+              rows={8}
+              className="w-full min-h-[160px] bg-slate-950/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30 font-mono transition resize-y leading-relaxed"
             />
+            <div className="flex items-center justify-between text-[10px] text-slate-500 mt-2 px-1">
+              <span>{scratchpad.length} chars • {scratchpad.trim() ? scratchpad.trim().split(/\s+/).length : 0} words</span>
+              <button
+                onClick={() => setIsScratchpadExpanded(true)}
+                className="text-red-400 hover:text-red-300 font-medium flex items-center gap-1 transition"
+              >
+                <span>Full Modal</span>
+                <Maximize2 className="w-3 h-3" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -602,6 +637,105 @@ export default function DashboardView() {
           })}
         </div>
       </div>
+
+      {/* Fullscreen Expanded Scratchpad Modal */}
+      {isScratchpadExpanded && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/90">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    Semester Scratchpad & Lab Notes
+                    <span className="text-[11px] font-normal px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      Auto-saving locally
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Your persistent workspace for command snippets, lab IP addresses, instructor advice, and quick reminders.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCopyNotes}
+                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition"
+                  title="Copy content to clipboard"
+                >
+                  {copiedNotes ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span className="text-emerald-400">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-slate-400" />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
+
+                {scratchpad && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to clear your scratchpad?")) {
+                        setScratchpad('');
+                      }
+                    }}
+                    className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition text-xs"
+                    title="Clear scratchpad"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setIsScratchpadExpanded(false)}
+                  className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  title="Minimize / Close"
+                >
+                  <Minimize2 className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Textarea Area */}
+            <div className="p-6 flex-1 flex flex-col bg-slate-950/60">
+              <textarea
+                value={scratchpad}
+                onChange={(e) => setScratchpad(e.target.value)}
+                placeholder="Type or paste your notes, terminal commands, Seneca lab credentials, AWS/Azure configurations, group meeting notes..."
+                autoFocus
+                className="w-full flex-1 min-h-[400px] h-[55vh] bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30 font-mono leading-relaxed resize-none"
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between px-6 py-3 border-t border-slate-800 bg-slate-900/90 text-xs text-slate-400">
+              <div className="flex items-center gap-4">
+                <span><strong>{scratchpad.length}</strong> characters</span>
+                <span><strong>{scratchpad.trim() ? scratchpad.trim().split(/\s+/).length : 0}</strong> words</span>
+                <span><strong>{scratchpad ? scratchpad.split('\n').length : 0}</strong> lines</span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="hidden sm:inline text-slate-500 text-[11px]">Saved in browser LocalStorage</span>
+                <button
+                  onClick={() => setIsScratchpadExpanded(false)}
+                  className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white font-semibold text-xs transition"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
