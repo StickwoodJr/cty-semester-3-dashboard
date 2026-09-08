@@ -122,7 +122,13 @@ export default function CommandPaletteModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
+    <div 
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150"
+      onClick={(e) => { if (e.target === e.currentTarget) setIsOpen(false); }}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Command palette navigation and search"
+    >
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
         
         {/* Search Bar Input */}
@@ -146,6 +152,7 @@ export default function CommandPaletteModal() {
           <button 
             onClick={() => setIsOpen(false)}
             className="text-slate-400 hover:text-white p-1"
+            aria-label="Close command palette"
           >
             <X className="w-4 h-4" />
           </button>

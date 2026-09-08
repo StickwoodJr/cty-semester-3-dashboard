@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { X, BookOpen, Plus, Trash2, MapPin } from 'lucide-react';
 
 export default function CourseEditModal() {
   const { activeModal, setActiveModal, modalPayload, updateCourse, addCourse } = useAcademic();
-
-  if (activeModal !== 'edit-course') return null;
 
   const isNew = modalPayload?.isNew || false;
   const course = modalPayload?.course || {};
@@ -22,6 +20,37 @@ export default function CourseEditModal() {
   const [color, setColor] = useState(course.color || '#3b82f6');
   const [description, setDescription] = useState(course.description || '');
   const [scheduleList, setScheduleList] = useState(course.schedule || [{ day: 'Monday', time: '9:50 AM - 11:35 AM', room: 'Newnham Bldg A' }]);
+
+  // Sync state whenever modalPayload changes
+  useEffect(() => {
+    if (activeModal === 'edit-course') {
+      const c = modalPayload?.course || {};
+      setCode(c.code || '');
+      setName(c.name || '');
+      setSection(c.section || 'NBB');
+      setClassNbr(c.classNbr || '');
+      setProfessor(c.professor || '');
+      setEmail(c.email || '');
+      setOfficeHours(c.officeHours || '');
+      setDelivery(c.delivery || 'In-Person');
+      setCredits(c.credits !== undefined ? String(c.credits) : '1.0');
+      setColor(c.color || '#3b82f6');
+      setDescription(c.description || '');
+      setScheduleList(c.schedule || [{ day: 'Monday', time: '9:50 AM - 11:35 AM', room: 'Newnham Bldg A' }]);
+    }
+  }, [activeModal, modalPayload]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (activeModal !== 'edit-course') return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveModal(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal, setActiveModal]);
+
+  if (activeModal !== 'edit-course') return null;
 
   const handleAddScheduleSlot = () => {
     setScheduleList([...scheduleList, { day: 'Wednesday', time: '9:50 AM - 11:35 AM', room: 'Newnham Campus' }]);
@@ -66,7 +95,13 @@ export default function CourseEditModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) setActiveModal(null); }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="course-edit-modal-title"
+    >
       <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
@@ -75,13 +110,14 @@ export default function CourseEditModal() {
             <div className="p-1.5 rounded-lg bg-red-600/10 text-red-400 border border-red-500/20">
               <BookOpen className="w-4 h-4" />
             </div>
-            <h3 className="text-base font-bold text-white">
+            <h3 id="course-edit-modal-title" className="text-base font-bold text-white">
               {isNew ? 'Add Course' : `Edit Course Details: ${course.code}`}
             </h3>
           </div>
           <button 
             onClick={() => setActiveModal(null)}
             className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            aria-label="Close course edit modal"
           >
             <X className="w-5 h-5" />
           </button>

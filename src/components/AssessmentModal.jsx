@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { X, CheckSquare, Calendar, Clock, Award, Tag } from 'lucide-react';
 
@@ -11,8 +11,6 @@ export default function AssessmentModal() {
     addAssessment, 
     updateAssessment 
   } = useAcademic();
-
-  if (activeModal !== 'add-task' && activeModal !== 'edit-task') return null;
 
   const isEdit = activeModal === 'edit-task';
   const editingTask = modalPayload?.assessment;
@@ -27,6 +25,34 @@ export default function AssessmentModal() {
   const [status, setStatus] = useState(editingTask?.status || 'Not Started');
   const [score, setScore] = useState(editingTask?.score !== null && editingTask?.score !== undefined ? String(editingTask.score) : '');
   const [topic, setTopic] = useState(editingTask?.topic || '');
+
+  // Keep form state synchronized whenever modalPayload changes
+  useEffect(() => {
+    if (activeModal === 'edit-task' || activeModal === 'add-task') {
+      const task = modalPayload?.assessment;
+      setCourseId(modalPayload?.courseId || courses[0]?.id);
+      setName(task?.name || '');
+      setCategory(task?.category || 'Assignment');
+      setWeight(task?.weight !== undefined ? String(task.weight) : '5.0');
+      setDueDate(task?.dueDate || modalPayload?.defaultDate || '2026-10-15');
+      setWeek(task?.week ? String(task.week) : '5');
+      setStatus(task?.status || 'Not Started');
+      setScore(task?.score !== null && task?.score !== undefined ? String(task.score) : '');
+      setTopic(task?.topic || '');
+    }
+  }, [activeModal, modalPayload, courses]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (activeModal !== 'add-task' && activeModal !== 'edit-task') return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveModal(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal, setActiveModal]);
+
+  if (activeModal !== 'add-task' && activeModal !== 'edit-task') return null;
 
   const categories = ['Lab', 'Quiz', 'Assignment', 'Test', 'Project', 'Exam', 'In-class', 'Milestone'];
   const statuses = ['Not Started', 'In Progress', 'Submitted', 'Graded'];
@@ -57,7 +83,13 @@ export default function AssessmentModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in"
+      onClick={(e) => { if (e.target === e.currentTarget) setActiveModal(null); }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assessment-modal-title"
+    >
       <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
         
         {/* Header */}
@@ -66,13 +98,14 @@ export default function AssessmentModal() {
             <div className="p-1.5 rounded-lg bg-red-600/10 text-red-400 border border-red-500/20">
               <CheckSquare className="w-4 h-4" />
             </div>
-            <h3 className="text-base font-bold text-white">
+            <h3 id="assessment-modal-title" className="text-base font-bold text-white">
               {isEdit ? 'Edit Assessment' : 'Add New Assessment'}
             </h3>
           </div>
           <button 
             onClick={() => setActiveModal(null)}
             className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            aria-label="Close assessment modal"
           >
             <X className="w-5 h-5" />
           </button>

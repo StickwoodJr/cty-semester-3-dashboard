@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { 
   X, Calendar, Download, Smartphone, Laptop, CheckCircle2, 
@@ -19,6 +19,16 @@ export default function SyncExportModal() {
     semesterConfig,
     showToast 
   } = useAcademic();
+
+  // Close on Escape key
+  useEffect(() => {
+    if (activeModal !== 'sync-export') return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveModal(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal, setActiveModal]);
 
   const [activeTab, setActiveTab] = useState('downloads'); // 'downloads' | 'guide-ios' | 'guide-google'
   const [downloadedType, setDownloadedType] = useState(null);
@@ -50,7 +60,13 @@ export default function SyncExportModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={(e) => { if (e.target === e.currentTarget) setActiveModal(null); }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="sync-export-modal-title"
+    >
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Header */}
@@ -60,7 +76,7 @@ export default function SyncExportModal() {
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 id="sync-export-modal-title" className="text-base font-bold text-white flex items-center gap-2">
                 Calendar Sync & iCal (.ics) Export
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
                   iOS • Google • Outlook
@@ -74,6 +90,7 @@ export default function SyncExportModal() {
           <button
             onClick={() => setActiveModal(null)}
             className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            aria-label="Close sync export modal"
           >
             <X className="w-5 h-5" />
           </button>

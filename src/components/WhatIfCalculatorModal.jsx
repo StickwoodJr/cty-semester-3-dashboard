@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
-import { X, Calculator, Target, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, Calculator, Target, Sparkles, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 export default function WhatIfCalculatorModal() {
   const { activeModal, setActiveModal, modalPayload, getCourseMetrics } = useAcademic();
+
+  // Close on Escape key
+  useEffect(() => {
+    if (activeModal !== 'what-if') return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveModal(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModal, setActiveModal]);
 
   if (activeModal !== 'what-if') return null;
   const course = modalPayload?.course;
   if (!course) return null;
 
+  const isWtp = course.id === 'wtp100' || course.credits === 0;
   const metrics = getCourseMetrics(course);
-  const [targetPercentage, setTargetPercentage] = useState(85); // default 85% (A)
+  const [targetPercentage, setTargetPercentage] = useState(80); // default 80% (Seneca A / 4.0 threshold)
 
   const completedWeight = metrics.completedWeight;
-  const remainingWeight = Math.max(0, 100 - completedWeight);
+  const totalWeight = metrics.totalWeight > 0 ? metrics.totalWeight : 100;
+  const remainingWeight = Math.max(0, totalWeight - completedWeight);
   const earnedWeight = metrics.earnedWeight;
 
-  // Needed points to hit target percentage
-  const neededEarnedTotal = targetPercentage; // out of 100%
+  // Needed points to hit target percentage scaled to total course weight
+  const neededEarnedTotal = (targetPercentage / 100) * totalWeight;
   const neededFromRemaining = neededEarnedTotal - earnedWeight;
   
   let requiredAverage = null;
@@ -25,10 +37,16 @@ export default function WhatIfCalculatorModal() {
     requiredAverage = (neededFromRemaining / remainingWeight) * 100;
   }
 
-  const maxPossibleGrade = earnedWeight + remainingWeight;
+  const maxPossibleGrade = totalWeight > 0 ? ((earnedWeight + remainingWeight) / totalWeight) * 100 : 100;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) setActiveModal(null); }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="what-if-modal-title"
+    >
       <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
         
         {/* Header */}
@@ -38,7 +56,7 @@ export default function WhatIfCalculatorModal() {
               <Calculator className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">
+              <h3 id="what-if-modal-title" className="text-base font-bold text-white">
                 Grade Target Simulator: {course.code}
               </h3>
               <p className="text-xs text-slate-400">{course.name}</p>
@@ -47,6 +65,7 @@ export default function WhatIfCalculatorModal() {
           <button 
             onClick={() => setActiveModal(null)}
             className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            aria-label="Close simulator modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -54,6 +73,20 @@ export default function WhatIfCalculatorModal() {
 
         {/* Content */}
         <div className="p-5 space-y-5 text-xs">
+          {isWtp ? (
+            <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 space-y-2">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                <span>WTP100 Grading Policy (SAT / UNSAT)</span>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                WTP100 (Work Term Preparation) is a non-credit course graded on a Satisfactory/Unsatisfactory basis. It does not carry numeric percentage grades or affect your semester GPA.
+              </p>
+              <div className="p-3 bg-slate-950/80 rounded-lg border border-slate-800 text-xs font-mono text-amber-300">
+                ⚠️ Requirement: Complete all 14 knowledge check modules with ≥80% by <strong>Friday, October 23, 2026</strong> for co-op clearance.
+              </div>
+            </div>
+          ) : null}
           
           {/* Current Stats Overview */}
           <div className="grid grid-cols-3 gap-2.5 p-3 rounded-xl bg-slate-950 border border-slate-800 font-mono text-center">
