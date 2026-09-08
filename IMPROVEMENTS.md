@@ -46,7 +46,22 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
     - Code splitting & bundle optimization in `vite.config.js` (`manualChunks` separating vendor, Lucide icons, and app code, reducing bundle warning to 0).
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Brain` icon and "Active" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Zero build errors (`npm run build`). Clean chunk split (vendor 134 kB, icons 42 kB, app 344 kB).
-- **Commit**: Completed in Cycle 3.
+- **Commit**: Completed in Cycle 3 (`2d695a9`).
+
+### Cycle 4 — 4.0 GPA Margin of Error & Assessment-Level Forecaster (`src/components/MarksGpaView.jsx`)
+- **Category**: High-Impact Feature Enhancement (4.0 Target Trajectory, Margin of Error Cushion & Syllabus Sentinel)
+- **Motivation**: In Seneca Polytechnic, a 4.0 GPA is non-linear and unforgiving: scoring below 80% (B+, 75-79%) in a single course drops that course to 3.5 quality points, dragging the entire term GPA down to 3.71. A student striving for a 4.0 needs granular insight into exactly how many course percentage points can still be dropped ("Margin of Error Cushion") and what exact scores are required on high-stakes midterms and final exams to guarantee $\ge 80.0\%$ (A). Additionally, Seneca outlines enforce mandatory sub-minimum test rules (e.g. DAT330 and SEC320 requiring $\ge 50\%$ test weighted averages to pass regardless of lab performance).
+- **Implementation**:
+  - Re-engineered `src/components/MarksGpaView.jsx` with an interactive **Assessment-Level Forecaster**:
+    - Select any of the 7 courses to drill into all its graded tasks (completed vs pending).
+    - Real-time sliders and numeric inputs to simulate scores on pending assignments, midterms, and finals.
+    - 1-Click course simulation presets: "Simulate 80% (Conservative 4.0 Threshold)", "Simulate 90% (Distinction A+)", and Reset.
+    - **4.0 Droppable Points Cushion Gauge**: Calculates exact course percentage points remaining before dipping below 80% (`20.0 - pointsLost`).
+    - **Required Remaining Average Formula**: Real-time computation of average required across remaining weight to lock an A grade.
+    - **Syllabus Sub-Minimum Sentinel**: Automatically audits DAT330 and SEC320 mandatory 50% test passing hurdle, displaying green pass shields or red warning indicators.
+    - **4.0 Semester Safety Heatmap**: Side-by-side comparative grid showing cushion status (Comfortable, On Track, Intensive Focus, Secured) across all courses.
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 10/10 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 4.
 
 ---
 
