@@ -63,8 +63,21 @@ export default function DashboardView() {
     });
   });
 
-  // Sort schedule by start time
-  scheduleForDay.sort((a, b) => a.time.localeCompare(b.time));
+  // Helper to parse time strings like "9:50 AM" or "1:30 PM" into minutes from midnight
+  const parseTimeToMinutes = (timeStr) => {
+    if (!timeStr) return 0;
+    const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!match) return 0;
+    let hours = parseInt(match[1], 10);
+    const minutes = parseInt(match[2], 10);
+    const meridian = match[3].toUpperCase();
+    if (meridian === 'PM' && hours < 12) hours += 12;
+    if (meridian === 'AM' && hours === 12) hours = 0;
+    return hours * 60 + minutes;
+  };
+
+  // Sort schedule by start time from earliest in the day to latest
+  scheduleForDay.sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
