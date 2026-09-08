@@ -87,6 +87,7 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 - [x] **T5.2 (CSV Formula Injection Protection)**: Exported CSV values beginning with formula triggers (`=`, `+`, `-`, `@`) sanitized with single quote prefixing. *(Fixed in `cbbe122`)*
 
 #### Tier 6 — Code Quality & Architecture
+- [x] **T6.1 (Duplicated Date & Time Utilities)**: Extracted into `src/utils/dateHelper.js`. *(Fixed in `4356d16`)*
 - [x] **T6.2 (Lack of Unit / Logic Verification Tests)**: Created native ES module test suite `scripts/verify-logic.js` (executable via `npm test`) covering RFC-4180 CSV parsing, quote preservation, formula injection protection, local timezone date calculations, due-date sorting, and Seneca Polytechnic credit-weighted GPA formulas with 10/10 automated tests passing cleanly.
 
 #### Tier 7 — Polish & UX Details
