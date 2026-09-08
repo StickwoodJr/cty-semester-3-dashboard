@@ -14,7 +14,7 @@ export function sanitizeCsvCell(val) {
   return str;
 }
 
-export function exportTasksToCSV(courses) {
+export function generateTasksCSV(courses) {
   const headers = ["Course", "Task", "Category", "Due Date", "Weight (%)", "Score (%)", "Status", "Topic / Notes"];
   const rows = [];
 
@@ -33,7 +33,13 @@ export function exportTasksToCSV(courses) {
     });
   });
 
-  const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+  return [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+}
+
+export function exportTasksToCSV(courses) {
+  const csvContent = generateTasksCSV(courses);
+  if (typeof document === 'undefined') return csvContent;
+
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -47,6 +53,7 @@ export function exportTasksToCSV(courses) {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+  return csvContent;
 }
 
 /**

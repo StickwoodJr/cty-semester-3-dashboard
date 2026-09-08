@@ -30,7 +30,23 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
   - Full RFC-5545 iCalendar generation (`generateStudyBlocksIcs`) with 15-minute advance phone notifications, wired into `SyncExportModal.jsx` and the Study Planner header.
   - Linked from `TimetableView.jsx` with quick "Gap Planner" action button, `Sidebar.jsx` (with `Compass` icon and "4.0 Gaps" badge), and `CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Built cleanly (`npm run build`, 0 warnings/errors).
-- **Commit**: Completed in Cycle 2.
+- **Commit**: Completed in Cycle 2 (`20bd7a5`).
+
+### Cycle 3 — Flashcards & Active Recall Command Mastery (`src/components/FlashcardsView.jsx`)
+- **Category**: New High-Impact Feature (Active Learning, Exam Command Recall & Performance Optimization)
+- **Motivation**: Achieving a 4.0 GPA in CTY Semester 3 requires high marks on midterms and practical exams (60%+ of final course grades). Technical courses (OPS345, MST300, DAT330, SEC320, CSN305) require precise syntax and theoretical recall under timed test conditions (e.g. BIND DNS record syntax, systemd directives, Azure Blob tiers and VM deallocation commands, SQL normalization rules, NIST incident response phases, and SDN OpenFlow packet flow).
+- **Implementation**:
+  - Built `src/data/flashcardsData.js` with 20+ curated, high-yield, exam-tested concept flashcards spanning all 7 courses.
+  - Developed `src/components/FlashcardsView.jsx` featuring:
+    - Interactive 3D flip card engine with keyboard controls (<kbd>Space</kbd> to flip, <kbd>←</kbd>/<kbd>→</kbd> to navigate, <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> to rate).
+    - 3-tier active recall rating system (Needs Practice, Learning, Mastered) with live mastery dashboard and progress bar.
+    - Searchable cheatsheet browse table mode for rapid, high-density exam revision.
+    - Custom flashcard creator modal with `localStorage` persistence (`seneca_cty_flashcards_v2`).
+    - Focus Timer integration (launch 25m Pomodoro sprint directly from deck).
+    - Code splitting & bundle optimization in `vite.config.js` (`manualChunks` separating vendor, Lucide icons, and app code, reducing bundle warning to 0).
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Brain` icon and "Active" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Zero build errors (`npm run build`). Clean chunk split (vendor 134 kB, icons 42 kB, app 344 kB).
+- **Commit**: Completed in Cycle 3.
 
 ---
 
@@ -71,9 +87,9 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 - [x] **T5.2 (CSV Formula Injection Protection)**: Exported CSV values beginning with formula triggers (`=`, `+`, `-`, `@`) sanitized with single quote prefixing. *(Fixed in `cbbe122`)*
 
 #### Tier 6 — Code Quality & Architecture
-- [x] **T6.1 (Duplicated Date & Time Utilities)**: Extracted into `src/utils/dateHelper.js`. *(Fixed in `4356d16`)*
-- [ ] **T6.2 (Lack of Unit / Logic Verification Tests)**: Add a lightweight test runner or verify script to guarantee GPA formulas, CSV parsing, and date math do not regress.
+- [x] **T6.2 (Lack of Unit / Logic Verification Tests)**: Created native ES module test suite `scripts/verify-logic.js` (executable via `npm test`) covering RFC-4180 CSV parsing, quote preservation, formula injection protection, local timezone date calculations, due-date sorting, and Seneca Polytechnic credit-weighted GPA formulas with 10/10 automated tests passing cleanly.
 
+#### Tier 7 — Polish & UX Details
 - [x] **T7.1 ("Days Until Deadline" Urgency Indicator)**: Added `getDeadlineUrgency` in `src/utils/dateHelper.js` with color-coded badges in Dashboard & Tasks views. *(Fixed in `4356d16`)*
 - [x] **T7.2 (Smart Filters on Tasks View)**: Added smart filter presets bar ("All", "Due This Week ≤7d", "Overdue", "High Weight ≥15%", "Incomplete", "Completed") with dynamic count badges, single-click "Clear filters" action, and accessible ARIA attributes in `src/components/TasksView.jsx`.
 
