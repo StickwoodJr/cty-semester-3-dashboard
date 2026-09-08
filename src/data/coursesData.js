@@ -134,8 +134,8 @@ export const INITIAL_COURSES = [
     badgeBg: "bg-amber-500/10 text-amber-400 border-amber-500/30",
     gradient: "from-amber-600 to-yellow-800",
     schedule: [
-      { day: "Wednesday", time: "1:30 PM - 3:15 PM", room: "Newnham Lab - Ubuntu Drive Host" },
-      { day: "Thursday", time: "8:55 AM - 10:40 AM", room: "Newnham Lab - Ubuntu Drive Host" }
+      { day: "Wednesday", time: "1:30 PM - 3:15 PM", room: "Newnham Lab" },
+      { day: "Thursday", time: "8:55 AM - 10:40 AM", room: "Newnham Lab" }
     ],
     links: [
       { label: "Course Site", url: "https://seneca-ictoer.github.io/OPS345v2/" },

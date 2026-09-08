@@ -87,7 +87,7 @@ export default function TimetableView() {
         name: "Open System Application Server",
         time: "1:30 PM - 3:15 PM",
         startTime: "1:30 PM",
-        room: "Newnham Lab - Ubuntu Host",
+        room: "Newnham Lab",
         instructor: "Linux Systems Faculty",
         color: "#d97706", // Gold / Amber
         mode: "In-Person Lab"
@@ -111,7 +111,7 @@ export default function TimetableView() {
         name: "Open System Application Server",
         time: "8:55 AM - 10:40 AM",
         startTime: "8:55 AM",
-        room: "Newnham Lab - Ubuntu Host",
+        room: "Newnham Lab",
         instructor: "Linux Systems Faculty",
         color: "#d97706", // Gold / Amber
         mode: "In-Person Lab"
