@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, BookOpen, Plus, Cloud, ChevronRight, 
-  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass
+  AlertTriangle, Timer, Terminal, Download, Printer, Award, Compass, Brain
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -28,6 +28,7 @@ export default function Sidebar() {
     { id: 'toolbelt', label: 'CTY Lab Toolbelt', icon: Terminal, badge: 'Snippets' },
     { id: 'marks', label: 'Marks & GPA', icon: BarChart3 },
     { id: 'exams', label: 'Exam & Midterm Hub', icon: Award, badge: 'Midterms' },
+    { id: 'flashcards', label: 'Flashcards & Recall', icon: Brain, badge: 'Active' },
     { id: 'wtp', label: 'WTP100 Career Hub', icon: Briefcase, badge: 'Oct 23' }
   ];
 
