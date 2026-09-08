@@ -524,13 +524,7 @@ export default function DashboardView() {
             />
             <div className="flex items-center justify-between text-[10px] text-slate-500 mt-2 px-1">
               <span>{scratchpad.length} chars • {scratchpad.trim() ? scratchpad.trim().split(/\s+/).length : 0} words</span>
-              <button
-                onClick={() => setIsScratchpadExpanded(true)}
-                className="text-red-400 hover:text-red-300 font-medium flex items-center gap-1 transition"
-              >
-                <span>Full Modal</span>
-                <Maximize2 className="w-3 h-3" />
-              </button>
+              <span>Auto-saved locally</span>
             </div>
           </div>
         </div>
