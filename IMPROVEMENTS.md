@@ -59,8 +59,8 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 
 #### Tier 3 — Accessibility (WCAG AA)
 - [x] **T3.1 (Dialog ARIA Attributes)**: Modals now include `role="dialog"`, `aria-modal="true"`, and `aria-labelledby`. *(Fixed in `e287d56`)*
-- [ ] **T3.2 (Icon-Only Button Labels)**: Nav toggle, modal close buttons, month pagers, and inline action buttons lack descriptive `aria-label` attributes for screen readers.
-- [ ] **T3.3 (Focus Visibility)**: Interactive elements need consistent `focus-visible:ring-2 focus-visible:ring-red-500` outlines.
+- [x] **T3.2 (Icon-Only Button Labels)**: Added explicit, descriptive `aria-label` attributes across all icon-only buttons (Navbar search/export/settings, Tasks table actions, Focus timer controls & tabs, Sidebar add course, Timetable filters, and Modal dismiss buttons).
+- [x] **T3.3 (Focus Visibility)**: Added consistent `focus-visible:ring-2 focus-visible:ring-red-500` outlines across navigation, action buttons, table rows, and interactive controls for keyboard accessibility.
 
 #### Tier 4 — Performance
 - [x] **T4.1 (Context Value Recreation Re-renders)**: Memoized all handler functions with `useCallback` and `AcademicContext.Provider` value with `useMemo` in `src/context/AcademicContext.jsx`.
