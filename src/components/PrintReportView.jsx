@@ -202,7 +202,7 @@ export default function PrintReportView() {
             {courses.map(course => (
               <div 
                 key={course.id} 
-                className="p-3 rounded-xl border border-slate-800 print:border-slate-300 bg-slate-950/40 print:bg-slate-50 space-y-1.5"
+                className="p-3 rounded-xl border border-slate-800 print:border-slate-300 bg-slate-950/40 print:bg-slate-50 space-y-1.5 break-inside-avoid"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-white print:text-slate-900">
@@ -229,7 +229,7 @@ export default function PrintReportView() {
         </div>
 
         {/* Section 3: Critical Term Dates */}
-        <div className="space-y-2">
+        <div className="space-y-2 break-inside-avoid">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-300 print:text-slate-800 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-red-500" />
             <span>3. Critical Fall 2026 Milestones</span>

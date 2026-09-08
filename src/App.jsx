@@ -26,6 +26,7 @@ import HabitsTrackerView from './components/HabitsTrackerView';
 import WorkloadRadarView from './components/WorkloadRadarView';
 import LabPreflightView from './components/LabPreflightView';
 import DegreePathwayView from './components/DegreePathwayView';
+import SocraticCoachView from './components/SocraticCoachView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -107,6 +108,7 @@ function AppContent() {
           {currentView === 'marks' && <MarksGpaView />}
           {currentView === 'exams' && <ExamWarRoomView />}
           {currentView === 'flashcards' && <FlashcardsView />}
+          {(currentView === 'socratic' || currentView === 'viva') && <SocraticCoachView />}
           {currentView === 'wtp' && <WtpCareerHub />}
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}

@@ -40,6 +40,14 @@
 
 /* Print / PDF Styles */
 @media print {
+  @page {
+    margin: 10mm 10mm 12mm 10mm;
+    size: auto;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
   header, aside, nav, .no-print {
     display: none !important;
   }
@@ -49,14 +57,21 @@
   }
   main {
     padding: 0 !important;
+    margin: 0 !important;
     min-height: auto !important;
+    max-width: 100% !important;
   }
   .print-page {
     background: #ffffff !important;
     color: #0f172a !important;
     padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
-  .print-page * {
-    color: inherit;
+  tr, .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }

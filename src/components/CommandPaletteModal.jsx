@@ -66,6 +66,7 @@ export default function CommandPaletteModal() {
     { id: 'marks', title: 'Marks & Seneca 4.0 GPA Command Center', category: 'Navigation', icon: BarChart3, action: () => setCurrentView('marks') },
     { id: 'exams', title: 'Exam & Midterm War Room (Countdowns & Cheat Sheets)', category: 'Navigation', icon: Award, action: () => setCurrentView('exams') },
     { id: 'flashcards', title: 'Flashcards & Active Recall (Command Mastery & Cheatsheet)', category: 'Navigation', icon: Brain, action: () => setCurrentView('flashcards') },
+    { id: 'socratic', title: 'Socratic Concept Viva & Oral Exam Coach (Hints & Model Defenses)', category: 'Navigation', icon: Sparkles, action: () => setCurrentView('socratic') },
     { id: 'wtp', title: 'WTP100 Career Hub (14 Modules)', category: 'Navigation', icon: Briefcase, action: () => setCurrentView('wtp') },
   ];
 

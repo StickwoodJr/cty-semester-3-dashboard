@@ -129,7 +129,7 @@ export const INITIAL_COURSES = [
     officeHours: "Weekly lab sessions & GitHub Discussions",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#d97706", // Gold / Amber
+    color: "#f59e0b", // Gold / Amber (high-contrast amber-500)
     accentColor: "amber",
     badgeBg: "bg-amber-500/10 text-amber-400 border-amber-500/30",
     gradient: "from-amber-600 to-yellow-800",
@@ -185,7 +185,7 @@ export const INITIAL_COURSES = [
     officeHours: "Tuesdays 1:30 PM - 2:30 PM or appointment",
     credits: 1.0,
     delivery: "In-Person",
-    color: "#0284c7", // Blue
+    color: "#0ea5e9", // Blue / Sky (high-contrast sky-500)
     accentColor: "sky",
     badgeBg: "bg-sky-500/10 text-sky-400 border-sky-500/30",
     gradient: "from-sky-600 to-blue-800",

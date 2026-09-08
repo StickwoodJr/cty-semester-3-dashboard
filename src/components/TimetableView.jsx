@@ -67,7 +67,7 @@ export default function TimetableView() {
         durationLabel: "1h 45m",
         room: "Newnham Bldg K - K1272",
         instructor: "Homayoun Mohamadi",
-        color: "#0284c7", // Blue
+        color: "#0ea5e9", // Sky (high-contrast)
         mode: "In-Person"
       },
       {
@@ -117,7 +117,7 @@ export default function TimetableView() {
         durationLabel: "1h 45m",
         room: "Newnham Bldg K - K1272",
         instructor: "Homayoun Mohamadi",
-        color: "#0284c7",
+        color: "#0ea5e9",
         mode: "In-Person"
       }
     ],
@@ -152,7 +152,7 @@ export default function TimetableView() {
         durationLabel: "1h 45m",
         room: "Newnham Lab",
         instructor: "Linux Systems Faculty",
-        color: "#d97706",
+        color: "#f59e0b",
         mode: "In-Person Lab"
       },
       {
@@ -186,7 +186,7 @@ export default function TimetableView() {
         durationLabel: "1h 45m",
         room: "Newnham Lab",
         instructor: "Linux Systems Faculty",
-        color: "#d97706",
+        color: "#f59e0b",
         mode: "In-Person Lab"
       },
       {
@@ -520,8 +520,17 @@ export default function TimetableView() {
                       return (
                         <div
                           key={gap.id}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Free Break on ${day}: ${gap.fromTime} to ${gap.toTime} (${durationStr}). Press Enter or Space to start study timer.`}
                           onClick={() => setCurrentView('timer')}
-                          className="absolute left-1.5 right-1.5 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/[0.04] p-2 flex flex-col items-center justify-center text-center transition-all hover:bg-amber-500/[0.12] hover:border-amber-500/50 cursor-pointer group z-10"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setCurrentView('timer');
+                            }
+                          }}
+                          className="absolute left-1.5 right-1.5 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/[0.04] p-2 flex flex-col items-center justify-center text-center transition-all hover:bg-amber-500/[0.12] hover:border-amber-500/50 cursor-pointer group z-10 focus:outline-none focus:ring-2 focus:ring-amber-500"
                           style={{
                             top: `${topPx + 3}px`,
                             height: `${heightPx - 6}px`
@@ -554,11 +563,21 @@ export default function TimetableView() {
                       return (
                         <div
                           key={idx}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`${item.courseCode} ${item.name}, ${item.time}, ${item.room}. Press Enter or Space to view syllabus and course details.`}
                           onClick={() => {
                             setSelectedCourseId(item.courseId);
                             setCurrentView('course-detail');
                           }}
-                          className="absolute left-1.5 right-1.5 rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all cursor-pointer group shadow-lg hover:z-30 hover:scale-[1.01] overflow-hidden"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedCourseId(item.courseId);
+                              setCurrentView('course-detail');
+                            }
+                          }}
+                          className="absolute left-1.5 right-1.5 rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between transition-all cursor-pointer group shadow-lg hover:z-30 hover:scale-[1.01] overflow-hidden focus:outline-none focus:ring-2 focus:ring-red-500"
                           style={{
                             top: `${topPx + 2}px`,
                             height: `${heightPx - 4}px`,

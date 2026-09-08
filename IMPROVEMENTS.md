@@ -193,7 +193,28 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
   - **Automated Verification Suite Expansion**: Added 3 new unit tests to `scripts/verify-logic.js` validating program config thresholds, prerequisite map integrity, and co-op/certification data completeness (**19/19 tests passing**).
   - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `GraduationCap` icon and "Diploma" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
 - **Verification**: Built cleanly (`npm run build`, 0 errors), 19/19 logic verification tests passing (`npm test`).
-- **Commit**: Completed in Cycle 10.
+- **Commit**: Completed in Cycle 10 (`20ca9e6`).
+
+### Cycle 11 — Socratic Concept Viva & Technical Oral Defense Coach (`src/components/SocraticCoachView.jsx`, `src/data/vivaQuestionsData.js`)
+- **Category**: New High-Impact Feature (Oral Examination Defense, Interview Prep & 4.0 Technical Mastery)
+- **Motivation**: In CTY Semester 3, professors routinely test authentic technical mastery through live lab demonstrations, oral vivas, and defense questioning (e.g. justifying BIND DNS forwarder configurations in OPS345, explaining normalization and B-tree indexes in DAT330, defending volatile RAM forensic acquisition order in SEC320, explaining OpenFlow flow table matching in CSN305, and detailing Azure Blob hot/cool/cold/archive tiers in MST300). Students targeting a 4.0 GPA must be able to articulate *why* configurations work, communicate architecture under pressure, and defend their design decisions without hesitating.
+- **Implementation**:
+  - Created `src/data/vivaQuestionsData.js` featuring:
+    - 30+ rigorous, technical oral exam questions spanning all 7 courses.
+    - 3-tier progressive Socratic hints (Tier 1: Guiding Question, Tier 2: Architectural Clue, Tier 3: Direct Technical Mechanism).
+    - 4.0 Model Defenses detailing the exact structured answers expected by Seneca faculty and technical interviewers.
+    - Essential Rubric Terms for mandatory technical vocabulary.
+    - Common Pitfalls & Deductions alerting students to typical mistakes that cost marks.
+  - Developed `src/components/SocraticCoachView.jsx` featuring:
+    - **Audio Question Narration**: Web Speech API (`window.speechSynthesis`) for real-time auditory examiner simulation.
+    - **Interactive Defense Sandbox**: Live student answer scratchpad with keyboard shortcuts (<kbd>H</kbd> for progressive hint, <kbd>M</kbd> to reveal model answer, <kbd>R</kbd> to read aloud, <kbd>N</kbd> for next).
+    - **4-Tier Oral Mastery Rating System**: Blanked / Stuck (1 pt), Partial / Shaky (2 pts), Solid Defense (3 pts), 4.0 Mastered (4 pts) with live mastery dashboard and progress gauge persisted in `localStorage` under `seneca_cty_viva_mastery_v1`.
+    - **Searchable Oral Defense Compendium**: Searchable, course-filterable reference table for rapid pre-exam verbal revision.
+    - **Focus Timer Integration**: Quick-launch 25m oral defense drill sprints.
+  - **Automated Verification Suite Expansion**: Added 2 new unit tests to `scripts/verify-logic.js` validating question schema completeness, valid course mappings, and 4-tier mastery scale integrity (**21/21 tests passing**).
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Sparkles` icon and "Oral" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 21/21 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 11.
 
 ---
 

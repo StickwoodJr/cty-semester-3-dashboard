@@ -15,6 +15,7 @@ import { calculateSemesterWorkload, calculateWorkloadMetrics, getCrunchSeverity 
 import { INITIAL_COURSES } from '../src/data/coursesData.js';
 import { LAB_PREFLIGHT_PRESETS, GENERAL_PREFLIGHT_CRITERIA } from '../src/data/labPreflightData.js';
 import { CTY_PROGRAM_CONFIG, CTY_SEMESTERS, SENECA_COOP_GATES, INDUSTRY_CERTIFICATIONS } from '../src/data/pathwayData.js';
+import { VIVA_QUESTIONS, VIVA_MASTERY_LEVELS } from '../src/data/vivaQuestionsData.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -382,6 +383,36 @@ test('SENECA_COOP_GATES & INDUSTRY_CERTIFICATIONS: Audits all 4 gates and 6 vend
     assert(cert.voucherTip, `Cert ${cert.id} must declare student voucher tip`);
     assert(cert.url.startsWith('https://'), `Cert ${cert.id} must have secure URL`);
   });
+});
+
+// -------------------------------------------------------------
+// 7. Socratic Concept Viva & Technical Oral Defense Tests
+// -------------------------------------------------------------
+console.log('\n🧠 7. Socratic Concept Viva & Technical Oral Defense:');
+
+test('VIVA_QUESTIONS: Covers core courses with multi-tier hints, model defenses, and key terms', () => {
+  const courseIds = new Set(INITIAL_COURSES.map(c => c.id));
+  assert(VIVA_QUESTIONS.length >= 8, 'Must have at least 8 viva defense scenarios');
+
+  VIVA_QUESTIONS.forEach(q => {
+    assert(q.id, 'Question must have id');
+    assert(courseIds.has(q.courseId), `Question courseId ${q.courseId} must exist in INITIAL_COURSES`);
+    assert(q.question && q.question.length > 20, 'Question text must be substantive');
+    assert(q.whyProfessorsAsk, 'Must document why professors ask this');
+    assert(Array.isArray(q.hints) && q.hints.length >= 3, 'Must have at least 3 progressive Socratic hints');
+    assert(q.modelAnswer && q.modelAnswer.length > 50, 'Model answer must be detailed and complete');
+    assert(Array.isArray(q.keyTerms) && q.keyTerms.length >= 3, 'Must have at least 3 key rubric terms');
+    assert(q.pitfalls, 'Must specify common mark-deduction pitfalls');
+  });
+});
+
+test('VIVA_MASTERY_LEVELS: Defines complete 4-tier oral self-evaluation scale', () => {
+  assert.strictEqual(VIVA_MASTERY_LEVELS.length, 4);
+  const ids = VIVA_MASTERY_LEVELS.map(m => m.id);
+  assert(ids.includes('unattempted'));
+  assert(ids.includes('needs-practice'));
+  assert(ids.includes('good'));
+  assert(ids.includes('mastered'));
 });
 
 console.log(`\n🎉 Verification Completed: ${passedTests}/${totalTests} tests passed cleanly with 0 failures.\n`);

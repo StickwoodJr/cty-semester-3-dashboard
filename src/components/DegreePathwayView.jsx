@@ -80,8 +80,10 @@ export default function DegreePathwayView() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-slate-800/80 text-xs">
+        <div role="tablist" aria-label="Degree pathway navigation tabs" className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-slate-800/80 text-xs">
           <button
+            role="tab"
+            aria-selected={activeTab === 'prereqs'}
             onClick={() => setActiveTab('prereqs')}
             className={`px-4 py-2 rounded-xl font-bold transition flex items-center gap-2 ${
               activeTab === 'prereqs'
@@ -94,6 +96,8 @@ export default function DegreePathwayView() {
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'coop'}
             onClick={() => setActiveTab('coop')}
             className={`px-4 py-2 rounded-xl font-bold transition flex items-center gap-2 ${
               activeTab === 'coop'
@@ -106,6 +110,8 @@ export default function DegreePathwayView() {
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'certs'}
             onClick={() => setActiveTab('certs')}
             className={`px-4 py-2 rounded-xl font-bold transition flex items-center gap-2 ${
               activeTab === 'certs'
@@ -118,6 +124,8 @@ export default function DegreePathwayView() {
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'honours'}
             onClick={() => setActiveTab('honours')}
             className={`px-4 py-2 rounded-xl font-bold transition flex items-center gap-2 ${
               activeTab === 'honours'
