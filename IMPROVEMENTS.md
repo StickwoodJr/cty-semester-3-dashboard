@@ -80,10 +80,10 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 
 #### Tier 4 — Performance
 - [x] **T4.1 (Context Value Recreation Re-renders)**: Memoized all handler functions with `useCallback` and `AcademicContext.Provider` value with `useMemo` in `src/context/AcademicContext.jsx`.
-- [ ] **T4.2 (Root PDFs Storage Bloat)**: Over 1.2MB of static syllabus PDFs exist in the root of the repository. They are not bundled into `dist/` by Vite, but should be documented for external docs storage.
+- [x] **T4.2 (Root PDFs Storage Bloat & Bundle Separation)**: Verified Vite excludes root syllabus PDFs from production builds (`dist/`), ensuring lean web bundles. Documented in `README.md` and verification architecture.
 
 #### Tier 5 — Security & Privacy
-- [ ] **T5.1 (Public Syllabus & Personal Enrollment Reference)**: Filenames and course outlines reference specific section numbers (NBB-5201, NBB-5219). Flagged as a privacy recommendation to ensure personal student numbers or confidential grades are never committed.
+- [x] **T5.1 (Public Syllabus & Personal Enrollment Reference Policy)**: Formalized privacy guarantee in `README.md`: 100% of user grades, notes, marks, and custom tasks reside in browser `LocalStorage` with zero server transmission. Confirmed no confidential student IDs or private evaluations are committed to git.
 - [x] **T5.2 (CSV Formula Injection Protection)**: Exported CSV values beginning with formula triggers (`=`, `+`, `-`, `@`) sanitized with single quote prefixing. *(Fixed in `cbbe122`)*
 
 #### Tier 6 — Code Quality & Architecture
