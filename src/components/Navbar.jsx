@@ -19,17 +19,6 @@ export default function Navbar() {
   } = useAcademic();
 
   const metrics = getSemesterMetrics();
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  // Search results
-  const searchResults = searchTerm.trim() === '' ? [] : courses.flatMap(c => 
-    (c.assessments || []).filter(a => 
-      a.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (a.topic && a.topic.toLowerCase().includes(searchTerm.toLowerCase()))
-    ).map(a => ({ ...a, courseCode: c.code, courseId: c.id }))
-  );
 
   return (
     <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-6 py-3">
@@ -62,65 +51,21 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Center: Quick Search Bar */}
+        {/* Center: Quick Search Bar with Command Palette trigger */}
         <div className="relative hidden md:block flex-1 max-w-md">
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500" />
-            <input 
-              type="text" 
-              placeholder="Search tasks, labs, tests, quizzes, courses..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-slate-950/80 border border-slate-800 rounded-lg pl-9 pr-4 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30 transition-colors"
-            />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-2 text-slate-500 hover:text-slate-300 text-xs"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Search Dropdown Results */}
-          {searchTerm && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-slate-900 border border-slate-700/80 rounded-xl shadow-2xl overflow-hidden z-50 max-h-80 overflow-y-auto">
-              <div className="p-2 border-b border-slate-800 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                Matching Assessments ({searchResults.length})
+          <div 
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+            className="relative cursor-pointer group"
+            title="Open Command Palette (Ctrl+K / ⌘K)"
+          >
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-500 group-hover:text-slate-300 transition" />
+            <div className="w-full bg-slate-950/80 hover:bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-400 flex items-center justify-between transition">
+              <span className="truncate">Search tasks, courses, commands...</span>
+              <div className="flex items-center gap-1 font-mono text-[10px] text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800 shrink-0">
+                <span>⌘K</span>
               </div>
-              {searchResults.length === 0 ? (
-                <div className="p-4 text-center text-xs text-slate-500">No assessments found matching "{searchTerm}"</div>
-              ) : (
-                searchResults.slice(0, 8).map(res => (
-                  <button 
-                    key={res.id}
-                    onClick={() => {
-                      setActiveModal('edit-task');
-                      setModalPayload({ courseId: res.courseId, assessment: res });
-                      setSearchTerm('');
-                    }}
-                    className="w-full text-left p-2.5 hover:bg-slate-800/80 transition flex items-center justify-between border-b border-slate-800/40 last:border-0"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-red-400">{res.courseCode}</span>
-                        <span className="text-xs text-white font-medium">{res.name}</span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                          {res.category}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-slate-400 truncate max-w-xs">{res.topic}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs font-semibold text-slate-200">{res.weight}%</div>
-                      <div className="text-[10px] text-slate-400">Due {res.dueDate}</div>
-                    </div>
-                  </button>
-                ))
-              )}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Right: Quick Stats, Add Task & Actions */}

@@ -16,6 +16,7 @@ import SettingsModal from './components/SettingsModal';
 import SyncExportModal from './components/SyncExportModal';
 import FocusTimerView from './components/FocusTimerView';
 import LabToolbeltView from './components/LabToolbeltView';
+import CommandPaletteModal from './components/CommandPaletteModal';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -88,6 +89,7 @@ function AppContent() {
       <WhatIfCalculatorModal />
       <SettingsModal />
       <SyncExportModal />
+      <CommandPaletteModal />
 
       {/* Toast Notification Banner */}
       {toastMessage && (
