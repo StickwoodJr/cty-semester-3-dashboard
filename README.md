@@ -1,9 +1,11 @@
 # Seneca CTY Semester 3 Academic Dashboard & Command Center 🎓
 
-[![Build Status](https://img.shields.io/badge/Build-Passing-emerald)](https://github.com/StickwoodJr)
+[![Live Dashboard](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success?style=for-the-badge&logo=github)](https://stickwoodjr.github.io/cty-semester-3-dashboard/)
 [![Seneca Polytechnic](https://img.shields.io/badge/Seneca%20Polytechnic-CTY%20Semester%203-red)](https://www.senecapolytechnic.ca/programs/fulltime/CTY/courses.html)
 [![Term](https://img.shields.io/badge/Term-Fall%202026-blue)](https://learn.senecapolytechnic.ca)
 [![License](https://img.shields.io/badge/License-MIT-purple)](LICENSE)
+
+> 🌐 **Live Web Application:** [https://stickwoodjr.github.io/cty-semester-3-dashboard/](https://stickwoodjr.github.io/cty-semester-3-dashboard/)
 
 An intelligent, multi-view academic dashboard and tracker built specifically for the **Computer Systems Technology (CTY)** program at **Seneca Polytechnic (Newnham Campus)** for **Semester 3 (Fall 2026)**.
 
