@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { INITIAL_COURSES } from '../data/coursesData';
 import { SEMESTER_CONFIG, SENECA_GRADE_SCALE, getLetterGrade, getGpaValue } from '../data/senecaDates';
 import { sortTasksByDueDate } from '../utils/dateHelper';
@@ -57,23 +57,23 @@ export function AcademicProvider({ children }) {
     }
   }, [scratchpad]);
 
-  const showToast = (msg, type = "info") => {
+  const showToast = useCallback((msg, type = "info") => {
     setToastMessage({ msg, type });
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
-  };
+  }, []);
 
-  const triggerCelebration = () => {
+  const triggerCelebration = useCallback(() => {
     confetti({
       particleCount: 60,
       spread: 70,
       origin: { y: 0.7 }
     });
-  };
+  }, []);
 
   // Assessment operations
-  const updateAssessment = (courseId, assessmentId, updatedFields) => {
+  const updateAssessment = useCallback((courseId, assessmentId, updatedFields) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== courseId) return course;
       const updatedAssessments = (course.assessments || []).map(task => {
@@ -87,9 +87,9 @@ export function AcademicProvider({ children }) {
       });
       return { ...course, assessments: updatedAssessments };
     }));
-  };
+  }, [triggerCelebration, showToast]);
 
-  const addAssessment = (courseId, newAssessment) => {
+  const addAssessment = useCallback((courseId, newAssessment) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== courseId) return course;
       const newId = `${course.id}-task-${Date.now()}`;
@@ -97,27 +97,27 @@ export function AcademicProvider({ children }) {
       return { ...course, assessments };
     }));
     showToast(`Added assessment to ${courseId.toUpperCase()}`, "success");
-  };
+  }, [showToast]);
 
-  const deleteAssessment = (courseId, assessmentId) => {
+  const deleteAssessment = useCallback((courseId, assessmentId) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== courseId) return course;
       const assessments = (course.assessments || []).filter(a => a.id !== assessmentId);
       return { ...course, assessments };
     }));
     showToast(`Assessment removed`, "info");
-  };
+  }, [showToast]);
 
   // Course operations
-  const updateCourse = (courseId, updatedFields) => {
+  const updateCourse = useCallback((courseId, updatedFields) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== courseId) return course;
       return { ...course, ...updatedFields };
     }));
     showToast(`Updated course ${updatedFields.code || courseId}`, "success");
-  };
+  }, [showToast]);
 
-  const addCourse = (newCourse) => {
+  const addCourse = useCallback((newCourse) => {
     const id = (newCourse.code || `course-${Date.now()}`).toLowerCase().replace(/[^a-z0-9]/g, '');
     const courseObj = {
       ...newCourse,
@@ -126,18 +126,16 @@ export function AcademicProvider({ children }) {
     };
     setCourses(prev => [...prev, courseObj]);
     showToast(`Added course ${newCourse.code}`, "success");
-  };
+  }, [showToast]);
 
-  const deleteCourse = (courseId) => {
+  const deleteCourse = useCallback((courseId) => {
     setCourses(prev => prev.filter(c => c.id !== courseId));
-    if (selectedCourseId === courseId) {
-      setSelectedCourseId(courses[0]?.id || null);
-    }
+    setSelectedCourseId(prev => (prev === courseId ? null : prev));
     showToast(`Course deleted`, "warning");
-  };
+  }, [showToast]);
 
   // WTP100 Module toggle
-  const toggleWtpModule = (moduleId) => {
+  const toggleWtpModule = useCallback((moduleId) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== 'wtp100') return course;
       const modules = (course.modulesList || []).map(m => {
@@ -150,10 +148,10 @@ export function AcademicProvider({ children }) {
       });
       return { ...course, modulesList: modules };
     }));
-  };
+  }, [triggerCelebration]);
 
   // Budget spend update
-  const updateBudgetSpend = (courseId, spendAmount) => {
+  const updateBudgetSpend = useCallback((courseId, spendAmount) => {
     setCourses(prevCourses => prevCourses.map(course => {
       if (course.id !== courseId || !course.budgetTracker) return course;
       return {
@@ -165,16 +163,16 @@ export function AcademicProvider({ children }) {
       };
     }));
     showToast(`Updated cloud budget spend`, "info");
-  };
+  }, [showToast]);
 
   // Reset to initial
-  const resetToDefaults = () => {
+  const resetToDefaults = useCallback(() => {
     setCourses(INITIAL_COURSES);
     showToast("Reset all courses and assessments to official syllabus defaults", "info");
-  };
+  }, [showToast]);
 
   // Calculate course grade and metrics
-  const getCourseMetrics = (course) => {
+  const getCourseMetrics = useCallback((course) => {
     const assessments = course.assessments || [];
     let completedWeight = 0;
     let earnedWeight = 0;
@@ -280,10 +278,10 @@ export function AcademicProvider({ children }) {
       gpa,
       passingChecks
     };
-  };
+  }, []);
 
   // Overall semester metrics (Credit-Weighted Seneca Polytechnic Formula)
-  const getSemesterMetrics = () => {
+  const getSemesterMetrics = useCallback(() => {
     let gradedCredits = 0;
     let totalQualityPoints = 0;
     let totalTasks = 0;
@@ -316,10 +314,10 @@ export function AcademicProvider({ children }) {
       totalTasks,
       progressPercent
     };
-  };
+  }, [courses, getCourseMetrics]);
 
   // All assessments flattened with course info, sorted safely by due date
-  const getAllAssessments = () => {
+  const getAllAssessments = useCallback(() => {
     const list = [];
     courses.forEach(course => {
       (course.assessments || []).forEach(task => {
@@ -336,41 +334,66 @@ export function AcademicProvider({ children }) {
     });
     // Safely sort by due date ascending (empty dates sort to end)
     return sortTasksByDueDate(list, true);
-  };
+  }, [courses]);
+
+  const contextValue = useMemo(() => ({
+    courses,
+    setCourses,
+    currentView,
+    setCurrentView,
+    selectedCourseId,
+    setSelectedCourseId,
+    activeModal,
+    setActiveModal,
+    modalPayload,
+    setModalPayload,
+    toastMessage,
+    showToast,
+    triggerCelebration,
+    scratchpad,
+    setScratchpad,
+    targetGpa,
+    setTargetGpa,
+    updateAssessment,
+    addAssessment,
+    deleteAssessment,
+    updateCourse,
+    addCourse,
+    deleteCourse,
+    toggleWtpModule,
+    updateBudgetSpend,
+    resetToDefaults,
+    getCourseMetrics,
+    getSemesterMetrics,
+    getAllAssessments,
+    semesterConfig: SEMESTER_CONFIG
+  }), [
+    courses,
+    currentView,
+    selectedCourseId,
+    activeModal,
+    modalPayload,
+    toastMessage,
+    showToast,
+    triggerCelebration,
+    scratchpad,
+    targetGpa,
+    updateAssessment,
+    addAssessment,
+    deleteAssessment,
+    updateCourse,
+    addCourse,
+    deleteCourse,
+    toggleWtpModule,
+    updateBudgetSpend,
+    resetToDefaults,
+    getCourseMetrics,
+    getSemesterMetrics,
+    getAllAssessments
+  ]);
 
   return (
-    <AcademicContext.Provider value={{
-      courses,
-      setCourses,
-      currentView,
-      setCurrentView,
-      selectedCourseId,
-      setSelectedCourseId,
-      activeModal,
-      setActiveModal,
-      modalPayload,
-      setModalPayload,
-      toastMessage,
-      showToast,
-      triggerCelebration,
-      scratchpad,
-      setScratchpad,
-      targetGpa,
-      setTargetGpa,
-      updateAssessment,
-      addAssessment,
-      deleteAssessment,
-      updateCourse,
-      addCourse,
-      deleteCourse,
-      toggleWtpModule,
-      updateBudgetSpend,
-      resetToDefaults,
-      getCourseMetrics,
-      getSemesterMetrics,
-      getAllAssessments,
-      semesterConfig: SEMESTER_CONFIG
-    }}>
+    <AcademicContext.Provider value={contextValue}>
       {children}
     </AcademicContext.Provider>
   );
