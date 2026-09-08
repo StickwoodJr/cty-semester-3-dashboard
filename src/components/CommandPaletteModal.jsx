@@ -3,7 +3,7 @@ import { useAcademic } from '../context/AcademicContext';
 import { 
   Search, LayoutDashboard, Calendar, CheckSquare, Clock, 
   BarChart3, Briefcase, Timer, Terminal, Plus, Download, 
-  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain
+  ArrowRight, BookOpen, Sparkles, X, FileText, Award, Compass, Brain, Library
 } from 'lucide-react';
 
 export default function CommandPaletteModal() {
@@ -54,6 +54,7 @@ export default function CommandPaletteModal() {
     { id: 'planner', title: 'Study & Gap Planner (4.0 Target & Campus Gaps)', category: 'Navigation', icon: Compass, action: () => setCurrentView('planner') },
     { id: 'timer', title: 'Focus & Study Session Timer', category: 'Navigation', icon: Timer, action: () => setCurrentView('timer') },
     { id: 'toolbelt', title: 'CTY Lab Technical Toolbelt & Cheatsheet', category: 'Navigation', icon: Terminal, action: () => setCurrentView('toolbelt') },
+    { id: 'resources', title: 'Resource & Faculty Vault (Portals, Directory & Policies)', category: 'Navigation', icon: Library, action: () => setCurrentView('resources') },
     { id: 'calendar', title: 'Academic Calendar (Month Grid & Agenda)', category: 'Navigation', icon: Calendar, action: () => setCurrentView('calendar') },
     { id: 'tasks', title: 'Assessments & Tasks (Kanban & Table)', category: 'Navigation', icon: CheckSquare, action: () => setCurrentView('tasks') },
     { id: 'marks', title: 'Marks & Seneca 4.0 GPA Command Center', category: 'Navigation', icon: BarChart3, action: () => setCurrentView('marks') },

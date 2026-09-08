@@ -61,7 +61,21 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
     - **Syllabus Sub-Minimum Sentinel**: Automatically audits DAT330 and SEC320 mandatory 50% test passing hurdle, displaying green pass shields or red warning indicators.
     - **4.0 Semester Safety Heatmap**: Side-by-side comparative grid showing cushion status (Comfortable, On Track, Intensive Focus, Secured) across all courses.
 - **Verification**: Built cleanly (`npm run build`, 0 errors), 10/10 logic verification tests passing (`npm test`).
-- **Commit**: Completed in Cycle 4.
+- **Commit**: Completed in Cycle 4 (`e9a9f15`).
+
+### Cycle 5 — Syllabus & Resource Vault with Faculty Directory & Student Perks (`src/components/ResourceVaultView.jsx`)
+- **Category**: New High-Impact Feature (Academic Centralization, Faculty Access, Policy Guidance & Free Tech Perks)
+- **Motivation**: In CTY Semester 3, students juggle distinct learning management portals, cloud dashboards, and campus services (Learn@Seneca, Microsoft Azure, Matrix SSH gateway, SenecaWorks WIL, Seneca Libraries). Additionally, reaching professors during office hours and understanding official Seneca policies (DNC penalty-free drop deadline, Exam conflict protocols, Academic Honesty AI rules, and President's Honour List requirements) are critical to maintaining peace of mind and securing distinction.
+- **Implementation**:
+  - Developed `src/components/ResourceVaultView.jsx` featuring:
+    - **Official Seneca & Cloud Portals Gateway**: Direct one-click access with status badges to Learn@Seneca, Student Home, Azure for Students, SenecaWorks, Matrix Linux SSH, Seneca Libraries (Safari/O'Reilly books), and ITS Service Desk.
+    - **CTY Faculty Directory**: Detailed profiles for all course professors (Parul Kantaria, Nooshin Beheshti, Homayoun Mohamadi, Glen Choi, Linux Faculty, SDN Faculty, WIL Coordinator) with campus office/lab locations, office hours, syllabus tips, 1-click email address copy, and pre-formatted `mailto:` inquiries.
+    - **Academic Policies & Survival Guide**: Clear breakdown of the Seneca 4.0 GPA distinction rule, Nov 13 DNC drop deadline, Academic Honesty & GenAI submission guidelines, and Exam conflict procedures.
+    - **Free Student Perks & Developer Software**: Links and guides to claim $2,000+ in student developer benefits (GitHub Student Developer Pack, Azure for Students $100 credits, Microsoft 365 ProPlus, and O'Reilly Safari Books online via Seneca SSO).
+    - Real-time search and tab filters (All, Portals, Faculty, Policies, Perks).
+  - Wired into `src/App.jsx`, `src/components/Sidebar.jsx` (with `Library` icon and "Portals" badge), and `src/components/CommandPaletteModal.jsx` (<kbd>Cmd+K</kbd>).
+- **Verification**: Built cleanly (`npm run build`, 0 errors), 10/10 logic verification tests passing (`npm test`).
+- **Commit**: Completed in Cycle 5.
 
 ---
 

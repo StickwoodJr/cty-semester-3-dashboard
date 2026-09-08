@@ -21,6 +21,7 @@ import PrintReportView from './components/PrintReportView';
 import ExamWarRoomView from './components/ExamWarRoomView';
 import StudyPlannerView from './components/StudyPlannerView';
 import FlashcardsView from './components/FlashcardsView';
+import ResourceVaultView from './components/ResourceVaultView';
 import { CheckCircle2, AlertCircle, Info, Menu, X } from 'lucide-react';
 
 function AppContent() {
@@ -87,6 +88,7 @@ function AppContent() {
           {currentView === 'wtp' && <WtpCareerHub />}
           {currentView === 'timer' && <FocusTimerView />}
           {currentView === 'toolbelt' && <LabToolbeltView />}
+          {currentView === 'resources' && <ResourceVaultView />}
           {currentView === 'print' && <PrintReportView />}
         </main>
       </div>

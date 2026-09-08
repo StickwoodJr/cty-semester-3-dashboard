@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAcademic } from '../context/AcademicContext';
 import { X, CheckSquare, Calendar, Clock, Award, Tag } from 'lucide-react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 export default function AssessmentModal() {
   const { 
@@ -11,6 +12,9 @@ export default function AssessmentModal() {
     addAssessment, 
     updateAssessment 
   } = useAcademic();
+
+  const isModalOpen = activeModal === 'add-task' || activeModal === 'edit-task';
+  const modalRef = useFocusTrap(isModalOpen);
 
   const isEdit = activeModal === 'edit-task';
   const editingTask = modalPayload?.assessment;
@@ -90,7 +94,7 @@ export default function AssessmentModal() {
       aria-modal="true"
       aria-labelledby="assessment-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div ref={modalRef} className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">
