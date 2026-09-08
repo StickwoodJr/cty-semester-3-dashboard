@@ -41,7 +41,7 @@ This document tracks all discovered bugs, accessibility audits, cross-browser/re
 #### Tier 2 — Responsive & Cross-Browser
 - [x] **T2.1 (Calendar Day Name Truncation)**: On mobile (<640px), weekday names switch to compact `Sun`, `Mon` while desktop displays `Sunday`, `Monday`. *(Fixed in `39ac1fe`)*
 - [x] **T2.2 (Timetable Mobile Scaling)**: Timetable grid dynamically collapses to 1 column when a day filter is selected on mobile/tablets, adds mobile swipe affordance for 5-day view, and provides responsive full-width compact view with keyboard accessibility in `src/components/TimetableView.jsx`.
-- [ ] **T2.3 (Modal Viewport Overflow)**: Modals on small mobile screens need explicit `max-h-[85vh]` with smooth scrolling bodies.
+- [x] **T2.3 (Modal Viewport Overflow)**: All modals (`AssessmentModal`, `CourseEditModal`, `SettingsModal`, `SyncExportModal`, `WhatIfCalculatorModal`, `CommandPaletteModal`) configured with `max-h-[90vh] flex flex-col` and scrollable bodies (`overflow-y-auto flex-1`) to prevent button cutoff on mobile landscape and small screens.
 
 #### Tier 3 — Accessibility (WCAG AA)
 - [x] **T3.1 (Dialog ARIA Attributes)**: Modals now include `role="dialog"`, `aria-modal="true"`, and `aria-labelledby`. *(Fixed in `e287d56`)*

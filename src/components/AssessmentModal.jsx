@@ -90,10 +90,10 @@ export default function AssessmentModal() {
       aria-modal="true"
       aria-labelledby="assessment-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800">
+        <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-red-600/10 text-red-400 border border-red-500/20">
               <CheckSquare className="w-4 h-4" />
@@ -112,7 +112,7 @@ export default function AssessmentModal() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs overflow-y-auto flex-1">
           
           {/* Course select */}
           <div>

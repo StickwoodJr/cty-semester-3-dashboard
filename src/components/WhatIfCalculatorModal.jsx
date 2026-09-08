@@ -47,10 +47,10 @@ export default function WhatIfCalculatorModal() {
       aria-modal="true"
       aria-labelledby="what-if-modal-title"
     >
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-slate-800">
+        <div className="flex items-center justify-between p-5 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-indigo-600/10 text-indigo-400 border border-indigo-500/20">
               <Calculator className="w-4 h-4" />
@@ -72,7 +72,7 @@ export default function WhatIfCalculatorModal() {
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-5 text-xs">
+        <div className="p-5 space-y-5 text-xs overflow-y-auto flex-1">
           {isWtp ? (
             <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 space-y-2">
               <div className="flex items-center gap-2 font-bold text-sm">
