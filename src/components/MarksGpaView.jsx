@@ -390,12 +390,12 @@ export default function MarksGpaView() {
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 text-[10px] uppercase tracking-wider">
               <tr>
-                <th className="py-2.5 px-3">Assessment</th>
-                <th className="py-2.5 px-3">Category</th>
-                <th className="py-2.5 px-3">Due Date</th>
-                <th className="py-2.5 px-3 text-center">Weight</th>
-                <th className="py-2.5 px-3 text-center">Status / Simulator Slider</th>
-                <th className="py-2.5 px-3 text-right">Simulated (%)</th>
+                <th scope="col" className="py-2.5 px-3">Assessment</th>
+                <th scope="col" className="py-2.5 px-3">Category</th>
+                <th scope="col" className="py-2.5 px-3">Due Date</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Weight</th>
+                <th scope="col" className="py-2.5 px-3 text-center">Status / Simulator Slider</th>
+                <th scope="col" className="py-2.5 px-3 text-right">Simulated (%)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
@@ -545,14 +545,14 @@ export default function MarksGpaView() {
         <table className="w-full text-left text-xs">
           <thead className="bg-slate-950/80 text-slate-400 font-semibold border-b border-slate-800 text-[10px] uppercase tracking-wider">
             <tr>
-              <th className="py-3 px-4">Course</th>
-              <th className="py-3 px-4">Title</th>
-              <th className="py-3 px-4">Credits</th>
-              <th className="py-3 px-4">Evaluated Weight</th>
-              <th className="py-3 px-4 text-center">Current Grade</th>
-              <th className="py-3 px-4 text-center">Letter Grade</th>
-              <th className="py-3 px-4 text-center">Seneca GPA</th>
-              <th className="py-3 px-4 text-right">Action</th>
+              <th scope="col" className="py-3 px-4">Course</th>
+              <th scope="col" className="py-3 px-4">Title</th>
+              <th scope="col" className="py-3 px-4">Credits</th>
+              <th scope="col" className="py-3 px-4">Evaluated Weight</th>
+              <th scope="col" className="py-3 px-4 text-center">Current Grade</th>
+              <th scope="col" className="py-3 px-4 text-center">Letter Grade</th>
+              <th scope="col" className="py-3 px-4 text-center">Seneca GPA</th>
+              <th scope="col" className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/60">
@@ -649,10 +649,10 @@ export default function MarksGpaView() {
             <table className="w-full text-left text-xs">
               <thead className="text-[10px] text-slate-400 uppercase tracking-wider border-b border-slate-800">
                 <tr>
-                  <th className="py-2">Letter</th>
-                  <th className="py-2">Percentage</th>
-                  <th className="py-2">GPA Value</th>
-                  <th className="py-2">Academic Description</th>
+                  <th scope="col" className="py-2">Letter</th>
+                  <th scope="col" className="py-2">Percentage</th>
+                  <th scope="col" className="py-2">GPA Value</th>
+                  <th scope="col" className="py-2">Academic Description</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60 font-mono text-[11px]">
