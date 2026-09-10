@@ -328,10 +328,10 @@ export const INITIAL_COURSES = [
     code: "CSN305",
     name: "Software Defined Networks",
     section: "NBB",
-    classNbr: "CSN305",
-    professor: "Faculty Assigned",
-    email: "seneca@senecapolytechnic.ca",
-    officeHours: "Thursday after class",
+    classNbr: "5197",
+    professor: "Lisa Li",
+    email: "lisa.li2@senecapolytechnic.ca",
+    officeHours: "Thursdays after class (4:10 PM) or by appointment",
     credits: 1.0,
     delivery: "In-Person",
     color: "#22c55e", // Green
@@ -339,24 +339,47 @@ export const INITIAL_COURSES = [
     badgeBg: "bg-green-500/10 text-green-400 border-green-500/30",
     gradient: "from-green-600 to-emerald-800",
     schedule: [
-      { day: "Thursday", time: "12:35 PM - 4:10 PM", room: "Newnham Campus" }
+      { day: "Thursday", time: "12:35 PM - 4:10 PM", room: "Newnham Bldg K - K1270" }
     ],
     links: [
-      { label: "Learn@Seneca", url: "https://learn.senecapolytechnic.ca/ultra/institution-page" }
+      { label: "Learn@Seneca", url: "https://learn.senecapolytechnic.ca/ultra/institution-page" },
+      { label: "Seneca Bookstore", url: "https://www.bkstr.com/senecastore/shop/textbooks-and-course-materials" }
     ],
-    description: "Core CTY 3rd semester networking course covering Software Defined Networking (SDN), OpenFlow protocols, network programmability, controller architecture (OpenDaylight/ONOS), and network virtualization.",
+    description: "In this project-based course students will examine and then use the functions and components of Software Defined Networks (SDN) to create a network. They will identify challenges when converting static networks to software defined ones. And will be able to analyze the performance of an SDN using verification and troubleshooting techniques to guarantee quality of service.",
+    textbook: {
+      title: "SDN and NFV Simplified: A Visual Guide to Understanding Software Defined Networks and Network Function Virtualization",
+      author: "Jim Doherty",
+      isbn: "0-13-4307399",
+      required: true,
+      supplies: "Solid-state drive (SSD) with minimum 500 GB available capacity"
+    },
     passingRequirements: [
-      "Achieve 50% or higher overall",
-      "Prerequisite: CSN205 completed in Semester 2"
+      "Achieve a grade of 50% or higher in the overall course",
+      "Achieve a weighted average of 50% or higher on all tests (4 tests @ 15% each = 60%)",
+      "Satisfactorily complete all labs (minimum 50% required for every lab report; if less, must redo and resubmit)",
+      "Prerequisite: CSN205"
     ],
-    latePolicy: "Standard Seneca Academic Policy applies.",
+    latePolicy: "All late lab report submissions are subject to a minimum 10% deduction (the later the submission, the higher the deduction). Satisfactory minimum grade for every lab report is 50%; if less, you must redo and resubmit as soon as possible with late deductions applied. Missed tests require prior discussion or immediate contact with professor for extension requests.",
+    testRules: "No electronic or wireless devices permitted during tests (smartphones, Smart Glasses prohibited; only prescribed non-Smart glasses allowed).",
+    labRules: "All lab reports must be submitted individually. All inserted screenshots in lab reports must be identified by including either the student's full name or login account name and the date/time when it was taken.",
     budgetTracker: { enabled: false },
     isCustomizable: true,
     assessments: [
-      { id: "csn305-placeholder-1", name: "Lab 1", category: "Lab", weight: 5.0, dueDate: "2026-09-25", week: 3, status: "Not Started", score: null, maxScore: 100, topic: "SDN Testbed & Controller Setup" },
-      { id: "csn305-placeholder-2", name: "Midterm Assessment", category: "Test", weight: 25.0, dueDate: "2026-10-21", week: 7, status: "Not Started", score: null, maxScore: 100, topic: "SDN Concepts & Architecture Exam" },
-      { id: "csn305-placeholder-3", name: "Final Assessment & Project", category: "Exam", weight: 70.0, dueDate: "2026-12-16", week: 14, status: "Not Started", score: null, maxScore: 100, topic: "Final evaluation and lab deliverables" }
+      { id: "csn305-lab1", name: "Lab 1", category: "Lab", weight: 4.0, dueDate: "2026-09-17", week: 2, status: "Not Started", score: null, maxScore: 100, topic: "Virtualization-Hypervisors & Testbed Setup" },
+      { id: "csn305-lab2", name: "Lab 2", category: "Lab", weight: 4.0, dueDate: "2026-09-24", week: 3, status: "Not Started", score: null, maxScore: 100, topic: "Cloud Computing Fundamentals" },
+      { id: "csn305-lab3", name: "Lab 3", category: "Lab", weight: 4.0, dueDate: "2026-10-01", week: 4, status: "Not Started", score: null, maxScore: 100, topic: "NFV-Core Networking Functionality" },
+      { id: "csn305-test1", name: "Test 1", category: "Test", weight: 15.0, dueDate: "2026-10-01", week: 4, status: "Not Started", score: null, maxScore: 100, topic: "Weeks 1–3: Virtualization, Cloud Fundamentals & NFV" },
+      { id: "csn305-lab4", name: "Lab 4", category: "Lab", weight: 4.0, dueDate: "2026-10-08", week: 5, status: "Not Started", score: null, maxScore: 100, topic: "SDN Architecture & OpenFlow Switch Specification" },
+      { id: "csn305-lab5", name: "Lab 5", category: "Lab", weight: 4.0, dueDate: "2026-10-15", week: 6, status: "Not Started", score: null, maxScore: 100, topic: "OpenFlow-Related Protocols" },
+      { id: "csn305-lab6", name: "Lab 6", category: "Lab", weight: 4.0, dueDate: "2026-10-22", week: 7, status: "Not Started", score: null, maxScore: 100, topic: "SDN Control Plane & Network Controllers" },
+      { id: "csn305-test2", name: "Test 2", category: "Test", weight: 15.0, dueDate: "2026-10-22", week: 7, status: "Not Started", score: null, maxScore: 100, topic: "Weeks 4–6: SDN Architecture, OpenFlow & Control Plane" },
+      { id: "csn305-lab7", name: "Lab 7", category: "Lab", weight: 4.0, dueDate: "2026-11-12", week: 9, status: "Not Started", score: null, maxScore: 100, topic: "SDN Application Plane & Custom Flow Control" },
+      { id: "csn305-lab8", name: "Lab 8", category: "Lab", weight: 4.0, dueDate: "2026-11-19", week: 10, status: "Not Started", score: null, maxScore: 100, topic: "Application Use Cases & Policy-Driven Data Flows" },
+      { id: "csn305-test3", name: "Test 3", category: "Test", weight: 15.0, dueDate: "2026-11-19", week: 10, status: "Not Started", score: null, maxScore: 100, topic: "Weeks 7–9: Data Plane Hardware, Applications & Use Cases" },
+      { id: "csn305-lab9", name: "Lab 9", category: "Lab", weight: 4.0, dueDate: "2026-12-03", week: 12, status: "Not Started", score: null, maxScore: 100, topic: "Traffic Monitoring & Network Visibility" },
+      { id: "csn305-lab10", name: "Lab 10", category: "Lab", weight: 4.0, dueDate: "2026-12-10", week: 13, status: "Not Started", score: null, maxScore: 100, topic: "SDN Security & Quality of Experience (QoE)" },
+      { id: "csn305-test4", name: "Test 4", category: "Test", weight: 15.0, dueDate: "2026-12-10", week: 13, status: "Not Started", score: null, maxScore: 100, topic: "Comprehensive Final Test: All Chapters & SDN Security" }
     ],
-    notes: "Thursday lecture 12:35 PM. Prerequisite CSN205 completed."
+    notes: "Thursday in-person block 12:35 PM – 4:10 PM in K1270. Requires 500GB SSD. Pass condition: >=50% overall, >=50% weighted on tests (60%), and >=50% on every lab report."
   }
 ];

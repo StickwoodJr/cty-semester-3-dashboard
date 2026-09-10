@@ -45,7 +45,7 @@ Deep-dive pages for each individual course featuring:
 - **SEC320 (Security Incident Response - Homayoun Mohamadi)**: Live/dead box forensics, memory analysis (GRR/Volatility), timeline reconstruction, malware analysis, SOAR scripts, and threat intelligence.
 - **PSY262 (Mindfulness for Students - Glen Choi)**: General Education course with flexible delivery (in-person or live broadcast online), 12 in-class reflections, memoir, 2 quizzes, and final exam.
 - **WTP100 (Work Term Preparation - WIL Co-ordinator)**: 14 weekly modules, resume/cover letter reviews, InStage AI mock interviews, and co-op readiness checklist.
-- **CSN305 (Software Defined Networks)**: Dedicated customizable course module ready to be populated with professor, room, and syllabus details as soon as published.
+- **CSN305 (Software Defined Networks - Lisa Li)**: Project-based SDN course in Newnham K1270 covering OpenFlow, Mininet emulators, SDN controllers (Ryu/POX), 10 weekly labs (4% each), 4 comprehensive tests (15% each), Jim Doherty prescribed textbook, and 500GB SSD setup.
 
 ### 5. 🕒 5-Day Weekly Timetable (`/schedule`)
 - Visual grid from 8:00 AM to 8:00 PM covering Monday through Friday.
@@ -53,7 +53,8 @@ Deep-dive pages for each individual course featuring:
   - `MST300`: Mon 9:50–11:35 (C3036) & Tue 9:50–11:35 (A4515)
   - `SEC320`: Mon 1:30–3:15 (K1272) & Tue 11:40–1:25 (K1272)
   - `DAT330`: Mon 3:20–5:05 (A1509) & Wed 5:10–6:55 (A3512)
-  - `OPS345`: Wed 9:50–11:35 & Fri 9:50–11:35 (Ubuntu Host Lab)
+  - `OPS345`: Wed 1:30–3:15 & Thu 8:55–10:40 (Newnham Lab)
+  - `CSN305`: Thu 12:35–4:10 (Newnham Bldg K - K1270)
   - `PSY262`: Fri 1:30–4:10 (K2241 or Flexible Online)
   - `WTP100`: Online Synchronous weekly modules
 

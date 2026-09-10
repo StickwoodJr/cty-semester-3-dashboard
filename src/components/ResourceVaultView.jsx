@@ -153,14 +153,14 @@ export default function ResourceVaultView() {
     {
       id: 'csn-faculty',
       category: 'faculty',
-      name: 'Software Defined Networks Faculty',
+      name: 'Lisa Li',
       courseCode: 'CSN305',
       courseName: 'Software Defined Networks',
-      email: 'csn305.coordinator@senecapolytechnic.ca',
-      officeHours: 'Thursdays after class (4:10 PM)',
-      location: 'Newnham Campus (Thursday 12:35 PM - 4:10 PM)',
+      email: 'lisa.li2@senecapolytechnic.ca',
+      officeHours: 'Thursdays after class (4:10 PM) or by appointment',
+      location: 'Newnham Bldg K - K1270 (Thursday 12:35 PM - 4:10 PM)',
       color: '#22c55e',
-      tips: 'Mininet scripts and OpenFlow flow tables are central to high-weighted practical lab exams.'
+      tips: 'Requires 500GB SSD. Minimum 50% required on all tests (60%) and on every lab report (40%) to obtain course credit.'
     },
     {
       id: 'wil-coord',

@@ -261,13 +261,35 @@ test('calculateSemesterWorkload: Accurately groups 14 weeks and identifies Week 
 
   const week7 = weeks.find(w => w.week === 7);
   assert(week7, 'Week 7 must exist');
-  assert.strictEqual(week7.tasks.length, 10, 'Week 7 must have 10 tasks');
+  assert.strictEqual(week7.tasks.length, 11, 'Week 7 must have 11 tasks');
   assert(week7.totalWeight > 100, 'Week 7 total weight must be > 100%');
   assert.strictEqual(week7.severity.level, 'extreme');
 
   const metrics = calculateWorkloadMetrics(weeks);
-  assert.strictEqual(metrics.totalTasks, 83, `Expected 83 total semester evaluations, got ${metrics.totalTasks}`);
+  assert.strictEqual(metrics.totalTasks, 94, `Expected 94 total semester evaluations, got ${metrics.totalTasks}`);
   assert(metrics.volatility > 0, 'Volatility must be positive');
+});
+
+test('CSN305 Syllabus Verification: Fully populated with Lisa Li, K1270, 10 labs, 4 tests, and passing thresholds', () => {
+  const csn = INITIAL_COURSES.find(c => c.id === 'csn305');
+  assert(csn, 'CSN305 must exist in INITIAL_COURSES');
+  assert.strictEqual(csn.classNbr, '5197');
+  assert.strictEqual(csn.professor, 'Lisa Li');
+  assert.strictEqual(csn.email, 'lisa.li2@senecapolytechnic.ca');
+  assert(csn.schedule.some(s => s.room === 'Newnham Bldg K - K1270' && s.day === 'Thursday'));
+  assert.strictEqual(csn.assessments.length, 14, 'Must have exactly 14 assessments (10 labs + 4 tests)');
+  
+  const labs = csn.assessments.filter(a => a.category === 'Lab');
+  const tests = csn.assessments.filter(a => a.category === 'Test');
+  assert.strictEqual(labs.length, 10, 'Must have exactly 10 labs');
+  assert.strictEqual(tests.length, 4, 'Must have exactly 4 tests');
+  
+  const totalWeight = csn.assessments.reduce((sum, a) => sum + a.weight, 0);
+  assert.strictEqual(Math.round(totalWeight), 100, 'Total CSN305 weight must equal 100%');
+  
+  // Verify 500GB SSD requirement & textbook
+  assert(csn.textbook && csn.textbook.supplies.includes('500 GB'), 'Must specify 500 GB SSD supply');
+  assert.strictEqual(csn.textbook.isbn, '0-13-4307399', 'Must specify correct Jim Doherty textbook ISBN');
 });
 
 test('calculateSemesterWorkload: Early-bird staging shifts weight and reduces crunch', () => {

@@ -6,7 +6,8 @@ import confetti from 'canvas-confetti';
 
 const AcademicContext = createContext();
 
-const STORAGE_KEY = 'seneca_cty_sem3_courses_v6';
+const STORAGE_KEY = 'seneca_cty_sem3_courses_v7';
+const PREV_STORAGE_KEY = 'seneca_cty_sem3_courses_v6';
 const NOTES_STORAGE_KEY = 'seneca_cty_sem3_scratchpad_v1';
 
 export function AcademicProvider({ children }) {
@@ -15,6 +16,19 @@ export function AcademicProvider({ children }) {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         return JSON.parse(saved);
+      }
+      // Migrate from v6 if available, upgrading placeholder CSN305 with official syllabus
+      const prevSaved = localStorage.getItem(PREV_STORAGE_KEY);
+      if (prevSaved) {
+        const parsed = JSON.parse(prevSaved);
+        const csnOfficial = INITIAL_COURSES.find(c => c.id === 'csn305');
+        const upgraded = parsed.map(c => {
+          if (c.id === 'csn305' && (c.classNbr === 'CSN305' || !c.assessments || c.assessments.some(a => a.id.includes('placeholder')))) {
+            return csnOfficial;
+          }
+          return c;
+        });
+        return upgraded;
       }
     } catch (e) {
       console.error("Failed to parse saved courses", e);

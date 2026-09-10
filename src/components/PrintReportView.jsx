@@ -173,8 +173,8 @@ export default function PrintReportView() {
                 <tr>
                   <td className="p-2.5 font-mono font-bold text-emerald-400 print:text-emerald-700">CSN305</td>
                   <td className="p-2.5 font-mono">12:35 PM – 4:10 PM</td>
-                  <td className="p-2.5">Newnham Campus</td>
-                  <td className="p-2.5">Faculty Assigned</td>
+                  <td className="p-2.5">Newnham Bldg K - K1270</td>
+                  <td className="p-2.5">Lisa Li</td>
                   <td className="p-2.5">In-Person Extended Block</td>
                 </tr>
 

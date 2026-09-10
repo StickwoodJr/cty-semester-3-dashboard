@@ -203,11 +203,28 @@ export const LAB_PREFLIGHT_PRESETS = [
 
   // --- CSN305: Software Defined Networks ---
   {
-    id: "csn305-placeholder-1",
+    id: "csn305-lab1",
     courseId: "csn305",
     courseCode: "CSN305",
-    labName: "Lab 1: SDN Testbed & Controller Setup",
-    category: "SDN Architecture",
+    labName: "Lab 1: Virtualization & Hypervisors",
+    category: "Virtualization & Hypervisors",
+    terminalType: "bash",
+    verificationCmd: 'echo "=== CSN305 VIRTUALIZATION AUDIT ===" && whoami && hostname && (kvm-ok 2>/dev/null || virsh list --all 2>/dev/null || uname -a) && date',
+    keyEvidence: "Hypervisor configuration, virtual machine execution proof, student identity in shell prompt, and system timestamp.",
+    requiredItems: [
+      { id: "hypervisor-config", label: "Hypervisor / VM platform configuration showing assigned SSD storage (>=500GB requirement)", penalty: "Storage setup rubric" },
+      { id: "vm-status", label: "Virtual environment running with active guest network interfaces", penalty: "VM instance failure" },
+      { id: "whoami-header", label: "Terminal output clearly showing student full name / login account", penalty: "Syllabus boilerplate deduction" },
+      { id: "timestamp-proof", label: "System date and time visible in the active terminal window", penalty: "Syllabus verification deduction" }
+    ],
+    proTip: "Seneca CSN305 syllabus strictly requires: 'All inserted screenshots in lab reports must be identified by including either the student\\'s full name or login account name and the date/time when it was taken. Minimum 50% required to pass every lab!'"
+  },
+  {
+    id: "csn305-lab4",
+    courseId: "csn305",
+    courseCode: "CSN305",
+    labName: "Lab 4: SDN Architecture & OpenFlow",
+    category: "SDN Architecture & OpenFlow",
     terminalType: "bash",
     verificationCmd: 'echo "=== CSN305 SDN AUDIT ===" && whoami && hostname && sudo mn --version && sudo ovs-vsctl show && date',
     keyEvidence: "Mininet topology launch, Open vSwitch bridge configuration, and successful pingall between virtual hosts.",

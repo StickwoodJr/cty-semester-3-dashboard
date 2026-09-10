@@ -200,8 +200,8 @@ export default function TimetableView() {
         endMin: 970,   // 16 * 60 + 10
         durationMin: 215,
         durationLabel: "3h 35m",
-        room: "Newnham Campus",
-        instructor: "Faculty Assigned",
+        room: "Newnham Bldg K - K1270",
+        instructor: "Lisa Li",
         color: "#22c55e",
         mode: "In-Person"
       }

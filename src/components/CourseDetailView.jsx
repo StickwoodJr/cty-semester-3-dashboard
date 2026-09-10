@@ -229,7 +229,7 @@ export default function CourseDetailView() {
             </div>
             {course.latePolicy && (
               <span className="text-[10px] text-amber-400/90 font-medium">
-                ⚠️ Late Penalty: 10%/day (max 3 days)
+                {course.id === 'csn305' ? '⚠️ Late Penalty: Min 10% deduction' : '⚠️ Late Penalty: 10%/day (max 3 days)'}
               </span>
             )}
           </div>
@@ -249,6 +249,23 @@ export default function CourseDetailView() {
                 📝 Test Reference Sheet Policy: Handwritten only! 1-sided for Midterm, 2-sided for Final.
               </span>
               <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 font-bold">STRICT</span>
+            </div>
+          )}
+
+          {course.id === 'csn305' && (
+            <div className="space-y-2">
+              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center justify-between">
+                <span className="font-semibold">
+                  💾 Hardware Requirement: Solid-state drive (SSD) with minimum 500 GB available capacity.
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 font-bold">REQUIRED</span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-center justify-between">
+                <span className="font-semibold">
+                  🚫 Test Integrity: No electronic or wireless devices (smartphones, Smart Glasses) permitted during tests!
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 font-bold">NO SMART DEVICES</span>
+              </div>
             </div>
           )}
         </div>
@@ -346,6 +363,61 @@ export default function CourseDetailView() {
                 <span className="text-[10px] font-mono text-slate-400 shrink-0">≥80%</span>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {course.id === 'csn305' && (
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-emerald-400 shrink-0" />
+              <div>
+                <h3 className="text-sm font-bold text-white">Required Course Textbook & Hardware Supplies</h3>
+                <p className="text-xs text-slate-400">Official Fall 2026 Seneca Polytechnic Course Materials</p>
+              </div>
+            </div>
+            <span className="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-semibold self-start sm:self-auto">
+              100% Course Aligned
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-300">
+            <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1.5">
+              <div className="text-emerald-400 font-bold flex items-center justify-between">
+                <span>📖 Prescribed Textbook (Required)</span>
+                <span className="font-mono text-[10px] text-slate-400">ISBN: 0-13-4307399</span>
+              </div>
+              <div className="text-white font-semibold text-xs leading-snug">
+                SDN and NFV Simplified: A Visual Guide to Understanding Software Defined Networks and Network Function Virtualization
+              </div>
+              <div className="text-slate-400 text-[11px]">
+                Author: <span className="text-slate-300">Jim Doherty</span> • Available via Seneca Bookstore / Libraries
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1.5">
+              <div className="text-emerald-400 font-bold flex items-center justify-between">
+                <span>💾 Required Hardware Supplies</span>
+                <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">≥ 500 GB SSD</span>
+              </div>
+              <div className="text-white font-semibold text-xs leading-snug">
+                Dedicated External Solid-State Drive (SSD)
+              </div>
+              <div className="text-slate-400 text-[11px] leading-relaxed">
+                Minimum 500 GB available capacity required for running virtualized SDN environments, Open vSwitch bridges, and Mininet emulators.
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs text-slate-300 space-y-1">
+            <div className="font-semibold text-white flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Lab Screenshot Identity Rule (Syllabus Requirement):</span>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              All inserted screenshots in lab reports must be clearly identified by including either the student's full name or Seneca login account name, along with the system date and time when taken. Minimum 50% required on each report to obtain credit.
+            </p>
           </div>
         </div>
       )}
